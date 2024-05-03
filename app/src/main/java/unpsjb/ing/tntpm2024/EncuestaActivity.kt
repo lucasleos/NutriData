@@ -44,9 +44,9 @@ class EncuestaActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // evento boton guardar
         binding.btnGuardar.setOnClickListener{
 
-            //Toast.makeText(this@MainActivity, ""+binding.spinnerPorcion.selectedItem, Toast.LENGTH_SHORT).show()
 
             val valorPorcion: String = binding.spinnerPorcion.selectedItem as String
             val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
