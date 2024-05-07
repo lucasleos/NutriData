@@ -12,7 +12,6 @@
         android:name="unpsjb.ing.tntpm2024.Inicio.InicioFragment"
         android:label="InicioFragment"
         tools:layout="@layout/fragment_inicio">
-
     </fragment>
 
 </navigation>
