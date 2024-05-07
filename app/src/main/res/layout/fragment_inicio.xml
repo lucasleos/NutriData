@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/inicio_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Inicio.InicioFragment"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvBienvenida"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="30sp"
+            android:text="Bienvenido/a"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/btnRealizarEncuesta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="300dp"
+            android:text="Realizar encuesta"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnListaEncuestas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lista encuestas"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</layout>

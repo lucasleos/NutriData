@@ -23,7 +23,7 @@ class ConfirmacionActivity : AppCompatActivity() {
             + valorVeces, Toast.LENGTH_SHORT).show()
 
         binding.tvRespuesta.text = "Usted consume " + valorPorcion + " de yogurt bebile entero, "+
-                valorFrecuencia + " veces por " + valorVeces
+                valorVeces + " veces por " + valorFrecuencia.lowercase()
 
         binding.btnAceptar.setOnClickListener({
             finish();

@@ -32,5 +32,7 @@
     <string name="listview">Encuesta a completar por el usuario.</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="lorem_ipsum" />
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
