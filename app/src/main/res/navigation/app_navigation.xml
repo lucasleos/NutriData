@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/inicioFragment"
+    >
+
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="unpsjb.ing.tntpm2024.Inicio.InicioFragment"
+        android:label="InicioFragment"
+        tools:layout="@layout/fragment_inicio">
+
+    </fragment>
+
+</navigation>
