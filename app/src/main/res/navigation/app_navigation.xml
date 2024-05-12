@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/inicioFragment"
+    app:startDestination="@id/loginFragment"
     >
 
     <fragment
@@ -12,6 +12,15 @@
         android:name="unpsjb.ing.tntpm2024.Inicio.InicioFragment"
         android:label="InicioFragment"
         tools:layout="@layout/fragment_inicio">
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="unpsjb.ing.tntpm2024.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_inicioFragment"
+            app:destination="@id/inicioFragment" />
     </fragment>
 
 </navigation>
