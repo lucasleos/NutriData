@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024
+package unpsjb.ing.tntpm2024.encuesta
 
 import android.content.Intent
 import android.net.Uri
@@ -9,25 +9,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import unpsjb.ing.tntpm2024.Inicio.InicioViewModel
+import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.inicio.InicioViewModel
+
 import unpsjb.ing.tntpm2024.databinding.FragmentEncuestaBinding
 
 class EncuestaFragment : Fragment() {
 
-    private val viewModel: InicioViewModel by viewModels()
+    private lateinit var binding: FragmentEncuestaBinding
+    private val viewModel: EncuestaViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentEncuestaBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_encuesta, container, false
         )
+
+        binding.encuestaViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+//        binding.spinnerPorcion.selectedItem.toString() = viewModel.porcion.value
+//        binding.spinnerFrecuencia.selectedItem.toString() = viewModel.frecuencia.value
+        binding.numberPicker.value = viewModel.veces.value!!
+
 
         val t = inflater.inflate(R.layout.fragment_encuesta,container,false)
 
@@ -37,8 +47,8 @@ class EncuestaFragment : Fragment() {
         val adaptadorPorcion = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, valoresPorcion)
         spinnerPorcion.adapter = adaptadorPorcion
 
-        binding.numberPiker.minValue = 0
-        binding.numberPiker.maxValue = 10
+        binding.numberPicker.minValue = 0
+        binding.numberPicker.maxValue = 10
 
         val spinnerFrecuencia = binding.spinnerFrecuencia
         val valoresFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
@@ -57,7 +67,7 @@ class EncuestaFragment : Fragment() {
 
             val valorPorcion: String = binding.spinnerPorcion.selectedItem as String
             val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
-            val valorVeces: String = binding.numberPiker.value.toString()
+            val valorVeces: String = binding.numberPicker.value.toString()
 
             findNavController().navigate(EncuestaFragmentDirections.actionEncuestaFragmentToConfirmacionFragment(
                 porcion = valorPorcion,

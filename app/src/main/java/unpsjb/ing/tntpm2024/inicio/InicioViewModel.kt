@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.Inicio
+package unpsjb.ing.tntpm2024.inicio
 
 import androidx.lifecycle.ViewModel
 

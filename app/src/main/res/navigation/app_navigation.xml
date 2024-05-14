@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/inicioFragment"
-        android:name="unpsjb.ing.tntpm2024.Inicio.InicioFragment"
+        android:name="unpsjb.ing.tntpm2024.inicio.InicioFragment"
         android:label="InicioFragment"
         tools:layout="@layout/fragment_inicio">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/encuestaFragment"
-        android:name="unpsjb.ing.tntpm2024.EncuestaFragment"
+        android:name="unpsjb.ing.tntpm2024.encuesta.EncuestaFragment"
         android:label="fragment_encuesta"
         tools:layout="@layout/fragment_encuesta" >
         <action
@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="unpsjb.ing.tntpm2024.DetailFragment"
+        android:name="unpsjb.ing.tntpm2024.detalle.DetailFragment"
         android:label="DetailFragment"
         tools:layout="@layout/fragment_detail">
         <argument

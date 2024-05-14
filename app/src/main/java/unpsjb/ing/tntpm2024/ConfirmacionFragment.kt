@@ -6,14 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import unpsjb.ing.tntpm2024.Inicio.InicioViewModel
+import unpsjb.ing.tntpm2024.inicio.InicioViewModel
 import unpsjb.ing.tntpm2024.databinding.FragmentConfirmacionBinding
-import unpsjb.ing.tntpm2024.databinding.FragmentEncuestaBinding
 
 class ConfirmacionFragment : Fragment() {
 

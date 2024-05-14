@@ -1,13 +1,13 @@
-package unpsjb.ing.tntpm2024
+package unpsjb.ing.tntpm2024.detalle
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
+import unpsjb.ing.tntpm2024.R
 
 class DetailFragment : Fragment() {
 
