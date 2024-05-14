@@ -3,6 +3,7 @@ package unpsjb.ing.tntpm2024.login
 import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,11 @@ class LoginFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
+        binding.loginViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.username.text = viewModel.usuario.value
+        binding.password.text = viewModel.password.value
 
         binding.btnIngresar.setOnClickListener {
             if ((binding.username.text.toString() == "admin") && (binding.password.text.toString() == "tnt2024")) {
