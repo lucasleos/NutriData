@@ -1,15 +1,19 @@
 package unpsjb.ing.tntpm2024
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
-import kotlin.collections.ArrayList
+import unpsjb.ing.tntpm2024.databinding.FragmentListaEncuestasBinding
+import java.util.Locale
 
-class ListaEncuestasActivity : AppCompatActivity() {
+class ListaEncuestasFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataList: ArrayList<DataClass>
@@ -21,9 +25,14 @@ class ListaEncuestasActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var searchList: ArrayList<DataClass>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lista_encuestas)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+    //    val binding: FragmentListaEncuestasBinding = DataBindingUtil.inflate(
+      //      inflater, R.layout.fragment_lista_encuestas, container, false
+       // )
 
         imageList = arrayOf(
             R.drawable.ic_list,
@@ -53,9 +62,9 @@ class ListaEncuestasActivity : AppCompatActivity() {
             R.drawable.list_detail,
             R.drawable.list_detail)
 
-        recyclerView = findViewById(R.id.recyclerView)
-        searchView = findViewById(R.id.search)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        searchView = view.findViewById(R.id.search)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
         dataList = arrayListOf<DataClass>()
@@ -93,11 +102,34 @@ class ListaEncuestasActivity : AppCompatActivity() {
         recyclerView.adapter = myAdapter
 
         myAdapter.onItemClick = {
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra("android", it)
-            startActivity(intent)
+            //hacer el fragment de detail activity
+            // val intent = Intent(this, DetailActivity::class.java)
+            //intent.putExtra("android", it)
+            //startActivity(intent)
+
+            findNavController().navigate(ListaEncuestasFragmentDirections.actionListaEncuestasFragmentToDetailFragment(
+                title = it.dataTitle,
+                desc = it.dataDesc))
+
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
         }
 
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+
+
+        return inflater.inflate(R.layout.fragment_lista_encuestas, container, false)
     }
 
     private fun getData(){
