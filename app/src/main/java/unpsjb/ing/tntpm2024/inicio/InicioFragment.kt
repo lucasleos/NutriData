@@ -18,13 +18,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import unpsjb.ing.tnt.ligadeportiva.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 
-class InicioFragment : Fragment(), SearchView.OnQueryTextListener {
+class InicioFragment : Fragment() {
 
     val TAG = "InicioFragment"
 
@@ -39,14 +42,22 @@ class InicioFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.inicio_menu, menu)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val search = menu?.findItem(R.id.menu_search)
-        val searchView = search?.actionView as? SearchView
-        searchView?.isSubmitButtonEnabled = true
-        searchView?.setOnQueryTextListener(this)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val searchQuery = "%$newText%"
+                encuestaViewModel.getEncuesta(searchQuery).observe(viewLifecycleOwner) { list ->
+                    list.let { adapterList.setEncuestas(it) }
+                }
+                return false
+            }
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -54,16 +65,16 @@ class InicioFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "onCreateView Inicio Fragment")
+
         val binding: FragmentInicioBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_inicio, container, false
         )
 
+        searchView = binding.searchView
         val recyclerView = binding.recyclerView
-        //val adapterList = EncuestaListAdapter(this.requireContext())
-       // adapterList = EncuestaListAdapter(this.requireContext())
         recyclerView.adapter = adapterList
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
-
 
         encuestaViewModel = ViewModelProvider(this).get(EncuestaViewModel::class.java)
 
@@ -76,56 +87,14 @@ class InicioFragment : Fragment(), SearchView.OnQueryTextListener {
                 }
             )
 
-        recyclerView.setOnClickListener {
-            Log.d(TAG, "la cantidad de elementos adapter ${encuestaViewModel.todasLasEncuestas.value}")
-        }
-        //Log.d(TAG, "la cantidad de elementos adapter ${encuestaViewModel.todasLasEncuestas.value}")
-        //getData(encuestaViewModel.todasLasEncuestas.value)
-
         val fab = binding.botonFlotante
 
         fab.setOnClickListener {
-            // TODO llamar al fragment para crear encuesta. vincular la vista en navigation
             findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToEncuestaFragment())
         }
 
-
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
-
-
-
-        /*searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchView.clearFocus()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchList.clear()
-                val searchText = newText!!.toLowerCase(Locale.getDefault())
-                if (searchText.isNotEmpty()){
-                    dataList.forEach{
-                        if (it.dataTitle.toLowerCase(Locale.getDefault()).contains(searchText)) {
-                            searchList.add(it)
-                        }
-                    }
-                    recyclerView.adapter!!.notifyDataSetChanged()
-                } else {
-                    searchList.clear()
-                    searchList.addAll(dataList)
-                    recyclerView.adapter!!.notifyDataSetChanged()
-                }
-                return false
-            }
-
-        })*/
-
-
-
-
-        //myAdapter = AdapterClass(searchList)
-        //recyclerView.adapter = myAdapter
 
         adapterList.onItemClick = {
             //Log.d(TAG, "el alimento es ${it.alimento}")
@@ -138,34 +107,7 @@ class InicioFragment : Fragment(), SearchView.OnQueryTextListener {
             )
         }
 
-
         return binding.root
-    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        Log.d(TAG , "entra al metodo textSubmit")
-        if(query != null) {
-            Log.d(TAG , "encuentra algo")
-            getEncuesta(query)
-        }
-        return true
-    }
-
-    override fun onQueryTextChange(query: String?): Boolean {
-        Log.d(TAG , "entra al metodo textChange")
-        if(query != null) {
-            Log.d(TAG , "encuentra algo")
-            getEncuesta(query)
-        }
-        return true
-    }
-
-    private fun getEncuesta(query: String){
-        System.out.print("entra al metodo getEncuesta")
-        val searchQuery = "%$query"
-        encuestaViewModel.getEncuesta(searchQuery).observe(this) { list ->
-            list.let { adapterList.setEncuestas(it) }
-        }
     }
 
 }

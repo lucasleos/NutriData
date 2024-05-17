@@ -10,19 +10,31 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            tools:context=".MainActivity">
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="16dp"
+                app:iconifiedByDefault="false"
+                app:searchHintIcon="@null"
+                app:queryHint="Buscar encuesta"
+                android:focusable="false"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/searchView"
+                android:layout_marginTop="20dp"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/boton_flotante"
@@ -34,7 +46,19 @@
                 android:contentDescription="@string/agregar_encuesta"
                 android:src="@drawable/ic_check_black_24dp"
                 />
+
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+<!--  <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:menu="@menu/inicio_menu"
+                tools:layout_editor_absoluteX="16dp" />-->
     </layout>
 
 
