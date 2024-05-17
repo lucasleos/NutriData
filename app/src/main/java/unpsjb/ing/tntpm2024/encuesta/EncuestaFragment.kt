@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -69,10 +70,7 @@ class EncuestaFragment : Fragment() {
             val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
             val valorVeces: String = binding.numberPicker.value.toString()
 
-            findNavController().navigate(EncuestaFragmentDirections.actionEncuestaFragmentToConfirmacionFragment(
-                porcion = valorPorcion,
-                frecuencia = valorFrecuencia,
-                veces =  valorVeces))
+            Toast.makeText(context, "Valores guardados: ${valorPorcion} - ${valorFrecuencia} - ${valorVeces}", Toast.LENGTH_SHORT).show()
         }
 
         spinnerPorcion.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{

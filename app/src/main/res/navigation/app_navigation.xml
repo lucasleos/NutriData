@@ -16,8 +16,8 @@
             android:id="@+id/action_inicioFragment_to_encuestaFragment"
             app:destination="@id/encuestaFragment" />
         <action
-            android:id="@+id/action_inicioFragment_to_listaEncuestasFragment"
-            app:destination="@id/listaEncuestasFragment" />
+            android:id="@+id/action_inicioFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -32,39 +32,7 @@
         android:id="@+id/encuestaFragment"
         android:name="unpsjb.ing.tntpm2024.encuesta.EncuestaFragment"
         android:label="fragment_encuesta"
-        tools:layout="@layout/fragment_encuesta" >
-        <action
-            android:id="@+id/action_encuestaFragment_to_confirmacionFragment"
-            app:destination="@id/confirmacionFragment"
-            app:popUpTo="@id/inicioFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/confirmacionFragment"
-        android:name="unpsjb.ing.tntpm2024.ConfirmacionFragment"
-        android:label="ConfirmacionFragment"
-        tools:layout="@layout/fragment_confirmacion">
-        <argument
-            android:name="porcion"
-            app:argType="string" />
-        <argument
-            android:name="frecuencia"
-            app:argType="string" />
-        <argument
-            android:name="veces"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_confirmacionFragment_to_inicioFragment"
-            app:destination="@id/inicioFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/listaEncuestasFragment"
-        android:name="unpsjb.ing.tntpm2024.ListaEncuestasFragment"
-        android:label="ListaEncuestasFragment"
-        tools:layout="@layout/fragment_lista_encuestas">
-        <action
-            android:id="@+id/action_listaEncuestasFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_encuesta" />
     <fragment
         android:id="@+id/detailFragment"
         android:name="unpsjb.ing.tntpm2024.detalle.DetailFragment"

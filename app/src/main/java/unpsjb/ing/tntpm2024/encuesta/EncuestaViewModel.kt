@@ -1,10 +1,40 @@
 package unpsjb.ing.tntpm2024.encuesta
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import unpsjb.ing.tntpm2024.basededatos.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.EncuestaRoomDatabase
+import unpsjb.ing.tntpm2024.basededatos.RepositorioDeEncuestas
 
-class EncuestaViewModel : ViewModel() {
+class EncuestaViewModel(application: Application) : AndroidViewModel(application) {
+
+
+    private val repository: RepositorioDeEncuestas
+    val todasLasEncuestas: LiveData<List<Encuesta>>
+
+    init {
+        val encuestasDao = EncuestaRoomDatabase
+            .obtenerDatabase(application, viewModelScope).encuestaDao()
+
+        repository = RepositorioDeEncuestas(encuestasDao)
+        todasLasEncuestas = repository.todasLasEncuestas
+    }
+    fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertar(encuesta)
+    }
+
+    fun getEncuesta(searchQuery: String) : LiveData<List<Encuesta>>{
+        return repository.getEncuesta(searchQuery).asLiveData()
+    }
+
+
 
     private var _alimento = MutableLiveData<String>("")
     val alimento: LiveData<String>
