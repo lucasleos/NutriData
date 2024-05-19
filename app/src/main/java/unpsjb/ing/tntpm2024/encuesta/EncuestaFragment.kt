@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.basededatos.Encuesta
 import unpsjb.ing.tntpm2024.inicio.InicioViewModel
 
 import unpsjb.ing.tntpm2024.databinding.FragmentEncuestaBinding
@@ -56,14 +57,6 @@ class EncuestaFragment : Fragment() {
         val adaptadorFrecuencia = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, valoresFrecuencia)
         spinnerFrecuencia.adapter = adaptadorFrecuencia
 
-        binding.btnSaberMas.setOnClickListener{
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(Uri.parse("https://www.unp.edu.ar/ingenieria/index.php/es/"))
-            startActivity(intent)
-        }
-
-
-        // evento boton guardar
         binding.btnGuardar.setOnClickListener{
 
             val valorPorcion: String = binding.spinnerPorcion.selectedItem as String
@@ -71,6 +64,17 @@ class EncuestaFragment : Fragment() {
             val valorVeces: String = binding.numberPicker.value.toString()
 
             Toast.makeText(context, "Valores guardados: ${valorPorcion} - ${valorFrecuencia} - ${valorVeces}", Toast.LENGTH_SHORT).show()
+
+            val encuesta = Encuesta(
+                alimento = "Yogur Bebible",
+                porcion = valorPorcion,
+                frecuencia = valorFrecuencia,
+                veces = valorVeces,
+                encuestaCompletada = true
+            )
+
+            viewModel.insert(encuesta)
+            findNavController().navigate(R.id.action_encuestaFragment_to_inicioFragment2)
         }
 
         spinnerPorcion.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{

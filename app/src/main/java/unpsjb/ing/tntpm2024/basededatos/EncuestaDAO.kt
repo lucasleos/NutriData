@@ -18,7 +18,7 @@ interface  EncuestaDAO {
     @Query("SELECT * from tabla_encuesta WHERE alimento LIKE :searchQuery")
     fun getEncuesta(searchQuery: String): Flow<List<Encuesta>>
 
-    @Query("SELECT * from tabla_encuesta ORDER BY encuestaId ASC")
+    @Query("SELECT * from tabla_encuesta ORDER BY encuestaId DESC")
     fun getEncuestas(): LiveData<List<Encuesta>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
