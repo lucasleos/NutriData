@@ -5,6 +5,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lista_encuestas_layout"
+            android:background="@drawable/fondo_encuesta_alimento_1_redim"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -23,28 +24,51 @@
                 app:iconifiedByDefault="false"
                 app:searchHintIcon="@null"
                 app:queryHint="Buscar encuesta"
+                android:background="#fff"
                 android:focusable="false"
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/searchView"
-                android:layout_marginTop="20dp"/>
+                android:background="@drawable/forma_personalizada"
+                tools:layout_editor_absoluteX="16dp"
+                android:elevation="3dp">
+
+                <TextView
+                    android:id="@+id/tvListadoEncuestas"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:textColor="#fff"
+                    android:background="@drawable/forma_personalizada_green"
+                    android:text="Listado de encuestas"
+                    android:textSize="25sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="90dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas" />
+
+            </LinearLayout>
+
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/boton_flotante"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="wrap_content"
+                android:backgroundTint="@color/green_light"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/agregar_encuesta"
-                android:src="@drawable/ic_check_black_24dp"
+                android:src="@drawable/ic_add"
                 />
 
 

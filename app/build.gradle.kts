@@ -52,6 +52,8 @@ dependencies {
     // Feature module Support
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
 
+    implementation("androidx.compose.material:material:1.6.7")
+    implementation("androidx.compose.material3:material3:1.2.1")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.6.1")

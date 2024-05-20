@@ -4,15 +4,15 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/lavender</item>
-        <item name="colorPrimaryVariant">@color/lavender</item>
+        <item name="colorPrimary">@color/green_light</item>
+        <item name="colorPrimaryVariant">@color/green_variant</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/green_variant</item>
     </style>
 
     <style name="Theme.TntPM2024" parent="Base.Theme.TntPM2024" />

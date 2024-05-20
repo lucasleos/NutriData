@@ -63,7 +63,6 @@ class EncuestaFragment : Fragment() {
             val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
             val valorVeces: String = binding.numberPicker.value.toString()
 
-            Toast.makeText(context, "Valores guardados: ${valorPorcion} - ${valorFrecuencia} - ${valorVeces}", Toast.LENGTH_SHORT).show()
 
             val encuesta = Encuesta(
                 alimento = "Yogur Bebible",

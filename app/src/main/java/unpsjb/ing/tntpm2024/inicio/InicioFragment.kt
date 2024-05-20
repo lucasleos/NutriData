@@ -97,13 +97,16 @@ class InicioFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         adapterList.onItemClick = {
+            var asd = it.encuestaCompletada
             //Log.d(TAG, "el alimento es ${it.alimento}")
             findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToDetailFragment(
                   //title = it.dataTitle,
                   //desc = it.dataDesc
                 title = "Detalle Encuesta",
                 desc = "Usted consume ${it.porcion} de ${it.alimento}, ${it.veces} cada ${it.frecuencia} \n" +
-                        "estado: ${it.encuestaCompletada}")
+                        //"estado: ${it.encuestaCompletada}")
+
+                        "Estado: " + if (it.encuestaCompletada) "Completada" else "Incompleta")
             )
         }
 

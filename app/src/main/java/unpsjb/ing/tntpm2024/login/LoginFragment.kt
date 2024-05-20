@@ -34,12 +34,12 @@ class LoginFragment : Fragment() {
         binding.password.text = viewModel.password.value
 
         binding.btnIngresar.setOnClickListener {
-           // if ((binding.username.text.toString() == "admin") && (binding.password.text.toString() == "tnt2024")) {
+            //if ((binding.username.text.toString() == "admin") && (binding.password.text.toString() == "tnt2024")) {
                 findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
-             //   Toast.makeText(activity, "Bienvenido " + binding.username.text, Toast.LENGTH_SHORT)
-              //      .show()
+              //  Toast.makeText(activity, "Bienvenido " + binding.username.text, Toast.LENGTH_SHORT)
+               //     .show()
             //} else {
-             //   Toast.makeText(activity, "Usuario o contraseña erronea", Toast.LENGTH_SHORT).show()
+            //   Toast.makeText(activity, "Usuario o contraseña erronea", Toast.LENGTH_SHORT).show()
            // }
         }
         return binding.root
