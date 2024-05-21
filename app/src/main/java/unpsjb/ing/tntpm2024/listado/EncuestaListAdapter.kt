@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 
 
 class EncuestaListAdapter internal constructor(

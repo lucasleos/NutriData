@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.basededatos
+package unpsjb.ing.tntpm2024.basededatos.encuestas
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -4,14 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import unpsjb.ing.tntpm2024.basededatos.Encuesta
-import unpsjb.ing.tntpm2024.basededatos.EncuestaRoomDatabase
-import unpsjb.ing.tntpm2024.basededatos.RepositorioDeEncuestas
+import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.encuestas.EncuestaRoomDatabase
+import unpsjb.ing.tntpm2024.basededatos.encuestas.RepositorioDeEncuestas
 
 class EncuestaViewModel(application: Application) : AndroidViewModel(application) {
 

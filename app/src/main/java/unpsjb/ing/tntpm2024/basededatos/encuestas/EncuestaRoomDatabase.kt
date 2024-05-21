@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.basededatos
+package unpsjb.ing.tntpm2024.basededatos.encuestas
 
 import android.content.Context
 import android.util.Log
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 // Anotar la clase para convertirla en una Database Room
 // con una Tabla (entity) de la clase Partido
-@Database(entities = arrayOf(Encuesta::class), version = 1, exportSchema = false)
+@Database(entities = [Encuesta::class], version = 1, exportSchema = false)
 public abstract class EncuestaRoomDatabase : RoomDatabase() {
 
     // ctrl + p para buscar archivos
@@ -21,7 +21,7 @@ public abstract class EncuestaRoomDatabase : RoomDatabase() {
         // Singleton previene multiples instancias de
         // la base de datos abriendose al mismo tiempo
         @Volatile
-        private var INSTANCIA: EncuestaRoomDatabase? = null
+        var INSTANCIA: EncuestaRoomDatabase? = null
 
         fun obtenerDatabase(
             context: Context,

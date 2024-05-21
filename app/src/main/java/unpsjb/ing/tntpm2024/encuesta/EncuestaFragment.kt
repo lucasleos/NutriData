@@ -1,7 +1,5 @@
 package unpsjb.ing.tntpm2024.encuesta
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.Encuesta
-import unpsjb.ing.tntpm2024.inicio.InicioViewModel
+import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 
 import unpsjb.ing.tntpm2024.databinding.FragmentEncuestaBinding
 

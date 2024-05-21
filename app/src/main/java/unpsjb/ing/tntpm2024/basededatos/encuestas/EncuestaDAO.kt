@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.basededatos
+package unpsjb.ing.tntpm2024.basededatos.encuestas
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 
 @Dao
 interface  EncuestaDAO {
