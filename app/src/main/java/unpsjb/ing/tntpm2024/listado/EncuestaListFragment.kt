@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.inicio
+package unpsjb.ing.tntpm2024.listado
 
 import android.os.Build
 import androidx.fragment.app.viewModels
@@ -23,18 +23,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import unpsjb.ing.tnt.ligadeportiva.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 
-class InicioFragment : Fragment() {
+class EncuestaListFragment : Fragment() {
 
-    val TAG = "InicioFragment"
+    val TAG = "EncuestaListFragment"
 
     //private lateinit var adapterList :  EncuestaListAdapter
     private val adapterList : EncuestaListAdapter by lazy {EncuestaListAdapter(requireContext())}
 
-    private val viewModel: InicioViewModel by viewModels()
     private lateinit var encuestaViewModel: EncuestaViewModel
     private lateinit var dataList: ArrayList<Encuesta>
 
@@ -90,7 +89,7 @@ class InicioFragment : Fragment() {
         val fab = binding.botonFlotante
 
         fab.setOnClickListener {
-            findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToEncuestaFragment())
+            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEncuestaFragment())
         }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -99,7 +98,7 @@ class InicioFragment : Fragment() {
         adapterList.onItemClick = {
             var asd = it.encuestaCompletada
             //Log.d(TAG, "el alimento es ${it.alimento}")
-            findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToDetailFragment(
+            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
                   //title = it.dataTitle,
                   //desc = it.dataDesc
                 title = "Detalle Encuesta",
