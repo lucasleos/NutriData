@@ -69,7 +69,7 @@ class EncuestaFragment : Fragment() {
             )
 
             viewModel.insert(encuesta)
-            findNavController().navigate(R.id.action_encuestaFragment_to_inicioFragment2)
+            findNavController().navigate(R.id.action_encuestaFragment_to_encuestalist2)
         }
 
         spinnerPorcion.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
