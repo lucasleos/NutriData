@@ -8,15 +8,15 @@
     >
 
     <fragment
-        android:id="@+id/inicioFragment"
-        android:name="unpsjb.ing.tntpm2024.inicio.InicioFragment"
-        android:label="InicioFragment"
+        android:id="@+id/encuestalist"
+        android:name="unpsjb.ing.tntpm2024.listado.EncuestaListFragment"
+        android:label="EncuestaListFragment"
         tools:layout="@layout/fragment_inicio">
         <action
-            android:id="@+id/action_inicioFragment_to_encuestaFragment"
+            android:id="@+id/action_encuestalist_to_encuestaFragment"
             app:destination="@id/encuestaFragment" />
         <action
-            android:id="@+id/action_inicioFragment_to_detailFragment"
+            android:id="@+id/action_encuestalist_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
     <fragment
@@ -25,8 +25,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_inicioFragment"
-            app:destination="@id/inicioFragment" />
+            android:id="@+id/action_loginFragment_to_encuestalist"
+            app:destination="@id/encuestalist" />
     </fragment>
     <fragment
         android:id="@+id/encuestaFragment"
@@ -34,8 +34,8 @@
         android:label="fragment_encuesta"
         tools:layout="@layout/fragment_encuesta" >
         <action
-            android:id="@+id/action_encuestaFragment_to_inicioFragment2"
-            app:destination="@id/inicioFragment" />
+            android:id="@+id/action_encuestaFragment_to_encuestalist2"
+            app:destination="@id/encuestalist" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
