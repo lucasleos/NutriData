@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 data class Encuesta(
     @PrimaryKey(autoGenerate = true)
     var encuestaId: Int = 0,
-
     @ColumnInfo(name = "alimento")
     var alimento: String,
     @ColumnInfo(name = "porcion")

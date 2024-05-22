@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import unpsjb.ing.tnt.ligadeportiva.listado.listado.EncuestaListAdapter
+import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
@@ -89,25 +89,42 @@ class EncuestaListFragment : Fragment() {
         val fab = binding.botonFlotante
 
         fab.setOnClickListener {
-            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEncuestaFragment())
+            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEncuestaFragment(
+                encuestaId = 1,
+                aliemento = null,
+                frecuencia = null,
+                porcion = null,
+                veces = null,
+                encuestaCompletada = false
+            ))
         }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
         adapterList.onItemClick = {
-            var asd = it.encuestaCompletada
             //Log.d(TAG, "el alimento es ${it.alimento}")
             findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
                   //title = it.dataTitle,
                   //desc = it.dataDesc
-                title = "Detalle Encuesta",
+                title = "Detalle Encuesta ${it.encuestaId}",
                 desc = "Usted consume ${it.porcion} de ${it.alimento}, ${it.veces} cada ${it.frecuencia} \n" +
                         //"estado: ${it.encuestaCompletada}")
 
                         "Estado: " + if (it.encuestaCompletada) "Completada" else "Incompleta")
             )
         }
+
+        adapterList.onItemClickEditEncuesta = {
+            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEncuestaFragment(
+                // set frecuencia etc por parametros
+                encuestaId = it.encuestaId,
+                aliemento = it.alimento,
+                frecuencia = it.frecuencia,
+                porcion = it.porcion,
+                veces = it.veces,
+                encuestaCompletada = it.encuestaCompletada
+            ))}
 
         return binding.root
     }

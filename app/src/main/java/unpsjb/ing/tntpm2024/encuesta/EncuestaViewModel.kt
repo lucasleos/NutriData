@@ -29,6 +29,10 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
         repository.insertar(encuesta)
     }
 
+    fun insertEncuestaIncompleta(encuestaId: Int, aliemento: String?, porcion: String?, frecuencia: String?, veces: String?, encuestaCompletada: Boolean)= viewModelScope.launch(Dispatchers.IO)  {
+        repository.insertarEncuestaIncompleta(encuestaId, aliemento, porcion, frecuencia, veces, encuestaCompletada)
+    }
+
     fun getEncuesta(searchQuery: String) : LiveData<List<Encuesta>>{
         return repository.getEncuesta(searchQuery).asLiveData()
     }
@@ -58,5 +62,7 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
     fun encuestaCompletada() {
         _encuestaCompletada.value = true
     }
+
+
 
 }

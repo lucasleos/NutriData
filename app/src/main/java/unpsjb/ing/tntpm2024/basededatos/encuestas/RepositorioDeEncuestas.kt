@@ -22,4 +22,16 @@ class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
         encuestaDAO.insertar(encuesta)
     }
 
+    suspend fun insertarEncuestaIncompleta(encuestaId: Int, aliemento: String?, porcion: String?, frecuencia: String?, veces: String?, encuestaCompletada: Boolean) {
+        if (aliemento != null) {
+            if (porcion != null) {
+                if (frecuencia != null) {
+                    if (veces != null) {
+                        encuestaDAO.insertarEncustaIncompleta(encuestaId, aliemento, porcion, frecuencia, veces, encuestaCompletada)
+                    }
+                }
+            }
+        }
+    }
+
 }

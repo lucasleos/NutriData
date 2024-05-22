@@ -22,8 +22,11 @@ interface  EncuestaDAO {
     @Query("SELECT * from tabla_encuesta ORDER BY encuestaId DESC")
     fun getEncuestas(): LiveData<List<Encuesta>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(encuesta: Encuesta)
+
+    @Query("INSERT OR REPLACE INTO tabla_encuesta (encuestaId, alimento, porcion, frecuencia, veces, encuestaCompletada) VALUES (:encuestaId, :alimento, :porcion, :frecuencia, :veces, :encuestaCompletada)")
+    suspend fun insertarEncustaIncompleta(encuestaId: Int, alimento: String, porcion: String,  frecuencia: String, veces: String, encuestaCompletada : Boolean)
 
     @Query("DELETE FROM tabla_encuesta")
     suspend fun borrarTodos()

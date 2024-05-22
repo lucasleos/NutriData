@@ -19,7 +19,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import unpsjb.ing.tnt.ligadeportiva.listado.listado.EncuestaListAdapter
+import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.databinding.ActivityMainBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 
