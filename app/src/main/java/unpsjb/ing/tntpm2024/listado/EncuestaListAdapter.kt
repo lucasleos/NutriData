@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
@@ -17,9 +18,11 @@ class EncuestaListAdapter internal constructor(
 
     var onItemClick: ((Encuesta) -> Unit)? = null
     var onItemClickEditEncuesta: ((Encuesta) -> Unit)? = null
+    var onSwipToDeleteCallback: ((Encuesta) -> Unit)? = null
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var encuestas = emptyList<Encuesta>() // Copia cache de los encuestas
+    //private var encuestas = emptyList<Encuesta>() // Copia cache de los encuestas
+    private var encuestas = mutableListOf<Encuesta>() // Copia cache de los encuestas
 
     inner class EncuestaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView : ImageView
@@ -65,10 +68,35 @@ class EncuestaListAdapter internal constructor(
 
 
     internal fun setEncuestas(encuestas: List<Encuesta>) {
-        this.encuestas = encuestas
+        //this.encuestas = encuestas
+        this.encuestas = encuestas.toMutableList()
         notifyDataSetChanged()
     }
 
     override fun getItemCount() = encuestas.size
+
+    fun showDeleteConfirmationDialog(position: Int) {
+        AlertDialog.Builder(context).apply {
+            setTitle("Confirmar eliminacion")
+            setMessage("Esta seguro que desea borrar la encuesta?")
+            setPositiveButton("Confirmar"){
+                dialog, wich -> removeAt(position)
+            }
+            setNegativeButton("Cancelar"){
+                dialog, wich -> dialog.dismiss()
+            }
+            create()
+            show()
+        }
+        notifyItemRangeChanged(position, itemCount) // actualiza las posiciones de los elementos restantes
+    }
+
+    private fun removeAt(position: Int) {
+        val encuesta = encuestas[position]
+        encuestas.removeAt(position)
+        onSwipToDeleteCallback?.invoke(encuesta)
+        notifyItemRemoved(position)
+    }
+
 }
 

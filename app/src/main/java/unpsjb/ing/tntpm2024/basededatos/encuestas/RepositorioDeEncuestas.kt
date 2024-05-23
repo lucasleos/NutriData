@@ -1,10 +1,12 @@
 package unpsjb.ing.tntpm2024.basededatos.encuestas
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
 
+    val TAG = "RepositorioDeEncuestas"
     fun getEncuesta(searchQuery: String) : Flow<List<Encuesta>> {
         return encuestaDAO.getEncuesta(searchQuery)
     }
@@ -30,6 +32,11 @@ class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
                 }
             }
         }
+    }
+
+    suspend fun deleteEncuesta(encuestaId: Int){
+        Log.d(TAG, "encuesta $encuestaId borrada")
+        encuestaDAO.deleteEncuesta(encuestaId)
     }
 
 }

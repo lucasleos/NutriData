@@ -52,6 +52,10 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
         return repository.getEncuesta(searchQuery).asLiveData()
     }
 
+    fun deleteEncuesta(encuestaId: Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteEncuesta(encuestaId)
+    }
+
 
     private var _alimento = MutableLiveData<String>("")
     val alimento: LiveData<String>

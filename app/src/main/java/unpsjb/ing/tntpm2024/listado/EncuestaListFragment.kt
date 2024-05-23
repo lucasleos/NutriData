@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.compose.material.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
@@ -69,6 +72,9 @@ class EncuestaListFragment : Fragment() {
         recyclerView.adapter = adapterList
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
 
+        val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
         encuestaViewModel = ViewModelProvider(this).get(EncuestaViewModel::class.java)
 
         encuestaViewModel.todasLasEncuestas
@@ -113,7 +119,16 @@ class EncuestaListFragment : Fragment() {
                 encuestaCompletada = it.encuestaCompletada
             ))}
 
+        adapterList.onSwipToDeleteCallback = {
+            //dialogo desea borrar encuesta?
+            encuestaViewModel.deleteEncuesta(it.encuestaId)
+            Toast.makeText(context, "encuesta borrada", Toast.LENGTH_SHORT).show()
+
+        }
+
         return binding.root
     }
+
+
 
 }

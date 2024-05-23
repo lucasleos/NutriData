@@ -32,4 +32,7 @@ interface  EncuestaDAO {
 
     @Query("SELECT COUNT(encuestaId) from tabla_encuesta")
     suspend fun cantidadDeEncuestas(): Int
+
+    @Query("DELETE FROM tabla_encuesta WHERE encuestaId=:encuestaId")
+    suspend fun deleteEncuesta(encuestaId: Int)
 }
