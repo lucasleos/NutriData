@@ -25,8 +25,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_encuestalist"
-            app:destination="@id/encuestalist" />
+            android:id="@+id/action_loginFragment_to_inicioFragment"
+            app:destination="@id/inicioFragment" />
     </fragment>
     <fragment
         android:id="@+id/encuestaFragment"
@@ -49,6 +49,25 @@
             android:name="desc"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="unpsjb.ing.tntpm2024.inicio.InicioFragment"
+        android:label="fragment_inicio2"
+        tools:layout="@layout/fragment_inicio2" >
+        <action
+            android:id="@+id/action_inicioFragment_to_encuestalist"
+            app:destination="@id/encuestalist" />
+        <action
+            android:id="@+id/action_inicioFragment_to_estadisticaFragment"
+            app:destination="@id/estadisticaFragment" />
+        <action
+            android:id="@+id/action_inicioFragment_to_encuestaFragment2"
+            app:destination="@id/encuestaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/estadisticaFragment"
+        android:name="unpsjb.ing.tntpm2024.estadistica.EstadisticaFragment"
+        android:label="EstadisticaFragment" />
 
 
 </navigation>

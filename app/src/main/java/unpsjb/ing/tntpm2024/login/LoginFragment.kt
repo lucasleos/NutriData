@@ -35,7 +35,7 @@ class LoginFragment : Fragment() {
 
         binding.btnIngresar.setOnClickListener {
             //if ((binding.username.text.toString() == "admin") && (binding.password.text.toString() == "tnt2024")) {
-                findNavController().navigate(R.id.action_loginFragment_to_encuestalist)
+                findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
               //  Toast.makeText(activity, "Bienvenido " + binding.username.text, Toast.LENGTH_SHORT)
                //     .show()
             //} else {

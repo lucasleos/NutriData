@@ -36,5 +36,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="agregar_encuesta">Agregar encuesta</string>
+    <string name="bienvenida">Bienvenido!</string>
+    <string name="btnEncuestas">Ir a Encuestas</string>
+    <string name="btnEncuesta">Hacer Encuesta</string>
+    <string name="btnEstadistica">Ir a Estadísticas</string>
 
 </resources>
