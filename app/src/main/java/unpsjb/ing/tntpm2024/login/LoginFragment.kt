@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentLoginBinding
+import unpsjb.ing.tntpm2024.listado.EncuestaListFragmentDirections
 
 
 class LoginFragment : Fragment() {
@@ -35,7 +36,10 @@ class LoginFragment : Fragment() {
 
         binding.btnIngresar.setOnClickListener {
             //if ((binding.username.text.toString() == "admin") && (binding.password.text.toString() == "tnt2024")) {
-                findNavController().navigate(R.id.action_loginFragment_to_encuestalist)
+
+            //    findNavController().navigate(R.id.action_loginFragment_to_encuestalist)
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToEncuestalist())
+
               //  Toast.makeText(activity, "Bienvenido " + binding.username.text, Toast.LENGTH_SHORT)
                //     .show()
             //} else {

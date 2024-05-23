@@ -91,7 +91,7 @@ class NuevaEncuestaFragment : Fragment() {
         )
 
         // TODO para guardar encuesta
-        viewModel.insert(encuesta)
+        //viewModel.insert(encuesta)
         requireActivity().supportFragmentManager.popBackStack()
     }
 

@@ -98,8 +98,7 @@ class EditarEncuestaFragment : Fragment() {
         val valorVeces: String = binding.numberPicker.value.toString()
 
         // para guardar encuesta
-        viewModel.editEncuesta(args.encuestaId,"Yogur Bebible", valorPorcion,
-            valorFrecuencia, valorVeces, encuestaCompletada)
+        //viewModel.editEncuesta(args.encuestaId,"Yogur Bebible", valorPorcion, valorFrecuencia, valorVeces, encuestaCompletada)
         requireActivity().supportFragmentManager.popBackStack()
     }
 }
