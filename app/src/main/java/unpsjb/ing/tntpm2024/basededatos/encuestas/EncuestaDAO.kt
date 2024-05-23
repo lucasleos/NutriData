@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 
 @Dao
 interface  EncuestaDAO {
@@ -26,7 +25,7 @@ interface  EncuestaDAO {
     suspend fun insertar(encuesta: Encuesta)
 
     @Query("INSERT OR REPLACE INTO tabla_encuesta (encuestaId, alimento, porcion, frecuencia, veces, encuestaCompletada) VALUES (:encuestaId, :alimento, :porcion, :frecuencia, :veces, :encuestaCompletada)")
-    suspend fun insertarEncustaIncompleta(encuestaId: Int, alimento: String, porcion: String,  frecuencia: String, veces: String, encuestaCompletada : Boolean)
+    suspend fun editEncuesta(encuestaId: Int, alimento: String, porcion: String, frecuencia: String, veces: String, encuestaCompletada : Boolean)
 
     @Query("DELETE FROM tabla_encuesta")
     suspend fun borrarTodos()

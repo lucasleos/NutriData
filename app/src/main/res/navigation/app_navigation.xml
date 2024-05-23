@@ -13,11 +13,14 @@
         android:label="EncuestaListFragment"
         tools:layout="@layout/fragment_inicio">
         <action
-            android:id="@+id/action_encuestalist_to_encuestaFragment"
+            android:id="@+id/action_encuestalist_to_nuevaEncuestaFragment"
             app:destination="@id/nuevaEncuestaFragment" />
         <action
             android:id="@+id/action_encuestalist_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_encuestalist_to_editarEncuestaFragment"
+            app:destination="@id/editarEncuestaFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -30,9 +33,27 @@
     </fragment>
     <fragment
         android:id="@+id/nuevaEncuestaFragment"
-        android:name="unpsjb.ing.tntpm2024.encuesta.EncuestaFragment"
+        android:name="unpsjb.ing.tntpm2024.encuesta.NuevaEncuestaFragment"
         android:label="fragment_encuesta"
-        tools:layout="@layout/fragment_encuesta">
+        tools:layout="@layout/fragment_nueva_encuesta">
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="unpsjb.ing.tntpm2024.detalle.DetailFragment"
+        android:label="DetailFragment"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="desc"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editarEncuestaFragment"
+        android:name="unpsjb.ing.tntpm2024.encuesta.EditarEncuestaFragment"
+        android:label="EditarEncuestaFragment"
+        tools:layout="@layout/fragment_editar_encuesta">
         <argument
             android:name="aliemento"
             app:argType="string"
@@ -55,18 +76,6 @@
         <argument
             android:name="encuestaId"
             app:argType="integer" />
-    </fragment>
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="unpsjb.ing.tntpm2024.detalle.DetailFragment"
-        android:label="DetailFragment"
-        tools:layout="@layout/fragment_detail">
-        <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="desc"
-            app:argType="string" />
     </fragment>
 
 

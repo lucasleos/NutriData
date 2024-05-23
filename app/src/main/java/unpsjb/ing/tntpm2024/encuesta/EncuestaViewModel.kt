@@ -25,18 +25,32 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
         repository = RepositorioDeEncuestas(encuestasDao)
         todasLasEncuestas = repository.todasLasEncuestas
     }
+
     fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertar(encuesta)
     }
 
-    fun insertEncuestaIncompleta(encuestaId: Int, aliemento: String?, porcion: String?, frecuencia: String?, veces: String?, encuestaCompletada: Boolean)= viewModelScope.launch(Dispatchers.IO)  {
-        repository.insertarEncuestaIncompleta(encuestaId, aliemento, porcion, frecuencia, veces, encuestaCompletada)
+    fun editEncuesta(
+        encuestaId: Int,
+        aliemento: String?,
+        porcion: String?,
+        frecuencia: String?,
+        veces: String?,
+        encuestaCompletada: Boolean
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        repository.editEncuesta(
+            encuestaId,
+            aliemento,
+            porcion,
+            frecuencia,
+            veces,
+            encuestaCompletada
+        )
     }
 
-    fun getEncuesta(searchQuery: String) : LiveData<List<Encuesta>>{
+    fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
         return repository.getEncuesta(searchQuery).asLiveData()
     }
-
 
 
     private var _alimento = MutableLiveData<String>("")
@@ -62,7 +76,5 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
     fun encuestaCompletada() {
         _encuestaCompletada.value = true
     }
-
-
 
 }

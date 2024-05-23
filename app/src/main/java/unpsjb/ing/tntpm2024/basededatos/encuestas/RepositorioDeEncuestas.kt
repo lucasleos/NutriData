@@ -2,8 +2,6 @@ package unpsjb.ing.tntpm2024.basededatos.encuestas
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
-import unpsjb.ing.tntpm2024.basededatos.encuestas.EncuestaDAO
 
 class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
 
@@ -22,12 +20,12 @@ class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
         encuestaDAO.insertar(encuesta)
     }
 
-    suspend fun insertarEncuestaIncompleta(encuestaId: Int, aliemento: String?, porcion: String?, frecuencia: String?, veces: String?, encuestaCompletada: Boolean) {
+    suspend fun editEncuesta(encuestaId: Int, aliemento: String?, porcion: String?, frecuencia: String?, veces: String?, encuestaCompletada: Boolean) {
         if (aliemento != null) {
             if (porcion != null) {
                 if (frecuencia != null) {
                     if (veces != null) {
-                        encuestaDAO.insertarEncustaIncompleta(encuestaId, aliemento, porcion, frecuencia, veces, encuestaCompletada)
+                        encuestaDAO.editEncuesta(encuestaId, aliemento, porcion, frecuencia, veces, encuestaCompletada)
                     }
                 }
             }
