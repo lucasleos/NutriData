@@ -1,27 +1,24 @@
 package unpsjb.ing.tntpm2024.listado
 
 import android.os.Build
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.databinding.DataBindingUtil
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.compose.material.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import unpsjb.ing.tnt.ligadeportiva.listado.listado.EncuestaListAdapter
+import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
@@ -75,6 +72,9 @@ class EncuestaListFragment : Fragment() {
         recyclerView.adapter = adapterList
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
 
+        val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
         encuestaViewModel = ViewModelProvider(this).get(EncuestaViewModel::class.java)
 
         encuestaViewModel.todasLasEncuestas
@@ -86,22 +86,21 @@ class EncuestaListFragment : Fragment() {
                 }
             )
 
-        val fab = binding.botonFlotante
+        val btnCrearEncuesta = binding.botonFlotante
 
-        fab.setOnClickListener {
-            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEncuestaFragment())
+        btnCrearEncuesta.setOnClickListener {
+            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToNuevaEncuestaFragment())
         }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
         adapterList.onItemClick = {
-            var asd = it.encuestaCompletada
             //Log.d(TAG, "el alimento es ${it.alimento}")
             findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
                   //title = it.dataTitle,
                   //desc = it.dataDesc
-                title = "Detalle Encuesta",
+                title = "Detalle Encuesta ${it.encuestaId}",
                 desc = "Usted consume ${it.porcion} de ${it.alimento}, ${it.veces} cada ${it.frecuencia} \n" +
                         //"estado: ${it.encuestaCompletada}")
 
@@ -109,7 +108,27 @@ class EncuestaListFragment : Fragment() {
             )
         }
 
+        adapterList.onItemClickEditEncuesta = {
+            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEditarEncuestaFragment(
+                // set frecuencia etc por parametros
+                encuestaId = it.encuestaId,
+                aliemento = it.alimento,
+                frecuencia = it.frecuencia,
+                porcion = it.porcion,
+                veces = it.veces,
+                encuestaCompletada = it.encuestaCompletada
+            ))}
+
+        adapterList.onSwipToDeleteCallback = {
+            //dialogo desea borrar encuesta?
+            encuestaViewModel.deleteEncuesta(it.encuestaId)
+            Toast.makeText(context, "encuesta borrada", Toast.LENGTH_SHORT).show()
+
+        }
+
         return binding.root
     }
+
+
 
 }

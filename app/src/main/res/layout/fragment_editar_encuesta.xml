@@ -6,7 +6,7 @@
 
     <data>
         <variable
-            name="encuestaViewModel"
+            name="EncuestaViewModel"
             type="unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel" />
     </data>
 
@@ -18,7 +18,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context=".encuesta.EncuestaFragment">
+        tools:context=".encuesta.NuevaEncuestaFragment">
 
     <TextView
         android:layout_marginTop="50dp"

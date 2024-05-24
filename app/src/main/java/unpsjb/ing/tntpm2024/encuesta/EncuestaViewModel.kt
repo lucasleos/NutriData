@@ -25,14 +25,36 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
         repository = RepositorioDeEncuestas(encuestasDao)
         todasLasEncuestas = repository.todasLasEncuestas
     }
+
     fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertar(encuesta)
     }
 
-    fun getEncuesta(searchQuery: String) : LiveData<List<Encuesta>>{
+    fun editEncuesta(
+        encuestaId: Int,
+        aliemento: String?,
+        porcion: String?,
+        frecuencia: String?,
+        veces: String?,
+        encuestaCompletada: Boolean
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        repository.editEncuesta(
+            encuestaId,
+            aliemento,
+            porcion,
+            frecuencia,
+            veces,
+            encuestaCompletada
+        )
+    }
+
+    fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
         return repository.getEncuesta(searchQuery).asLiveData()
     }
 
+    fun deleteEncuesta(encuestaId: Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteEncuesta(encuestaId)
+    }
 
 
     private var _alimento = MutableLiveData<String>("")

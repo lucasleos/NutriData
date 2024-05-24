@@ -13,11 +13,14 @@
         android:label="EncuestaListFragment"
         tools:layout="@layout/fragment_inicio">
         <action
-            android:id="@+id/action_encuestalist_to_encuestaFragment"
-            app:destination="@id/encuestaFragment" />
+            android:id="@+id/action_encuestalist_to_nuevaEncuestaFragment"
+            app:destination="@id/nuevaEncuestaFragment" />
         <action
             android:id="@+id/action_encuestalist_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_encuestalist_to_editarEncuestaFragment"
+            app:destination="@id/editarEncuestaFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -29,13 +32,10 @@
             app:destination="@id/inicioFragment" />
     </fragment>
     <fragment
-        android:id="@+id/encuestaFragment"
-        android:name="unpsjb.ing.tntpm2024.encuesta.EncuestaFragment"
+        android:id="@+id/nuevaEncuestaFragment"
+        android:name="unpsjb.ing.tntpm2024.encuesta.NuevaEncuestaFragment"
         android:label="fragment_encuesta"
-        tools:layout="@layout/fragment_encuesta" >
-        <action
-            android:id="@+id/action_encuestaFragment_to_encuestalist2"
-            app:destination="@id/encuestalist" />
+        tools:layout="@layout/fragment_nueva_encuesta">
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -50,6 +50,35 @@
             app:argType="string" />
     </fragment>
     <fragment
+        android:id="@+id/editarEncuestaFragment"
+        android:name="unpsjb.ing.tntpm2024.encuesta.EditarEncuestaFragment"
+        android:label="EditarEncuestaFragment"
+        tools:layout="@layout/fragment_editar_encuesta">
+        <argument
+            android:name="aliemento"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="frecuencia"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="porcion"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="veces"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="encuestaCompletada"
+            app:argType="boolean" />
+        <argument
+            android:name="encuestaId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
         android:id="@+id/inicioFragment"
         android:name="unpsjb.ing.tntpm2024.inicio.InicioFragment"
         android:label="fragment_inicio2"
@@ -62,12 +91,11 @@
             app:destination="@id/estadisticaFragment" />
         <action
             android:id="@+id/action_inicioFragment_to_encuestaFragment2"
-            app:destination="@id/encuestaFragment" />
+            app:destination="@id/nuevaEncuestaFragment" />
     </fragment>
     <fragment
         android:id="@+id/estadisticaFragment"
         android:name="unpsjb.ing.tntpm2024.estadistica.EstadisticaFragment"
         android:label="EstadisticaFragment" />
-
 
 </navigation>
