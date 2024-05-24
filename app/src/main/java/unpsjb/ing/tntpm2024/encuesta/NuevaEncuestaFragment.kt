@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentNuevaEncuestaBinding
+import java.util.Date
 
 
 class NuevaEncuestaFragment : Fragment() {
@@ -81,12 +80,15 @@ class NuevaEncuestaFragment : Fragment() {
         val valorPorcion: String = binding.spinnerPorcion.selectedItem as String
         val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
         val valorVeces: String = binding.numberPicker.value.toString()
+        val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
+        val fechaLong: Long = fechaActual.time // Convierte Date a Long
 
         val encuesta = Encuesta(
             alimento = "Yogur Bebible",
             porcion = valorPorcion,
             frecuencia = valorFrecuencia,
             veces = valorVeces,
+            fecha =  fechaLong,
             encuestaCompletada = encuestaCompletada
         )
 

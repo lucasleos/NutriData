@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
-import androidx.compose.material.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,6 +22,7 @@ import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
+import unpsjb.ing.tntpm2024.util.SwipToDeleteCallback
 
 class EncuestaListFragment : Fragment() {
 
@@ -86,24 +86,18 @@ class EncuestaListFragment : Fragment() {
                 }
             )
 
-        val btnCrearEncuesta = binding.botonFlotante
-
-        btnCrearEncuesta.setOnClickListener {
-            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToNuevaEncuestaFragment())
-        }
+        //val btnCrearEncuesta = binding.botonFlotante
+       // btnCrearEncuesta.setOnClickListener {
+        //    findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToNuevaEncuestaFragment())
+        //}
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
         adapterList.onItemClick = {
-            //Log.d(TAG, "el alimento es ${it.alimento}")
             findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
-                  //title = it.dataTitle,
-                  //desc = it.dataDesc
                 title = "Detalle Encuesta ${it.encuestaId}",
                 desc = "Usted consume ${it.porcion} de ${it.alimento}, ${it.veces} cada ${it.frecuencia} \n" +
-                        //"estado: ${it.encuestaCompletada}")
-
                         "Estado: " + if (it.encuestaCompletada) "Completada" else "Incompleta")
             )
         }
@@ -120,7 +114,6 @@ class EncuestaListFragment : Fragment() {
             ))}
 
         adapterList.onSwipToDeleteCallback = {
-            //dialogo desea borrar encuesta?
             encuestaViewModel.deleteEncuesta(it.encuestaId)
             Toast.makeText(context, "encuesta borrada", Toast.LENGTH_SHORT).show()
 

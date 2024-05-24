@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import java.util.Calendar
 
 @Dao
 interface  EncuestaDAO {
@@ -18,14 +19,14 @@ interface  EncuestaDAO {
     @Query("SELECT * from tabla_encuesta WHERE alimento LIKE :searchQuery")
     fun getEncuesta(searchQuery: String): Flow<List<Encuesta>>
 
-    @Query("SELECT * from tabla_encuesta ORDER BY encuestaId DESC")
+    @Query("SELECT * from tabla_encuesta ORDER BY fecha DESC")
     fun getEncuestas(): LiveData<List<Encuesta>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(encuesta: Encuesta)
 
-    @Query("INSERT OR REPLACE INTO tabla_encuesta (encuestaId, alimento, porcion, frecuencia, veces, encuestaCompletada) VALUES (:encuestaId, :alimento, :porcion, :frecuencia, :veces, :encuestaCompletada)")
-    suspend fun editEncuesta(encuestaId: Int, alimento: String, porcion: String, frecuencia: String, veces: String, encuestaCompletada : Boolean)
+    @Query("INSERT OR REPLACE INTO tabla_encuesta (encuestaId, alimento, porcion, frecuencia, veces, fecha, encuestaCompletada) VALUES (:encuestaId, :alimento, :porcion, :frecuencia, :veces, :fecha, :encuestaCompletada)")
+    suspend fun editEncuesta(encuestaId: Int, alimento: String, porcion: String, frecuencia: String, veces: String, fecha: Long, encuestaCompletada: Boolean)
 
     @Query("DELETE FROM tabla_encuesta")
     suspend fun borrarTodos()

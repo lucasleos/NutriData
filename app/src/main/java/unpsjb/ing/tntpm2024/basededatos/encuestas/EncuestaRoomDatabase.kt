@@ -5,12 +5,16 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import unpsjb.ing.tntpm2024.util.CalendarConverters
 
 // Anotar la clase para convertirla en una Database Room
 // con una Tabla (entity) de la clase Partido
+
+@TypeConverters(CalendarConverters::class)
 @Database(entities = [Encuesta::class], version = 1, exportSchema = false)
 public abstract class EncuestaRoomDatabase : RoomDatabase() {
 
@@ -66,43 +70,9 @@ public abstract class EncuestaRoomDatabase : RoomDatabase() {
             suspend fun cargarBaseDeDatos(encuestaDAO: EncuestaDAO) {
 
                 if(encuestaDAO.cantidadDeEncuestas() == 0) {
-
                     Log.i("EncuestaRoomDatabase", "cargarBaseDeDatos")
                     // Borrar el contenido de la base
                     encuestaDAO.borrarTodos()
-
-                    // Agregar partidos de ejemplo
-                    var encuesta = Encuesta(
-                        1,
-                        "yogur",
-                        "100ml",
-                        "semana",
-                        "2 veces",
-                        false
-                    )
-                    encuestaDAO.insertar(encuesta)
-
-                    encuestaDAO.insertar(
-                        Encuesta(
-                            2,
-                            "agua",
-                            "200ml",
-                            "dia",
-                            "2 veces",
-                            true
-                        )
-                    )
-
-                    encuestaDAO.insertar(
-                        Encuesta(
-                            encuestaId = 3,
-                            alimento = "leche",
-                            porcion = "300ml",
-                            frecuencia = "dia",
-                            veces = "3 veces",
-                            true
-                        )
-                    )
                 } // fin comprobacion cantidad
 
             }

@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.listado
+package unpsjb.ing.tntpm2024.util
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

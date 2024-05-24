@@ -56,15 +56,17 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas"/>
             </LinearLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/boton_flotante"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="wrap_content"
-                android:backgroundTint="@color/green_light"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:contentDescription="@string/agregar_encuesta"
-                android:src="@drawable/ic_add"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+   <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/boton_flotante"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:backgroundTint="@color/green_light"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/agregar_encuesta"
+        android:src="@drawable/ic_add"/> -->
 </layout>

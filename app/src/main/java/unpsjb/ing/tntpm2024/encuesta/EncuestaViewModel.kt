@@ -36,6 +36,7 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
         porcion: String?,
         frecuencia: String?,
         veces: String?,
+        fecha: Long,
         encuestaCompletada: Boolean
     ) = viewModelScope.launch(Dispatchers.IO) {
         repository.editEncuesta(
@@ -44,6 +45,7 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
             porcion,
             frecuencia,
             veces,
+            fecha,
             encuestaCompletada
         )
     }
