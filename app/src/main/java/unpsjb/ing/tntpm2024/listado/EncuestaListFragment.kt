@@ -29,7 +29,7 @@ class EncuestaListFragment : Fragment() {
     val TAG = "EncuestaListFragment"
 
     //private lateinit var adapterList :  EncuestaListAdapter
-    private val adapterList : EncuestaListAdapter by lazy {EncuestaListAdapter(requireContext())}
+    private val adapterList: EncuestaListAdapter by lazy { EncuestaListAdapter(requireContext()) }
 
     private lateinit var encuestaViewModel: EncuestaViewModel
     private lateinit var dataList: ArrayList<Encuesta>
@@ -80,14 +80,13 @@ class EncuestaListFragment : Fragment() {
         encuestaViewModel.todasLasEncuestas
             .observe(
                 viewLifecycleOwner,
-                Observer {
-                        encuestas ->
-                    encuestas?.let{ adapterList.setEncuestas(it) }
+                Observer { encuestas ->
+                    encuestas?.let { adapterList.setEncuestas(it) }
                 }
             )
 
         //val btnCrearEncuesta = binding.botonFlotante
-       // btnCrearEncuesta.setOnClickListener {
+        // btnCrearEncuesta.setOnClickListener {
         //    findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToNuevaEncuestaFragment())
         //}
 
@@ -95,23 +94,40 @@ class EncuestaListFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         adapterList.onItemClick = {
-            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
-                title = "Detalle Encuesta ${it.encuestaId}",
-                desc = "Usted consume ${it.porcion} de ${it.alimento}, ${it.veces} cada ${it.frecuencia} \n" +
-                        "Estado: " + if (it.encuestaCompletada) "Completada" else "Incompleta")
+            val encuestaId = it.encuestaId
+            val porcion = it.porcion
+            val alimento = it.alimento
+            val veces = it.veces
+            val frecuencia = it.frecuencia
+            val estado = if (it.encuestaCompletada) "Completada" else "Incompleta"
+
+            val title = "Detalle Encuesta $encuestaId"
+            val desc = """
+        Usted consume $porcion de $alimento, $veces cada $frecuencia
+        Estado: $estado
+    """.trimIndent()
+
+            findNavController().navigate(
+                EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
+                    title = title,
+                    desc = desc
+                )
             )
         }
 
         adapterList.onItemClickEditEncuesta = {
-            findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToEditarEncuestaFragment(
-                // set frecuencia etc por parametros
-                encuestaId = it.encuestaId,
-                aliemento = it.alimento,
-                frecuencia = it.frecuencia,
-                porcion = it.porcion,
-                veces = it.veces,
-                encuestaCompletada = it.encuestaCompletada
-            ))}
+            findNavController().navigate(
+                EncuestaListFragmentDirections.actionEncuestalistToEditarEncuestaFragment(
+                    // set frecuencia etc por parametros
+                    encuestaId = it.encuestaId,
+                    aliemento = it.alimento,
+                    frecuencia = it.frecuencia,
+                    porcion = it.porcion,
+                    veces = it.veces,
+                    encuestaCompletada = it.encuestaCompletada
+                )
+            )
+        }
 
         adapterList.onSwipToDeleteCallback = {
             encuestaViewModel.deleteEncuesta(it.encuestaId)
@@ -121,7 +137,6 @@ class EncuestaListFragment : Fragment() {
 
         return binding.root
     }
-
 
 
 }

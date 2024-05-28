@@ -21,18 +21,19 @@ class EncuestaListAdapter internal constructor(
     var onSwipToDeleteCallback: ((Encuesta) -> Unit)? = null
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+
     //private var encuestas = emptyList<Encuesta>() // Copia cache de los encuestas
     private var encuestas = mutableListOf<Encuesta>() // Copia cache de los encuestas
 
     inner class EncuestaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView : ImageView
-        val encuestaItemView: TextView = itemView.findViewById(R.id.tvTitle)
-
-        init {
-            imageView = itemView.findViewById(R.id.imageView)
-        }
-
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val alimentoTextView: TextView = itemView.findViewById(R.id.tvAlimento)
+        val porcionTextView: TextView = itemView.findViewById(R.id.tvPorcion)
+        val frecuenciaTextView: TextView = itemView.findViewById(R.id.tvFrecuencia)
+        val vecesTextView: TextView = itemView.findViewById(R.id.tvVeces)
+        val encuestaIdTextView: TextView = itemView.findViewById(R.id.tvEncuestaId)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EncuestaViewHolder {
         val itemView = inflater.inflate(R.layout.item_layout, parent, false)
@@ -40,32 +41,28 @@ class EncuestaListAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: EncuestaViewHolder, position: Int) {
-
         val encuesta = encuestas[position]
-        val text = "${encuesta.alimento} ${encuesta.porcion} ${encuesta.frecuencia} ${encuesta.veces} ${encuesta.encuestaId}"
-        holder.encuestaItemView.text = text
 
-        if(encuesta.encuestaCompletada) {
+        holder.encuestaIdTextView.text = "Encuesta N° ${encuesta.encuestaId}"
+        holder.alimentoTextView.text = "Alimento: ${encuesta.alimento}"
+        holder.porcionTextView.text = "Porción: ${encuesta.porcion}"
+        holder.frecuenciaTextView.text = "Frecuencia: ${encuesta.frecuencia}"
+        holder.vecesTextView.text = "Veces: ${encuesta.veces}"
+
+        if (encuesta.encuestaCompletada) {
             holder.imageView.setImageResource(R.drawable.view_ico)
-        }else{
+        } else {
             holder.imageView.setImageResource(R.drawable.edit_ico)
         }
 
-      //  holder.itemView.setOnClickListener{
-       //     onItemClick?.invoke(encuesta)
-       // }
-
         holder.imageView.setOnClickListener {
-            if(encuesta.encuestaCompletada) {
-                // navegar a detail
+            if (encuesta.encuestaCompletada) {
                 onItemClick?.invoke(encuesta)
-            }else{
-               // navegar a editar, pasarle parametros de como estaba la encuesta
+            } else {
                 onItemClickEditEncuesta?.invoke(encuesta)
             }
         }
     }
-
 
     internal fun setEncuestas(encuestas: List<Encuesta>) {
         //this.encuestas = encuestas
@@ -79,16 +76,19 @@ class EncuestaListAdapter internal constructor(
         AlertDialog.Builder(context).apply {
             setTitle("Confirmar eliminacion")
             setMessage("Esta seguro que desea borrar la encuesta?")
-            setPositiveButton("Confirmar"){
-                dialog, wich -> removeAt(position)
+            setPositiveButton("Confirmar") { dialog, wich ->
+                removeAt(position)
             }
-            setNegativeButton("Cancelar"){
-                dialog, wich -> dialog.dismiss()
+            setNegativeButton("Cancelar") { dialog, wich ->
+                dialog.dismiss()
             }
             create()
             show()
         }
-        notifyItemRangeChanged(position, itemCount) // actualiza las posiciones de los elementos restantes
+        notifyItemRangeChanged(
+            position,
+            itemCount
+        ) // actualiza las posiciones de los elementos restantes
     }
 
     private fun removeAt(position: Int) {
