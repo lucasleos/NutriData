@@ -24,9 +24,14 @@ class EstadisticaFragment : Fragment() {
     private val viewModel: EstadisticaViewModel by viewModels()
 
     private lateinit var pieChart: PieChart
-    private var sumaDiaria: Float = 0f;
-    private var sumaSemanal: Float = 0f;
-    private var sumaMensual: Float = 0f;
+    private var sumaDiaria: Float = 0f
+    private var sumaSemanal: Float = 0f
+    private var sumaMensual: Float = 0f
+
+    val DENSIDAD_GRASA = 1.1
+    private lateinit var consumoDiario: String
+    private lateinit var consumoSemanal: String
+    private lateinit var consumoMensual: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +43,10 @@ class EstadisticaFragment : Fragment() {
 
         binding.estadisticaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        consumoDiario = binding.consumoDiarioText.toString()
+        consumoSemanal = binding.consumoSemanalText.toString()
+        consumoMensual = binding.consumoMensualText.toString()
 
         calculoEncuestasDiarias()
         calculoEncuestasSemanales()
@@ -58,7 +67,12 @@ class EstadisticaFragment : Fragment() {
             Encuesta(3, "Yogur bebible", "100ml", "Dia", "1", 12, true)
         )
         sumaDiaria = encuestas.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        calculoConsumoDiario()
 
+    }
+
+    private fun calculoConsumoDiario() {
+        consumoDiario = (sumaDiaria * DENSIDAD_GRASA).toString() + "gr"
     }
 
     private fun calculoEncuestasSemanales() {
@@ -69,7 +83,12 @@ class EstadisticaFragment : Fragment() {
             Encuesta(3, "Yogur bebible", "150ml", "Semana", "3", 12, true)
         )
         sumaSemanal = encuestas.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        calculoConsumoSemanal()
 
+    }
+
+    private fun calculoConsumoSemanal() {
+        consumoSemanal = (sumaSemanal * DENSIDAD_GRASA).toString() + "gr"
     }
 
     private fun calculoEncuestasMensuales() {
@@ -80,7 +99,12 @@ class EstadisticaFragment : Fragment() {
             Encuesta(3, "Yogur bebible", "150ml", "Mes", "24", 12, true)
         )
         sumaMensual = encuestas.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        calculoConsumoMensual()
 
+    }
+
+    private fun calculoConsumoMensual() {
+        consumoMensual = (sumaMensual * DENSIDAD_GRASA).toString() + "gr"
     }
 
     private fun extractNum(cadena: String): Int {
