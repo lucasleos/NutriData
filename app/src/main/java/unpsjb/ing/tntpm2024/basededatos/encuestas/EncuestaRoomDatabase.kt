@@ -41,6 +41,7 @@ public abstract class EncuestaRoomDatabase : RoomDatabase() {
                     EncuestaRoomDatabase::class.java,
                     "encuesta_database"
                 )
+                    .fallbackToDestructiveMigration()
                     .addCallback(EncuestaDatabaseCallback(viewModelScope))
                     .build()
                 INSTANCIA = instancia
