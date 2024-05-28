@@ -162,10 +162,6 @@ class EstadisticaFragment : Fragment() {
     }
 
     private fun loadPieChartData() {
-        // Ejemplo de datos de consumo de grasas (en gramos)
-        val consumoDiario = 20f
-        val consumoSemanal = 140f
-        val consumoMensual = 600f
 
         Log.d(TAG, "sumaDiariaGrafico: $sumaDiaria")
         Log.d(TAG, "sumaSemanalGrafico: $sumaSemanal")
@@ -178,7 +174,7 @@ class EstadisticaFragment : Fragment() {
 
         val colors = ArrayList<Int>()
         colors.add(Color.Red.toArgb())
-        colors.add(Color.Blue.toArgb())
+        colors.add(Color.Yellow.toArgb())
         colors.add(Color.Green.toArgb())
 
         val dataSet = PieDataSet(entries, "Consumo de Grasas")
