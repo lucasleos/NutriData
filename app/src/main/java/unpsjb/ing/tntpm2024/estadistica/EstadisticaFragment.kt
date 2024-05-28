@@ -2,6 +2,7 @@ package unpsjb.ing.tntpm2024.estadistica
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,26 +10,37 @@ import android.view.ViewGroup
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentEstadisticaBinding
+import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 
 
 class EstadisticaFragment : Fragment() {
 
+    val TAG = "EstadisticaFragment"
     private lateinit var binding: FragmentEstadisticaBinding
     private val viewModel: EstadisticaViewModel by viewModels()
+
+    private lateinit var encuestaViewModel: EncuestaViewModel
+    private val adapterList : EncuestaListAdapter by lazy { EncuestaListAdapter(requireContext()) }
+
+    private var listDiarias: List<Encuesta> = listOf()
+    private var listSemanales: List<Encuesta> = listOf()
+    private var listMensuales: List<Encuesta> = listOf()
 
     private lateinit var pieChart: PieChart
     private var sumaDiaria: Float = 0f
     private var sumaSemanal: Float = 0f
     private var sumaMensual: Float = 0f
 
-    val DENSIDAD_GRASA = 1.1
+    private val DENSIDAD_GRASA = 0.11
     private lateinit var consumoDiario: String
     private lateinit var consumoSemanal: String
     private lateinit var consumoMensual: String
@@ -48,63 +60,89 @@ class EstadisticaFragment : Fragment() {
         consumoSemanal = binding.consumoSemanalText.toString()
         consumoMensual = binding.consumoMensualText.toString()
 
-        calculoEncuestasDiarias()
-        calculoEncuestasSemanales()
-        calculoEncuestasMensuales()
-
         pieChart = binding.pieChart
-        setupPieChart()
-        loadPieChartData()
+
+        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
+
+        encuestaViewModel.todasLasEncuestas
+            .observe(
+                viewLifecycleOwner
+            ) { encuestas ->
+                encuestas?.let {
+                    Log.d(TAG, "EncuestasDiarias: $encuestas")
+                    filtrarEncuestasPorDia(encuestas)
+                    filtrarEncuestasPorSemana(encuestas)
+                    filtrarEncuestasPorMes(encuestas)
+                    adapterList.setEncuestas(it)
+                }
+                setupPieChart()
+                loadPieChartData()
+            }
+
 
         return binding.root
     }
 
+    private fun filtrarEncuestasPorDia(encuestas: List<Encuesta>) {
+        listDiarias = encuestas.filter { it.frecuencia == "Dia" }
+        Log.d(TAG, "FiltradoEncuestasDiarias: $listDiarias")
+        calculoEncuestasDiarias()
+    }
+
+    private fun filtrarEncuestasPorSemana(encuestas: List<Encuesta>) {
+        listSemanales = encuestas.filter { it.frecuencia == "Semana" }
+        Log.d(TAG, "FiltradoEncuestasSemanales: $listSemanales")
+        calculoEncuestasSemanales()
+    }
+
+    private fun filtrarEncuestasPorMes(encuestas: List<Encuesta>) {
+        listMensuales = encuestas.filter { it.frecuencia == "Mes" }
+        Log.d(TAG, "FiltradoEncuestasMensuales: $listMensuales")
+        calculoEncuestasMensuales()
+    }
+
     private fun calculoEncuestasDiarias() {
 
-        val encuestas = listOf(
-            Encuesta(1, "Yogur bebible", "250ml", "Dia", "2", 12, true),
-            Encuesta(2, "Yogur bebible", "150ml", "Dia", "5", 12, true),
-            Encuesta(3, "Yogur bebible", "100ml", "Dia", "1", 12, true)
-        )
-        sumaDiaria = encuestas.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        Log.d(TAG, "ListaEncuestasDiariasPrevia: $listDiarias")
+        sumaDiaria = listDiarias.sumOf { encuesta ->
+            val veces = encuesta.veces.toIntOrNull() ?: 0
+            val porcion = extractNum(encuesta.porcion)
+            veces * porcion
+        }.toFloat()
+        Log.d(TAG, "CalculoEncuestasDiarias: $sumaDiaria")
         calculoConsumoDiario()
 
     }
 
     private fun calculoConsumoDiario() {
         consumoDiario = (sumaDiaria * DENSIDAD_GRASA).toString() + "gr"
+        Log.d(TAG, "CalculoConsumoDiario: $consumoDiario")
     }
 
     private fun calculoEncuestasSemanales() {
 
-        val encuestas = listOf(
-            Encuesta(1, "Yogur bebible", "250ml", "Semana", "5", 12, true),
-            Encuesta(2, "Yogur bebible", "250ml", "Semana", "3", 12, true),
-            Encuesta(3, "Yogur bebible", "150ml", "Semana", "3", 12, true)
-        )
-        sumaSemanal = encuestas.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        sumaSemanal = listSemanales.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        Log.d(TAG, "CalculoEncuestasSemanales: $sumaSemanal")
         calculoConsumoSemanal()
 
     }
 
     private fun calculoConsumoSemanal() {
         consumoSemanal = (sumaSemanal * DENSIDAD_GRASA).toString() + "gr"
+        Log.d(TAG, "CalculoConsumoSemanal: $consumoSemanal")
     }
 
     private fun calculoEncuestasMensuales() {
 
-        val encuestas = listOf(
-            Encuesta(1, "Yogur bebible", "250ml", "Mes", "15", 12, true),
-            Encuesta(2, "Yogur bebible", "250ml", "Mes", "8", 12, true),
-            Encuesta(3, "Yogur bebible", "150ml", "Mes", "24", 12, true)
-        )
-        sumaMensual = encuestas.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        sumaMensual = listMensuales.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        Log.d(TAG, "CalculoEncuestasMensuales: $sumaMensual")
         calculoConsumoMensual()
 
     }
 
     private fun calculoConsumoMensual() {
         consumoMensual = (sumaMensual * DENSIDAD_GRASA).toString() + "gr"
+        Log.d(TAG, "CalculoConsumoMensual: $consumoMensual")
     }
 
     private fun extractNum(cadena: String): Int {
@@ -128,6 +166,10 @@ class EstadisticaFragment : Fragment() {
         val consumoDiario = 20f
         val consumoSemanal = 140f
         val consumoMensual = 600f
+
+        Log.d(TAG, "sumaDiariaGrafico: $sumaDiaria")
+        Log.d(TAG, "sumaSemanalGrafico: $sumaSemanal")
+        Log.d(TAG, "sumaMensualGrafico: $sumaMensual")
 
         val entries = ArrayList<PieEntry>()
         entries.add(PieEntry(sumaDiaria, "% Diario"))

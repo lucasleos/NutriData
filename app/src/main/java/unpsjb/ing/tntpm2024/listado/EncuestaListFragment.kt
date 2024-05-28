@@ -75,16 +75,14 @@ class EncuestaListFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        encuestaViewModel = ViewModelProvider(this).get(EncuestaViewModel::class.java)
+        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
 
         encuestaViewModel.todasLasEncuestas
             .observe(
-                viewLifecycleOwner,
-                Observer {
-                        encuestas ->
-                    encuestas?.let{ adapterList.setEncuestas(it) }
-                }
-            )
+                viewLifecycleOwner
+            ) { encuestas ->
+                encuestas?.let { adapterList.setEncuestas(it) }
+            }
 
         //val btnCrearEncuesta = binding.botonFlotante
        // btnCrearEncuesta.setOnClickListener {
