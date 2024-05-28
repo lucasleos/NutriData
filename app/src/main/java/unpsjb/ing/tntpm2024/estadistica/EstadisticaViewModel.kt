@@ -1,7 +1,22 @@
 package unpsjb.ing.tntpm2024.estadistica
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.encuestas.EncuestaRoomDatabase
+import unpsjb.ing.tntpm2024.basededatos.encuestas.RepositorioDeEncuestas
 
-class EstadisticaViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class EstadisticaViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository: RepositorioDeEncuestas
+
+    init {
+        val dao = EncuestaRoomDatabase
+            .obtenerDatabase(application, viewModelScope).encuestaDao()
+
+        repository = RepositorioDeEncuestas(dao)
+    }
+
 }
