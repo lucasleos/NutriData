@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "633050958720",
+    "project_id": "appencuestas-4d4b0",
+    "storage_bucket": "appencuestas-4d4b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633050958720:android:29f5df2517e6db29a20f65",
+        "android_client_info": {
+          "package_name": "unpsjb.ing.tntpm2024"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-1Tf53Az-6S9qDqSqB7vyXJgp40gnWgY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

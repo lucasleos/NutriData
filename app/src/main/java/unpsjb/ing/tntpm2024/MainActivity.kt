@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.database.database
 import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.databinding.ActivityMainBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
@@ -26,6 +29,10 @@ class MainActivity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
+
+        // Inicializar Firebase
+        val database = Firebase.database
+        val auth = Firebase.auth
 
         encuestaViewModel = ViewModelProvider(this).get(EncuestaViewModel::class.java)
 
