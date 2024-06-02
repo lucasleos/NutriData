@@ -5,21 +5,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentNuevaEncuestaBinding
 import java.util.Date
 
-
 class NuevaEncuestaFragment : Fragment() {
 
-    var isSaved : Boolean = false
-    // debe vincularse con el nombre del xml
+    var isSaved: Boolean = false
+
     private lateinit var binding: FragmentNuevaEncuestaBinding
     private val viewModel: EncuestaViewModel by viewModels()
 
@@ -34,52 +33,63 @@ class NuevaEncuestaFragment : Fragment() {
         binding.nuevaEncuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.numberPicker.value = viewModel.veces.value!!
+        val t = inflater.inflate(R.layout.fragment_nueva_encuesta, container, false)
 
-        val t = inflater.inflate(R.layout.fragment_nueva_encuesta,container,false)
+        val autoCompletePorcion = binding.autoCompleteTextViewPorcion
+        val itemsPorcion = resources.getStringArray(R.array.opcionesPorcion)
+        val adapterPorcion =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsPorcion)
+        autoCompletePorcion.setAdapter(adapterPorcion)
 
-        val spinnerPorcion = binding.spinnerPorcion
+        val autoCompleteFrecuencia = binding.autoCompleteTextViewFrecuencia
+        val itemsFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
+        val adapterFrecuencia =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsFrecuencia)
+        autoCompleteFrecuencia.setAdapter(adapterFrecuencia)
 
-        val valoresPorcion = resources.getStringArray(R.array.opcionesPorcion)
-        val adaptadorPorcion = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, valoresPorcion)
-        spinnerPorcion.adapter = adaptadorPorcion
-
-        binding.numberPicker.minValue = 0
-        binding.numberPicker.maxValue = 10
-
-        val spinnerFrecuencia = binding.spinnerFrecuencia
-        val valoresFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
-        val adaptadorFrecuencia = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, valoresFrecuencia)
-        spinnerFrecuencia.adapter = adaptadorFrecuencia
-
-
-        binding.btnGuardar.setOnClickListener{
-            isSaved = true
-            guardarEncuesta(true)
-        }
-
-        spinnerPorcion.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                //Toast.makeText(this@MainActivity, valoresPorcion[position], Toast.LENGTH_SHORT)
-                Log.i("spinner", valoresPorcion[position])
-
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
+        binding.btnGuardar.setOnClickListener {
+            if (validarInputs()) {
+                isSaved = true
+                guardarEncuesta(true)
             }
         }
         return binding.root
     }
 
+    private fun validarInputs(): Boolean {
+        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
+        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
+        val valorVeces: String = binding.inputVeces.text.toString()
+        var esValido: Boolean = true
+
+        if (valorPorcion.isEmpty()) {
+            binding.tfPorcion.error = "Error: Input Vacío."
+            esValido = false
+        }
+
+        if (valorFrecuencia.isEmpty()) {
+            binding.tfFrecuencia.error = "Error: Input Vacío."
+            esValido = false
+        }
+
+        if (valorVeces.isEmpty()) {
+            binding.tfVeces.error = "Error: Input Vacío."
+            esValido = false
+        }
+
+        return esValido
+    }
+
     override fun onStop() {
         super.onStop()
-        if(!isSaved)
+        if (!isSaved)
             guardarEncuesta(false)
     }
 
-    private fun guardarEncuesta(encuestaCompletada : Boolean) {
-        val valorPorcion: String = binding.spinnerPorcion.selectedItem as String
-        val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
-        val valorVeces: String = binding.numberPicker.value.toString()
+    private fun guardarEncuesta(encuestaCompletada: Boolean) {
+        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
+        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
+        val valorVeces: String = binding.inputVeces.text.toString()
         val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
         val fechaLong: Long = fechaActual.time // Convierte Date a Long
 
@@ -88,16 +98,12 @@ class NuevaEncuestaFragment : Fragment() {
             porcion = valorPorcion,
             frecuencia = valorFrecuencia,
             veces = valorVeces,
-            fecha =  fechaLong,
+            fecha = fechaLong,
             encuestaCompletada = encuestaCompletada
         )
 
-        // TODO para guardar encuesta
         viewModel.insert(encuesta)
-        requireActivity().supportFragmentManager.popBackStack()
+        findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
+
     }
-
 }
-
-
-

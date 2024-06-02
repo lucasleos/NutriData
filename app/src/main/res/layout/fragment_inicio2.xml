@@ -13,14 +13,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
         tools:context=".inicio.InicioFragment">
 
         <Button
             android:id="@+id/btnEncuestas"
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_marginTop="64dp"
+            android:background="@drawable/rounded_btn"
             android:text="@string/btnEncuestas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,9 @@
         <Button
             android:id="@+id/btnEncuesta"
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:drawablePadding="8dp"
+            android:background="@drawable/rounded_btn"
             android:text="@string/btnEncuesta"
             app:layout_constraintBottom_toTopOf="@+id/btnEstadistica"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +41,8 @@
         <Button
             android:id="@+id/btnEstadistica"
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
+            android:background="@drawable/rounded_btn"
             android:layout_marginBottom="64dp"
             android:text="@string/btnEstadistica"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +53,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="409dp"
             android:layout_height="200dp"
-            android:background="@drawable/fondo_customizado_verde"
+            android:background="@color/dark_green"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

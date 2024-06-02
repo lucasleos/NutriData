@@ -13,9 +13,6 @@
         android:label="EncuestaListFragment"
         tools:layout="@layout/fragment_inicio">
         <action
-            android:id="@+id/action_encuestalist_to_nuevaEncuestaFragment"
-            app:destination="@id/nuevaEncuestaFragment" />
-        <action
             android:id="@+id/action_encuestalist_to_detailFragment"
             app:destination="@id/detailFragment" />
         <action
@@ -36,6 +33,11 @@
         android:name="unpsjb.ing.tntpm2024.encuesta.NuevaEncuestaFragment"
         android:label="fragment_encuesta"
         tools:layout="@layout/fragment_nueva_encuesta">
+        <action
+            android:id="@+id/action_nuevaEncuestaFragment_to_encuestalist"
+            app:destination="@id/encuestalist"
+            app:popUpTo="@+id/nuevaEncuestaFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -96,6 +98,7 @@
     <fragment
         android:id="@+id/estadisticaFragment"
         android:name="unpsjb.ing.tntpm2024.estadistica.EstadisticaFragment"
-        android:label="EstadisticaFragment" />
+        android:label="EstadisticaFragment"
+        tools:layout="@layout/fragment_estadistica" />
 
 </navigation>

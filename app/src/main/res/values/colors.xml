@@ -6,4 +6,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="green_light">#b5e9dd</color>
     <color name="green_variant">#9BC5BB</color>
+    <color name="dark_green">#24824D</color>
+    <color name="medium_green">#3CB371</color>
+    <color name="bone_white">#F0F0F0</color>
 </resources>

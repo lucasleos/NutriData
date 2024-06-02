@@ -14,18 +14,15 @@
         android:id="@+id/login_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/fondo_encuesta_alimento_1_redim"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context=".login.LoginFragment">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/indigo_daisy"
             android:gravity="center"
             android:text="Encuesta Alimentaria"
@@ -36,9 +33,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
+            android:hint="Email"
+            app:boxBackgroundColor="@color/bone_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView">
@@ -46,19 +45,18 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:background="@color/white"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:textColor="@color/black" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
+            android:hint="Password"
+            app:boxBackgroundColor="@color/bone_white"
+            app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/usernameLayout">
@@ -66,26 +64,24 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:background="@color/white"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:textColor="@color/black" />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnIngresar"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_btn"
             android:fontFamily="@font/roboto_regular"
-            android:text="Ingresar"
+            android:text="Iniciar Sesión"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="EncuestaViewModel"
             type="unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel" />
@@ -14,101 +14,101 @@
         android:id="@+id/encuesta_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context=".encuesta.NuevaEncuestaFragment">
-
-    <TextView
-        android:layout_marginTop="50dp"
-        android:id="@+id/tvTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Alimento: yogurt bebible entero"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/layoutPorcion"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="@+id/tvTitulo"
-        tools:layout_editor_absoluteX="1dp">
-
-        <TextView
-            android:id="@+id/tvPorcion"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="Porcion: " />
-
-
-        <Spinner
-            android:id="@+id/spinnerPorcion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitulo"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/layoutFrecuencia"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/layoutPorcion"
-        tools:layout_editor_absoluteX="1dp">
-
-        <TextView
-            android:id="@+id/tvFrecuencia"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="Frecuencia: " />
-
-        <Spinner
-            android:id="@+id/spinnerFrecuencia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="236dp" />
-
-        <TextView
-            android:id="@+id/tvVeces"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="Veces: " />
-
-        <NumberPicker
-            android:id="@+id/numberPicker"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            />
-
-
-    </LinearLayout>
 
 
         <Button
             android:id="@+id/btnGuardar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_btn"
             android:text="Guardar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutFrecuencia" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tfPorcion"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            app:boxBackgroundColor="@color/bone_white"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="160dp"
+            app:errorEnabled="true"
+            android:layout_marginEnd="16dp"
+            android:hint="Porción"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewPorcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tfFrecuencia"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="210dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            app:errorEnabled="true"
+            app:boxBackgroundColor="@color/bone_white"
+            android:hint="Frecuencia"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tfVeces"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewFrecuencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tfVeces"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Veces"
+            app:boxBackgroundColor="@color/bone_white"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/btnGuardar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tfFrecuencia"
+            app:layout_constraintTop_toBottomOf="@+id/tfPorcion">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputVeces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvListadoEncuestas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_green"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Yogur Bebible"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

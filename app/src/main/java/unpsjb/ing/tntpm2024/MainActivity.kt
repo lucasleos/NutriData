@@ -1,7 +1,7 @@
 package unpsjb.ing.tntpm2024
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,12 +15,12 @@ import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.databinding.ActivityMainBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 
-class MainActivity : AppCompatActivity()  {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val adapterList : EncuestaListAdapter by lazy {EncuestaListAdapter(this)}
+    private val adapterList: EncuestaListAdapter by lazy { EncuestaListAdapter(this) }
     private lateinit var encuestaViewModel: EncuestaViewModel
 
     val TAG = "MainActivity"
@@ -34,14 +34,13 @@ class MainActivity : AppCompatActivity()  {
         val database = Firebase.database
         val auth = Firebase.auth
 
-        encuestaViewModel = ViewModelProvider(this).get(EncuestaViewModel::class.java)
+        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
 
         encuestaViewModel.todasLasEncuestas
             .observe(
                 this,
-                Observer {
-                        encuestas ->
-                    encuestas?.let{ adapterList.setEncuestas(it) }
+                Observer { encuestas ->
+                    encuestas?.let { adapterList.setEncuestas(it) }
                 }
             )
 
@@ -51,7 +50,5 @@ class MainActivity : AppCompatActivity()  {
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.theNavHostFragment)
         return NavigationUI.navigateUp(navController, drawerLayout)
-        //return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-
     }
 }

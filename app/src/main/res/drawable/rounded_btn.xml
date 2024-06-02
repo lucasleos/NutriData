@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <corners android:radius="8dp" /> <!-- Radio de las esquinas -->
+    <solid android:color="@color/dark_green" /> <!-- Color de fondo -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/green_variant" /> <!-- Color y ancho del borde -->
+
+    <!-- Opcional: agregar padding interno -->
+    <padding
+        android:bottom="10dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp" />
+</shape>

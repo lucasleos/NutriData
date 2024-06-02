@@ -1,11 +1,10 @@
 package unpsjb.ing.tntpm2024.encuesta
 
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,11 +14,11 @@ import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentEditarEncuestaBinding
 import java.util.Date
 
-
 class EditarEncuestaFragment : Fragment() {
 
-    var isSaved : Boolean = false
+    var isSaved: Boolean = false
     val args: EditarEncuestaFragmentArgs by navArgs()
+
     // debe vincularse con el nombre del xml
     private lateinit var binding: FragmentEditarEncuestaBinding
     private val viewModel: EncuestaViewModel by viewModels()
@@ -34,77 +33,85 @@ class EditarEncuestaFragment : Fragment() {
 
         binding.encuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.numberPicker.value = viewModel.veces.value!!
 
-        val t = inflater.inflate(R.layout.fragment_nueva_encuesta,container,false)
+        // Setear el valor del campo "Veces"
+        binding.inputVeces.text =
+            Editable.Factory.getInstance().newEditable(args.veces?.toString() ?: "")
 
-        val spinnerPorcion = binding.spinnerPorcion
+        // Configuración del AutoCompleteTextView para la Porción
+        val autoCompletePorcion = binding.autoCompleteTextViewPorcion
+        val itemsPorcion = resources.getStringArray(R.array.opcionesPorcion)
+        val adapterPorcion =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsPorcion)
+        autoCompletePorcion.setAdapter(adapterPorcion)
 
-        val valoresPorcion = resources.getStringArray(R.array.opcionesPorcion)
-        val adaptadorPorcion = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, valoresPorcion)
-        spinnerPorcion.adapter = adaptadorPorcion
+        // Configuración del AutoCompleteTextView para la Frecuencia
+        val autoCompleteFrecuencia = binding.autoCompleteTextViewFrecuencia
+        val itemsFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
+        val adapterFrecuencia =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsFrecuencia)
+        autoCompleteFrecuencia.setAdapter(adapterFrecuencia)
 
-        binding.numberPicker.minValue = 0
-        binding.numberPicker.maxValue = 10
+        // Setear los valores que vinieron de la otra pantalla
+        autoCompletePorcion.setText(args.porcion, false)
+        autoCompleteFrecuencia.setText(args.frecuencia, false)
 
-        val spinnerFrecuencia = binding.spinnerFrecuencia
-        val valoresFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
-        val adaptadorFrecuencia = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, valoresFrecuencia)
-        spinnerFrecuencia.adapter = adaptadorFrecuencia
-
-
-        binding.numberPicker.value = args.veces!!.toInt()
-
-        // setear valores que vinieron de la otra pantalla
-        for((index, item) in valoresFrecuencia.withIndex()){
-            if(item == args.frecuencia){
-                binding.spinnerFrecuencia.setSelection(index)
+        binding.btnGuardar.setOnClickListener {
+            if (validarInputs()) {
+                isSaved = true
+                editarEncuesta(true)
             }
         }
-
-        for((index, item) in valoresPorcion.withIndex()){
-            if(item == args.porcion){
-                binding.spinnerPorcion.setSelection(index)
-            }
-        }
-
-        binding.btnGuardar.setOnClickListener{
-            isSaved = true
-            editarEncuesta(true)
-        }
-
-        spinnerPorcion.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                Log.i("spinner", valoresPorcion[position])
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        }
-
         return binding.root
+    }
 
+    private fun validarInputs(): Boolean {
+        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
+        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
+        val valorVeces: String = binding.inputVeces.text.toString()
+        var esValido: Boolean = true
+
+        if (valorPorcion.isEmpty()) {
+            binding.tfPorcion.error = "Error: Input Vacío."
+            esValido = false
+        }
+
+        if (valorFrecuencia.isEmpty()) {
+            binding.tfFrecuencia.error = "Error: Input Vacío."
+            esValido = false
+        }
+
+        if (valorVeces.isEmpty()) {
+            binding.tfVeces.error = "Error: Input Vacío."
+            esValido = false
+        }
+
+        return esValido
     }
 
     override fun onStop() {
         super.onStop()
-        if(!isSaved)
+        if (!isSaved)
             editarEncuesta(false)
     }
 
     private fun editarEncuesta(encuestaCompletada: Boolean) {
-
-        val valorPorcion: String = binding.spinnerPorcion.selectedItem as String
-        val valorFrecuencia: String = binding.spinnerFrecuencia.selectedItem as String
-        val valorVeces: String = binding.numberPicker.value.toString()
+        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
+        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
+        val valorVeces: String = binding.inputVeces.text.toString()
         val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
         val fechaLong: Long = fechaActual.time // Convierte Date a Long
 
-
-        // para guardar encuesta
-        viewModel.editEncuesta(args.encuestaId,"Yogur Bebible", valorPorcion, valorFrecuencia, valorVeces, fechaLong, encuestaCompletada)
+        // Para guardar encuesta
+        viewModel.editEncuesta(
+            args.encuestaId,
+            "Yogur Bebible",
+            valorPorcion,
+            valorFrecuencia,
+            valorVeces,
+            fechaLong,
+            encuestaCompletada
+        )
         requireActivity().supportFragmentManager.popBackStack()
     }
 }
-
-
-
