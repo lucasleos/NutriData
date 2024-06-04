@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 
 class EncuestaListAdapter internal constructor(

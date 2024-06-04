@@ -17,7 +17,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentEstadisticaBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 

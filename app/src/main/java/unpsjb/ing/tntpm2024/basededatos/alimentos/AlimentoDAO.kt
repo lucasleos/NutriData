@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 
 @Dao
 interface AlimentoDAO {

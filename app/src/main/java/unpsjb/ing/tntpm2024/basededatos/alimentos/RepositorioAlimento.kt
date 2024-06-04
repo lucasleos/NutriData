@@ -2,8 +2,7 @@ package unpsjb.ing.tntpm2024.basededatos.alimentos
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
-import unpsjb.ing.tntpm2024.basededatos.encuestas.EncuestaDAO
+import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 
 class RepositorioAlimento(private val alimentoDAO: AlimentoDAO) {
 

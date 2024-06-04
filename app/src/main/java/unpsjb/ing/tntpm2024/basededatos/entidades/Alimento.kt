@@ -1,8 +1,9 @@
-package unpsjb.ing.tntpm2024.basededatos.alimentos
+package unpsjb.ing.tntpm2024.basededatos.entidades
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+
 @Entity(tableName = "tabla_alimento")
 data class Alimento(
     @PrimaryKey(autoGenerate = true)

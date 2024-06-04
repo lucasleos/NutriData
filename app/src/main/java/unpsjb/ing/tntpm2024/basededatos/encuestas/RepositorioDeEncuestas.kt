@@ -3,6 +3,7 @@ package unpsjb.ing.tntpm2024.basededatos.encuestas
 import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
 
