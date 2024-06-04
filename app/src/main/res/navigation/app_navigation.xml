@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_loginFragment_to_inicioFragment"
             app:destination="@id/inicioFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/nuevaEncuestaFragment"
@@ -100,5 +103,10 @@
         android:name="unpsjb.ing.tntpm2024.estadistica.EstadisticaFragment"
         android:label="EstadisticaFragment"
         tools:layout="@layout/fragment_estadistica" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="unpsjb.ing.tntpm2024.encuesta.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 
 </navigation>
