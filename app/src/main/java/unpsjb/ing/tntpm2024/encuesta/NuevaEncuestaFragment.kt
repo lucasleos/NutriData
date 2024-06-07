@@ -93,10 +93,6 @@ class NuevaEncuestaFragment : Fragment() {
         val fechaLong: Long = fechaActual.time // Convierte Date a Long
 
         val encuesta = Encuesta(
-            alimento = "Yogur Bebible",
-            porcion = valorPorcion,
-            frecuencia = valorFrecuencia,
-            veces = valorVeces,
             fecha = fechaLong,
             encuestaCompletada = encuestaCompletada
         )

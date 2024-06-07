@@ -11,8 +11,10 @@ data class Alimento(
 
     @ColumnInfo(name = "nombre")
     var nombre: String,
-    @ColumnInfo(name = "tipo")
-    var tipo: String,
+    @ColumnInfo(name = "categoria")
+    var categoria: String,
+    @ColumnInfo(name = "medida")
+    var medida: String,
     @ColumnInfo(name = "porcentaje_graso")
     var porcentajeGraso: Double,
 )

@@ -47,6 +47,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-common-ktx:21.0.0")
     implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
     val nav_version = "2.3.5"
     // Navigation Kotlin
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")

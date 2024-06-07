@@ -3,11 +3,13 @@ package unpsjb.ing.tntpm2024.basededatos.encuestas
 import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
+import unpsjb.ing.tntpm2024.basededatos.EncuestaDAO
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
 
     val TAG = "RepositorioDeEncuestas"
+
     fun getEncuesta(searchQuery: String) : Flow<List<Encuesta>> {
         return encuestaDAO.getEncuesta(searchQuery)
     }
@@ -20,7 +22,7 @@ class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
     // De esta manera, Room garantiza que no se realicen operaciones de larga ejecución
     // en el hilo principal, bloqueando la interfaz de usuario.
     suspend fun insertar(encuesta: Encuesta){
-        encuestaDAO.insertar(encuesta)
+        encuestaDAO.insertEncuesta(encuesta)
     }
 
     suspend fun editEncuesta(encuestaId: Int, aliemento: String?, porcion: String?, frecuencia: String?, veces: String?, fecha: Long, encuestaCompletada: Boolean) {
@@ -28,7 +30,7 @@ class RepositorioDeEncuestas(private val encuestaDAO: EncuestaDAO) {
             if (porcion != null) {
                 if (frecuencia != null) {
                     if (veces != null) {
-                        encuestaDAO.editEncuesta(encuestaId, aliemento, porcion, frecuencia, veces, fecha, encuestaCompletada)
+                        encuestaDAO.editEncuesta(encuestaId, fecha, encuestaCompletada)
                     }
                 }
             }

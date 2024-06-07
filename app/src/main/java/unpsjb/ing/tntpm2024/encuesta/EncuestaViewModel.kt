@@ -1,53 +1,33 @@
 package unpsjb.ing.tntpm2024.encuesta
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
-import unpsjb.ing.tntpm2024.basededatos.encuestas.EncuestaRoomDatabase
 import unpsjb.ing.tntpm2024.basededatos.encuestas.RepositorioDeEncuestas
 
-class EncuestaViewModel(application: Application) : AndroidViewModel(application) {
-
+class EncuestaViewModel(private val database: EncuestasDatabase) : ViewModel() {
 
     private val repository: RepositorioDeEncuestas
     val todasLasEncuestas: LiveData<List<Encuesta>>
 
     init {
-        val encuestasDao = EncuestaRoomDatabase
-            .obtenerDatabase(application, viewModelScope).encuestaDao()
+
+        val encuestasDao = database.encuestaDAO
 
         repository = RepositorioDeEncuestas(encuestasDao)
         todasLasEncuestas = repository.todasLasEncuestas
+
     }
 
     fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertar(encuesta)
-    }
-
-    fun editEncuesta(
-        encuestaId: Int,
-        aliemento: String?,
-        porcion: String?,
-        frecuencia: String?,
-        veces: String?,
-        fecha: Long,
-        encuestaCompletada: Boolean
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        repository.editEncuesta(
-            encuestaId,
-            aliemento,
-            porcion,
-            frecuencia,
-            veces,
-            fecha,
-            encuestaCompletada
-        )
     }
 
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
@@ -83,4 +63,14 @@ class EncuestaViewModel(application: Application) : AndroidViewModel(application
         _encuestaCompletada.value = true
     }
 
+}
+
+class EncuestaViewModelFactory(private val database: EncuestasDatabase) : ViewModelProvider.Factory {
+    fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(EncuestaViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return EncuestaViewModel(database) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

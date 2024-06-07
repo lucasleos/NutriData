@@ -3,7 +3,8 @@ package unpsjb.ing.tntpm2024.basededatos.entidades
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 
-@Entity(primaryKeys= ["encuestaId","alimentoId"])
+@Entity(tableName = "tabla_alimento_encuesta",
+        primaryKeys= ["encuestaId","alimentoId"])
 data class AlimentoEncuesta(
     val encuestaId: Int,
     val alimentoId: Int,
