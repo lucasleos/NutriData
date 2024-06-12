@@ -9,43 +9,19 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
 
     val allEncuestas: LiveData<List<Encuesta>> = encuestaDAO.getEncuestas()
 
-    val allAlimentos: LiveData<List<Alimento>> = encuestaDAO.getAlimentos()
+    fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
+        return encuestaDAO.getEncuesta(searchQuery)
+    }
+
+    fun eliminarEncuesta(encuesta: Encuesta) {
+        encuestaDAO.deleteEncuesta(encuesta)
+    }
 
     suspend fun insertarEncuesta(encuesta: Encuesta) {
         encuestaDAO.insertEncuesta(encuesta)
     }
 
-    fun getEncuesta(searchQuery: String) : Flow<List<Encuesta>> {
-        return encuestaDAO.getEncuesta(searchQuery)
+    fun editarEncuesta(encuesta: Encuesta) {
+        encuestaDAO.editEncuesta(encuesta)
     }
-
-    fun getCantidadEncuestas(): Int {
-        return encuestaDAO.getCantidadEncuestas()
-    }
-
-    fun borrarEncuestas() {
-        encuestaDAO.borrarEncuestas()
-    }
-
-    suspend fun insertarAlimento(alimento: Alimento) {
-        encuestaDAO.insertAlimento(alimento)
-    }
-
-    fun getAlimentoByNombre(nombre: String): Alimento {
-        return encuestaDAO.getAlimentoByName(nombre)
-    }
-
-//    fun getEncuestasByAlimentos(alimentoId: Int): LiveData<List<AlimentoEncuesta>> {
-//        return encuestaDAO.getEncuestasByAlimentos(alimentoId)
-//    }
-
-
-    fun getCantidadAlimentos(): Int {
-        return encuestaDAO.getCantidadAlimentos()
-    }
-
-//    suspend fun insertarAlimentoEncuesta(alimentoEncuesta: AlimentoEncuesta) {
-//        encuestaDAO.insertAlimentoEncuesta(alimentoEncuesta)
-//    }
-
 }

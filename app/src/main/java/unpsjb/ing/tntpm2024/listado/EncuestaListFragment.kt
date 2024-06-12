@@ -96,10 +96,10 @@ class EncuestaListFragment : Fragment() {
 
         adapterList.onItemClick = {
             val encuestaId = it.encuestaId
-            val porcion = it.porcion
-            val alimento = it.alimento
-            val veces = it.veces
-            val frecuencia = it.frecuencia
+            val porcion = "100 ml"
+            val alimento = "Yogur bebible"
+            val veces = "5"
+            val frecuencia = "Dia"
             val estado = if (it.encuestaCompletada) "Completada" else "Incompleta"
 
             val title = "Detalle Encuesta $encuestaId"
@@ -121,17 +121,23 @@ class EncuestaListFragment : Fragment() {
                 EncuestaListFragmentDirections.actionEncuestalistToEditarEncuestaFragment(
                     // set frecuencia etc por parametros
                     encuestaId = it.encuestaId,
-                    aliemento = it.alimento,
-                    frecuencia = it.frecuencia,
-                    porcion = it.porcion,
-                    veces = it.veces,
+                    aliemento = "Yogur bebible",
+                    frecuencia = "Dia",
+                    porcion = "100 ml",
+                    veces = "5",
                     encuestaCompletada = it.encuestaCompletada
                 )
             )
         }
 
         adapterList.onSwipToDeleteCallback = {
-            encuestaViewModel.deleteEncuesta(it.encuestaId)
+            val encuesta = Encuesta(
+                it.encuestaId,
+                123455,
+                true
+            )
+
+            encuestaViewModel.deleteEncuesta(encuesta)
             Toast.makeText(context, "encuesta borrada", Toast.LENGTH_SHORT).show()
 
         }

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentEditarEncuestaBinding
 import java.util.Date
 
@@ -96,21 +97,20 @@ class EditarEncuestaFragment : Fragment() {
     }
 
     private fun editarEncuesta(encuestaCompletada: Boolean) {
-        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
-        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
-        val valorVeces: String = binding.inputVeces.text.toString()
+        val id: Int = args.encuestaId
         val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
         val fechaLong: Long = fechaActual.time // Convierte Date a Long
+//        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
+//        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
+//        val valorVeces: String = binding.inputVeces.text.toString()
 
         // Para guardar encuesta
         viewModel.editEncuesta(
-            args.encuestaId,
-            "Yogur Bebible",
-            valorPorcion,
-            valorFrecuencia,
-            valorVeces,
-            fechaLong,
-            encuestaCompletada
+            Encuesta(
+                id,
+                fechaLong,
+                encuestaCompletada
+            )
         )
         requireActivity().supportFragmentManager.popBackStack()
     }

@@ -84,20 +84,20 @@ class EstadisticaFragment : Fragment() {
     }
 
     private fun filtrarEncuestasPorDia(encuestas: List<Encuesta>) {
-        listDiarias = encuestas.filter { it.frecuencia == "Dia" }
-        Log.d(TAG, "FiltradoEncuestasDiarias: $listDiarias")
+//        listDiarias = encuestas.filter { it.frecuencia == "Dia" }
+//        Log.d(TAG, "FiltradoEncuestasDiarias: $listDiarias")
         calculoEncuestasDiarias()
     }
 
     private fun filtrarEncuestasPorSemana(encuestas: List<Encuesta>) {
-        listSemanales = encuestas.filter { it.frecuencia == "Semana" }
-        Log.d(TAG, "FiltradoEncuestasSemanales: $listSemanales")
+//        listSemanales = encuestas.filter { it.frecuencia == "Semana" }
+//        Log.d(TAG, "FiltradoEncuestasSemanales: $listSemanales")
         calculoEncuestasSemanales()
     }
 
     private fun filtrarEncuestasPorMes(encuestas: List<Encuesta>) {
-        listMensuales = encuestas.filter { it.frecuencia == "Mes" }
-        Log.d(TAG, "FiltradoEncuestasMensuales: $listMensuales")
+//        listMensuales = encuestas.filter { it.frecuencia == "Mes" }
+//        Log.d(TAG, "FiltradoEncuestasMensuales: $listMensuales")
         calculoEncuestasMensuales()
     }
 
@@ -105,8 +105,10 @@ class EstadisticaFragment : Fragment() {
 
         Log.d(TAG, "ListaEncuestasDiariasPrevia: $listDiarias")
         sumaDiaria = listDiarias.sumOf { encuesta ->
-            val veces = encuesta.veces.toIntOrNull() ?: 0
-            val porcion = extractNum(encuesta.porcion)
+//            val veces = encuesta.veces.toIntOrNull() ?:
+//            val porcion = extractNum(encuesta.porcion)
+            val veces = 1
+            val porcion = 250
             veces * porcion
         }.toFloat()
         Log.d(TAG, "CalculoEncuestasDiarias: $sumaDiaria")
@@ -121,7 +123,8 @@ class EstadisticaFragment : Fragment() {
 
     private fun calculoEncuestasSemanales() {
 
-        sumaSemanal = listSemanales.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+//        sumaSemanal = listSemanales.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        sumaSemanal = 20.0F
         Log.d(TAG, "CalculoEncuestasSemanales: $sumaSemanal")
         calculoConsumoSemanal()
 
@@ -134,7 +137,8 @@ class EstadisticaFragment : Fragment() {
 
     private fun calculoEncuestasMensuales() {
 
-        sumaMensual = listMensuales.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+//        sumaMensual = listMensuales.sumOf { it.veces.toInt() * extractNum(it.porcion) }.toFloat()
+        sumaMensual = 10.0F
         Log.d(TAG, "CalculoEncuestasMensuales: $sumaMensual")
         calculoConsumoMensual()
 

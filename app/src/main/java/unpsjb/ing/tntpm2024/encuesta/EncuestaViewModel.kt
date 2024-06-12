@@ -10,50 +10,41 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
-import unpsjb.ing.tntpm2024.basededatos.encuestas.RepositorioDeEncuestas
+import unpsjb.ing.tntpm2024.basededatos.Repository
 
-class EncuestaViewModel(private val database: EncuestasDatabase) : ViewModel() {
+class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
-    private val repository: RepositorioDeEncuestas
+    private val repository: Repository
     val todasLasEncuestas: LiveData<List<Encuesta>>
 
     init {
 
-        val encuestasDao = database.encuestaDAO
+        val dao = database.encuestaDAO
+        repository = Repository(dao)
 
-        repository = RepositorioDeEncuestas(encuestasDao)
-        todasLasEncuestas = repository.todasLasEncuestas
+        todasLasEncuestas = repository.allEncuestas
 
     }
 
     fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertar(encuesta)
+        repository.insertarEncuesta(encuesta)
     }
 
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
-        return repository.getEncuesta(searchQuery).asLiveData()
+        return repository.getEncuesta(searchQuery)
     }
 
-    fun deleteEncuesta(encuestaId: Int) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteEncuesta(encuestaId)
+    fun deleteEncuesta(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
+        repository.eliminarEncuesta(encuesta)
     }
 
+    fun editEncuesta(encuesta: Encuesta) {
+        repository.editarEncuesta(encuesta)
+    }
 
-    private var _alimento = MutableLiveData<String>("")
-    val alimento: LiveData<String>
-        get() = _alimento
-
-    private var _porcion = MutableLiveData<String>("")
-    val porcion: LiveData<String>
-        get() = _porcion
-
-    private var _frecuencia = MutableLiveData<String>("")
-    val frecuencia: LiveData<String>
-        get() = _frecuencia
-
-    private var _veces = MutableLiveData<Int>(0)
-    val veces: LiveData<Int>
-        get() = _veces
+    private var _fecha = MutableLiveData<Long>()
+    val fecha: LiveData<Long>
+        get() = _fecha
 
     private var _encuestaCompletada = MutableLiveData<Boolean>(false)
     val encuestaCompletada: LiveData<Boolean>
@@ -66,11 +57,4 @@ class EncuestaViewModel(private val database: EncuestasDatabase) : ViewModel() {
 }
 
 class EncuestaViewModelFactory(private val database: EncuestasDatabase) : ViewModelProvider.Factory {
-    fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(EncuestaViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return EncuestaViewModel(database) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }

@@ -14,15 +14,13 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 @Database(
-    version = 2,
+    version = 1,
     entities = [
         Encuesta::class,
         Alimento::class,
         AlimentoEncuesta::class
     ],
-    autoMigrations = [
-        AutoMigration (from = 1, to = 2)
-    ]
+    exportSchema = true
 )
 abstract class EncuestasDatabase: RoomDatabase() {
 
@@ -60,17 +58,20 @@ abstract class EncuestasDatabase: RoomDatabase() {
 
         suspend fun cargarDatabase(encuestaDAO: EncuestaDAO) {
             Log.i("EncuestasDatabase", "cargarDatabase")
-
+/*
             if(encuestaDAO.getCantidadAlimentos() == 0) {
                 encuestaDAO.insertAlimento(
                     Alimento(
                         1,
                         "Yogur bebible",
                         "liquido",
-                        0.35
+                        "ml",
+                        0.8
                     )
                 )
             }
+
+ */
         }
 
     }
