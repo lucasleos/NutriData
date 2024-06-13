@@ -40,19 +40,13 @@ class LoginFragment : Fragment() {
         binding.password.text = viewModel.password.value
 
         binding.btnIngresar.setOnClickListener {
-            if(!binding.username.text.toString().isEmpty() && !binding.password.text.toString().isEmpty()){
+           // if(!binding.username.text.toString().isEmpty() && !binding.password.text.toString().isEmpty()){
                 loginUser(binding.username.text.toString(),binding.password.text.toString())
-            }else{
-                Toast.makeText(context, "Ingrese Email y Password", Toast.LENGTH_SHORT).show()
-            }
-
-            //if ((binding.username.text.toString() == "admin") && (binding.password.text.toString() == "tnt2024")) {
-                //findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
-              //  Toast.makeText(activity, "Bienvenido " + binding.username.text, Toast.LENGTH_SHORT)
-               //     .show()
-            //} else {
-            //   Toast.makeText(activity, "Usuario o contraseña erronea", Toast.LENGTH_SHORT).show()
+           // }else{
+            //    Toast.makeText(context, "Ingrese Email y Password", Toast.LENGTH_SHORT).show()
            // }
+
+
         }
 
 
@@ -62,7 +56,8 @@ class LoginFragment : Fragment() {
 
 
     fun loginUser(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
+        findNavController().navigate(R.id.action_loginFragment_to_mapsFragment)
+        /*auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // El inicio de sesión fue exitoso
@@ -80,7 +75,7 @@ class LoginFragment : Fragment() {
                     Toast.makeText(context, "Datos ingresados incorrectos", Toast.LENGTH_SHORT).show()
                     Log.e("Login", "Error: ${task.exception?.message}")
                 }
-            }
+            }*/
     }
 
     // obtener datos del usuario desde Realtime Database
