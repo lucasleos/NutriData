@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,6 +22,8 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
 import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.databinding.FragmentInicio2Binding
+import unpsjb.ing.tntpm2024.databinding.FragmentMapsBinding
 
 class MapsFragment : Fragment() {
 
@@ -28,6 +32,9 @@ class MapsFragment : Fragment() {
     private var colorAnimator: ValueAnimator? = null
     private var latLngAnimator: ValueAnimator? = null
     private var selectedPolygonInfo: PolygonInfo? = null
+    private lateinit var btnSeleccionZona : Button
+    private var _binding: FragmentMapsBinding? = null
+    private val binding get() = _binding!!
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
@@ -90,6 +97,7 @@ class MapsFragment : Fragment() {
                 animatePolygon(newlySelectedPolygonInfo)
                 animateLatLng(newlySelectedPolygonInfo.polygon.points[0], LatLng(newlySelectedPolygonInfo.polygon.points[0].latitude + 0.01, newlySelectedPolygonInfo.polygon.points[0].longitude))
                 showInfoWindow(newlySelectedPolygonInfo)
+                binding.btnSeleccionZona.isEnabled = true
             }
         }
     }
@@ -99,12 +107,19 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+        return binding.root
+
+        //return inflater.inflate(R.layout.fragment_maps, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+
+        binding.btnSeleccionZona.setOnClickListener{
+            Toast.makeText(context, "selecciono: ${selectedPolygonInfo?.zona}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun addPolygonToMap(points: List<LatLng>, name: String) {
@@ -141,6 +156,7 @@ class MapsFragment : Fragment() {
     }
 
     private fun resetPolygon(polygonInfo: PolygonInfo) {
+        binding.btnSeleccionZona.isEnabled = false
         polygonInfo.isSelected = false
         val startColor = polygonInfo.polygon.fillColor
         val endColor = Color.argb(128, 128, 128, 128) // Gris translúcido
