@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentNuevaEncuestaBinding
 import java.util.Date
@@ -19,7 +20,7 @@ class NuevaEncuestaFragment : Fragment() {
     var isSaved: Boolean = false
 
     private lateinit var binding: FragmentNuevaEncuestaBinding
-    private val viewModel: EncuestaViewModel by viewModels()
+    private lateinit var viewModel: EncuestaViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +29,11 @@ class NuevaEncuestaFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_nueva_encuesta, container, false
         )
+
+        // Crear la instancia del ViewModel usando la fábrica
+        val database = EncuestasDatabase.getInstance(requireContext())
+        val factory = EncuestaViewModelFactory(database)
+        viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
 
         binding.nuevaEncuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -99,6 +105,5 @@ class NuevaEncuestaFragment : Fragment() {
 
         viewModel.insert(encuesta)
         findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
-
     }
 }

@@ -4,14 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
-import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.basededatos.Repository
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
@@ -19,12 +18,9 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
     val todasLasEncuestas: LiveData<List<Encuesta>>
 
     init {
-
         val dao = database.encuestaDAO
         repository = Repository(dao)
-
         todasLasEncuestas = repository.allEncuestas
-
     }
 
     fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
@@ -54,15 +50,16 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
     fun encuestaCompletada() {
         _encuestaCompletada.value = true
     }
-
 }
 
-class EncuestaViewModelFactory(private val database: EncuestasDatabase) : ViewModelProvider.Factory {
+class EncuestaViewModelFactory(private val database: EncuestasDatabase) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         return when {
             modelClass.isAssignableFrom(EncuestaViewModel::class.java) -> {
                 EncuestaViewModel(database) as T
             }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

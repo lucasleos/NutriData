@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.AutoMigration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
@@ -22,7 +22,7 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
     ],
     exportSchema = true
 )
-abstract class EncuestasDatabase: RoomDatabase() {
+abstract class EncuestasDatabase : RoomDatabase() {
 
     abstract val encuestaDAO: EncuestaDAO
 
@@ -36,9 +36,12 @@ abstract class EncuestasDatabase: RoomDatabase() {
                     context.applicationContext,
                     EncuestasDatabase::class.java,
                     "encuestas_db"
-                ).build().also {
-                    INSTANCE = it
-                }
+                )
+                    .addCallback(EncuestasDatabaseCallback(CoroutineScope(Dispatchers.IO)))
+                    .fallbackToDestructiveMigration()
+                    .build().also {
+                        INSTANCE = it
+                    }
             }
         }
     }
@@ -58,7 +61,8 @@ abstract class EncuestasDatabase: RoomDatabase() {
 
         suspend fun cargarDatabase(encuestaDAO: EncuestaDAO) {
             Log.i("EncuestasDatabase", "cargarDatabase")
-/*
+            // Descomentar para precargar datos iniciales
+            /*
             if(encuestaDAO.getCantidadAlimentos() == 0) {
                 encuestaDAO.insertAlimento(
                     Alimento(
@@ -70,10 +74,7 @@ abstract class EncuestasDatabase: RoomDatabase() {
                     )
                 )
             }
-
- */
+            */
         }
-
     }
-
 }
