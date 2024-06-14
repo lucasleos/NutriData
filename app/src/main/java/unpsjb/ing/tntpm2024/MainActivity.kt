@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
@@ -33,15 +34,17 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
 
         // Inicializar Firebase
-        Firebase.database
-        Firebase.auth
+        FirebaseApp.initializeApp(this)
+        //Firebase.database
+        //Firebase.auth
 
         // Obtener la instancia de la base de datos desde AndroidApp
         val database = (application as AndroidApp).database
 
         // Crear el ViewModel utilizando el ViewModelFactory
         val viewModelFactory = EncuestaViewModelFactory(database)
-        encuestaViewModel = ViewModelProvider(this, viewModelFactory)[EncuestaViewModel::class.java]
+        //encuestaViewModel = ViewModelProvider(this, viewModelFactory)[EncuestaViewModel::class.java]
+        encuestaViewModel = ViewModelProvider(this, viewModelFactory).get(EncuestaViewModel::class.java)
 
         encuestaViewModel.todasLasEncuestas
             .observe(

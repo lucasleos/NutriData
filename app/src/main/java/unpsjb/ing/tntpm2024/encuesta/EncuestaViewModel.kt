@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
@@ -57,4 +58,12 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 }
 
 class EncuestaViewModelFactory(private val database: EncuestasDatabase) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+        return when {
+            modelClass.isAssignableFrom(EncuestaViewModel::class.java) -> {
+                EncuestaViewModel(database) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
 }
