@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
+import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
 import unpsjb.ing.tntpm2024.util.SwipToDeleteCallback
 
 class EncuestaListFragment : Fragment() {
@@ -75,7 +77,10 @@ class EncuestaListFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
+        val database = EncuestasDatabase.getInstance(requireContext())
+        val factory = EncuestaViewModelFactory(database)
+        encuestaViewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
+
 
         encuestaViewModel.todasLasEncuestas
             .observe(
@@ -96,10 +101,10 @@ class EncuestaListFragment : Fragment() {
 
         adapterList.onItemClick = {
             val encuestaId = it.encuestaId
-            val porcion = it.porcion
-            val alimento = it.alimento
-            val veces = it.veces
-            val frecuencia = it.frecuencia
+            val porcion = "100 ml"
+            val alimento = "Yogur bebible"
+            val veces = "5"
+            val frecuencia = "Dia"
             val estado = if (it.encuestaCompletada) "Completada" else "Incompleta"
 
             val title = "Detalle Encuesta $encuestaId"
@@ -121,17 +126,23 @@ class EncuestaListFragment : Fragment() {
                 EncuestaListFragmentDirections.actionEncuestalistToEditarEncuestaFragment(
                     // set frecuencia etc por parametros
                     encuestaId = it.encuestaId,
-                    aliemento = it.alimento,
-                    frecuencia = it.frecuencia,
-                    porcion = it.porcion,
-                    veces = it.veces,
+                    aliemento = "Yogur bebible",
+                    frecuencia = "Dia",
+                    porcion = "100 ml",
+                    veces = "5",
                     encuestaCompletada = it.encuestaCompletada
                 )
             )
         }
 
         adapterList.onSwipToDeleteCallback = {
-            encuestaViewModel.deleteEncuesta(it.encuestaId)
+            val encuesta = Encuesta(
+                it.encuestaId,
+                123455,
+                true
+            )
+
+            encuestaViewModel.deleteEncuesta(encuesta)
             Toast.makeText(context, "encuesta borrada", Toast.LENGTH_SHORT).show()
 
         }

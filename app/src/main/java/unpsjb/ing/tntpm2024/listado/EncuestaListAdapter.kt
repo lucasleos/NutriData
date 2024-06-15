@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 
 class EncuestaListAdapter internal constructor(
@@ -44,10 +44,10 @@ class EncuestaListAdapter internal constructor(
         val encuesta = encuestas[position]
 
         holder.encuestaIdTextView.text = "Encuesta N° ${encuesta.encuestaId}"
-        holder.alimentoTextView.text = "Alimento: ${encuesta.alimento}"
-        holder.porcionTextView.text = "Porción: ${encuesta.porcion}"
-        holder.frecuenciaTextView.text = "Frecuencia: ${encuesta.frecuencia}"
-        holder.vecesTextView.text = "Veces: ${encuesta.veces}"
+        holder.alimentoTextView.text = "Alimento: Yogur bebible"
+        holder.porcionTextView.text = "Porción: 250 ml"
+        holder.frecuenciaTextView.text = "Frecuencia: Semana"
+        holder.vecesTextView.text = "Veces: 3"
 
         if (encuesta.encuestaCompletada) {
             holder.imageView.setImageResource(R.drawable.view_ico)

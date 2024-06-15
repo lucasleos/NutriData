@@ -1,4 +1,4 @@
-package unpsjb.ing.tntpm2024.basededatos.encuestas
+package unpsjb.ing.tntpm2024.basededatos.entidades
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,14 +8,6 @@ import androidx.room.PrimaryKey
 data class Encuesta(
     @PrimaryKey(autoGenerate = true)
     var encuestaId: Int = 0,
-    @ColumnInfo(name = "alimento")
-    var alimento: String,
-    @ColumnInfo(name = "porcion")
-    var porcion: String,
-    @ColumnInfo(name = "frecuencia")
-    var frecuencia:String,
-    @ColumnInfo(name = "veces")
-    var veces: String,
     @ColumnInfo(name = "fecha")
     var fecha: Long,
     @ColumnInfo(name = "encuestaCompletada")

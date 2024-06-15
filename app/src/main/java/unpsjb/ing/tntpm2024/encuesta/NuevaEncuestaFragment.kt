@@ -9,9 +9,11 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import unpsjb.ing.tntpm2024.R
-import unpsjb.ing.tntpm2024.basededatos.encuestas.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentNuevaEncuestaBinding
 import java.util.Date
 
@@ -20,7 +22,7 @@ class NuevaEncuestaFragment : Fragment() {
     var isSaved: Boolean = false
 
     private lateinit var binding: FragmentNuevaEncuestaBinding
-    private val viewModel: EncuestaViewModel by viewModels()
+    private lateinit var viewModel: EncuestaViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +31,10 @@ class NuevaEncuestaFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_nueva_encuesta, container, false
         )
+
+        val database = EncuestasDatabase.getInstance(requireContext())
+        val factory = EncuestaViewModelFactory(database)
+        viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
 
         binding.nuevaEncuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -94,16 +100,12 @@ class NuevaEncuestaFragment : Fragment() {
         val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
         val fechaLong: Long = fechaActual.time // Convierte Date a Long
 
+
         val encuesta = Encuesta(
-            alimento = "Yogur Bebible",
-            porcion = valorPorcion,
-            frecuencia = valorFrecuencia,
-            veces = valorVeces,
             fecha = fechaLong,
             encuestaCompletada = encuestaCompletada
         )
 
         viewModel.insert(encuesta)
-        // findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
     }
 }

@@ -6,11 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.textfield.TextInputLayout
 import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
+import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentEditarEncuestaBinding
 import java.util.Date
 
@@ -19,9 +24,8 @@ class EditarEncuestaFragment : Fragment() {
     var isSaved: Boolean = false
     val args: EditarEncuestaFragmentArgs by navArgs()
 
-    // debe vincularse con el nombre del xml
     private lateinit var binding: FragmentEditarEncuestaBinding
-    private val viewModel: EncuestaViewModel by viewModels()
+    private lateinit var viewModel: EncuestaViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,30 +35,27 @@ class EditarEncuestaFragment : Fragment() {
             inflater, R.layout.fragment_editar_encuesta, container, false
         )
 
+        val database = EncuestasDatabase.getInstance(requireContext())
+        val factory = EncuestaViewModelFactory(database)
+        viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
+
         binding.encuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        // Setear el valor del campo "Veces"
         binding.inputVeces.text =
             Editable.Factory.getInstance().newEditable(args.veces?.toString() ?: "")
 
-        // Configuración del AutoCompleteTextView para la Porción
-        val autoCompletePorcion = binding.autoCompleteTextViewPorcion
-        val itemsPorcion = resources.getStringArray(R.array.opcionesPorcion)
-        val adapterPorcion =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsPorcion)
-        autoCompletePorcion.setAdapter(adapterPorcion)
+        setupAutoCompleteTextView(
+            binding.autoCompleteTextViewPorcion,
+            R.array.opcionesPorcion,
+            args.porcion
+        )
 
-        // Configuración del AutoCompleteTextView para la Frecuencia
-        val autoCompleteFrecuencia = binding.autoCompleteTextViewFrecuencia
-        val itemsFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
-        val adapterFrecuencia =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsFrecuencia)
-        autoCompleteFrecuencia.setAdapter(adapterFrecuencia)
-
-        // Setear los valores que vinieron de la otra pantalla
-        autoCompletePorcion.setText(args.porcion, false)
-        autoCompleteFrecuencia.setText(args.frecuencia, false)
+        setupAutoCompleteTextView(
+            binding.autoCompleteTextViewFrecuencia,
+            R.array.opcionesFrecuencia,
+            args.frecuencia
+        )
 
         binding.btnGuardar.setOnClickListener {
             if (validarInputs()) {
@@ -66,53 +67,53 @@ class EditarEncuestaFragment : Fragment() {
         return binding.root
     }
 
+    private fun setupAutoCompleteTextView(
+        autoCompleteTextView: AutoCompleteTextView,
+        arrayResId: Int,
+        initialValue: String?
+    ) {
+        val items = resources.getStringArray(arrayResId)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+        autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setText(initialValue, false)
+    }
+
     private fun validarInputs(): Boolean {
-        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
-        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
-        val valorVeces: String = binding.inputVeces.text.toString()
-        var esValido: Boolean = true
+        var esValido = true
 
-        if (valorPorcion.isEmpty()) {
-            binding.tfPorcion.error = "Error: Input Vacío."
-            esValido = false
-        }
-
-        if (valorFrecuencia.isEmpty()) {
-            binding.tfFrecuencia.error = "Error: Input Vacío."
-            esValido = false
-        }
-
-        if (valorVeces.isEmpty()) {
-            binding.tfVeces.error = "Error: Input Vacío."
-            esValido = false
-        }
+        esValido = validarCampo(binding.autoCompleteTextViewPorcion, binding.tfPorcion) && esValido
+        esValido =
+            validarCampo(binding.autoCompleteTextViewFrecuencia, binding.tfFrecuencia) && esValido
+        esValido = validarCampo(binding.inputVeces, binding.tfVeces) && esValido
 
         return esValido
     }
 
+    private fun validarCampo(input: EditText, textField: TextInputLayout): Boolean {
+        return if (input.text.toString().isEmpty()) {
+            textField.error = "Error: Input Vacío."
+            false
+        } else {
+            textField.error = null
+            true
+        }
+    }
+
     override fun onStop() {
         super.onStop()
-        if (!isSaved)
-            editarEncuesta(false)
+        if (!isSaved) editarEncuesta(false)
     }
 
     private fun editarEncuesta(encuestaCompletada: Boolean) {
-        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
-        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
-        val valorVeces: String = binding.inputVeces.text.toString()
-        val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
-        val fechaLong: Long = fechaActual.time // Convierte Date a Long
+        val id = args.encuestaId
+        val fechaActual = Date().time
 
-        // Para guardar encuesta
         viewModel.editEncuesta(
-            args.encuestaId,
-            "Yogur Bebible",
-            valorPorcion,
-            valorFrecuencia,
-            valorVeces,
-            fechaLong,
-            encuestaCompletada
+            Encuesta(
+                id,
+                fechaActual,
+                encuestaCompletada
+            )
         )
-        // requireActivity().supportFragmentManager.popBackStack()
     }
 }
