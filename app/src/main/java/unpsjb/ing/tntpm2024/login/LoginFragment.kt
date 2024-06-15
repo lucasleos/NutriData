@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
                         // Obtenemos los datos del usuario desde Realtime Database
                         getUserData(userId)
                     }
-                    findNavController().navigate(R.id.action_loginFragment_to_mapsFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
                 } else {
                     // El inicio de sesión falló
                     Toast.makeText(context, "Datos ingresados incorrectos", Toast.LENGTH_SHORT).show()

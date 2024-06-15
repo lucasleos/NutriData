@@ -60,6 +60,7 @@ class EditarEncuestaFragment : Fragment() {
             if (validarInputs()) {
                 isSaved = true
                 editarEncuesta(true)
+                requireActivity().supportFragmentManager.popBackStack()
             }
         }
         return binding.root
@@ -112,6 +113,6 @@ class EditarEncuestaFragment : Fragment() {
             fechaLong,
             encuestaCompletada
         )
-        requireActivity().supportFragmentManager.popBackStack()
+        // requireActivity().supportFragmentManager.popBackStack()
     }
 }

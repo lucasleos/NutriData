@@ -51,6 +51,7 @@ class NuevaEncuestaFragment : Fragment() {
             if (validarInputs()) {
                 isSaved = true
                 guardarEncuesta(true)
+                findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
             }
         }
         return binding.root
@@ -103,7 +104,6 @@ class NuevaEncuestaFragment : Fragment() {
         )
 
         viewModel.insert(encuesta)
-        findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
-
+        // findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
     }
 }
