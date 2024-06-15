@@ -56,7 +56,7 @@ class LoginFragment : Fragment() {
 
 
     fun loginUser(email: String, password: String) {
-        findNavController().navigate(R.id.action_loginFragment_to_mapsFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
         /*auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
