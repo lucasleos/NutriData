@@ -36,7 +36,9 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
     }
 
     fun editEncuesta(encuesta: Encuesta) {
-        repository.editarEncuesta(encuesta)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.editarEncuesta(encuesta)
+        }
     }
 
     private var _fecha = MutableLiveData<Long>()

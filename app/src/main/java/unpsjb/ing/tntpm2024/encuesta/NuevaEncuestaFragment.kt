@@ -30,7 +30,6 @@ class NuevaEncuestaFragment : Fragment() {
             inflater, R.layout.fragment_nueva_encuesta, container, false
         )
 
-        // Crear la instancia del ViewModel usando la fábrica
         val database = EncuestasDatabase.getInstance(requireContext())
         val factory = EncuestaViewModelFactory(database)
         viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
