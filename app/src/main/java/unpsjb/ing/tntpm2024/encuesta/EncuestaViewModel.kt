@@ -1,11 +1,14 @@
 package unpsjb.ing.tntpm2024.encuesta
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
@@ -25,6 +28,15 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
     fun insert(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertarEncuesta(encuesta)
+    }
+
+    //    fun uploadEncuesta(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun uploadEncuesta(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (DatabaseError) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        repository.uploadEncuestaToFirebase(encuesta, onSuccess, onFailure)
+    }
+
+    fun deleteEncuestaFromFirebase(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (DatabaseError) -> Unit) = viewModelScope.launch(Dispatchers.IO){
+        repository.deleteEncuestaFromFirebase(encuesta, onSuccess, onFailure)
     }
 
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
@@ -19,6 +20,7 @@ class EncuestaListAdapter internal constructor(
     var onItemClick: ((Encuesta) -> Unit)? = null
     var onItemClickEditEncuesta: ((Encuesta) -> Unit)? = null
     var onSwipToDeleteCallback: ((Encuesta) -> Unit)? = null
+    var onItemClickUploadInCloud: ((Encuesta) -> Unit)? = null
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -27,6 +29,7 @@ class EncuestaListAdapter internal constructor(
 
     inner class EncuestaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val imageUpload: ImageView = itemView.findViewById(R.id.imageUpload)
         val alimentoTextView: TextView = itemView.findViewById(R.id.tvAlimento)
         val porcionTextView: TextView = itemView.findViewById(R.id.tvPorcion)
         val frecuenciaTextView: TextView = itemView.findViewById(R.id.tvFrecuencia)
@@ -53,6 +56,7 @@ class EncuestaListAdapter internal constructor(
 
         if (encuesta.encuestaCompletada) {
             holder.imageView.setImageResource(R.drawable.view_ico)
+            holder.imageUpload.setImageResource(R.drawable.cloud_upload_icon)
         } else {
             holder.imageView.setImageResource(R.drawable.edit_ico)
         }
@@ -63,6 +67,17 @@ class EncuestaListAdapter internal constructor(
             } else {
                 onItemClickEditEncuesta?.invoke(encuesta)
             }
+        }
+
+    /*    if (encuesta.encuestaSubidaANube) {
+            holder.imageView.setImageResource(R.drawable.view_ico) // icono subida ok
+        } else {
+            holder.imageView.setImageResource(R.drawable.edit_ico) // icono subir
+        }*/
+
+        holder.imageUpload.setOnClickListener{
+            onItemClickUploadInCloud?.invoke(encuesta)
+//            Toast.makeText(context, "Encuesta subida a la nube", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -123,6 +123,20 @@ class EncuestaListFragment : Fragment() {
             )
         }
 
+        adapterList.onItemClickUploadInCloud = { encuesta ->
+                encuestaViewModel.uploadEncuesta(encuesta,
+                    onSuccess = {
+                        Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = { e ->
+                        Toast.makeText(context, "Error al subir encuesta: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.i(TAG,"Error al subir encuesta: ${e.message}" )
+                    }
+                )
+            }
+
+
+
         adapterList.onSwipToDeleteCallback = {
             val encuesta = Encuesta(
                 it.encuestaId,
@@ -132,8 +146,14 @@ class EncuestaListFragment : Fragment() {
             )
 
             encuestaViewModel.deleteEncuesta(encuesta)
-            Toast.makeText(context, "encuesta borrada", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(context, "Encuesta borrada", Toast.LENGTH_SHORT).show()
+            encuestaViewModel.deleteEncuestaFromFirebase(encuesta, onSuccess = {
+//                Toast.makeText(context, "Encuesta Firebase eliminada con éxito", Toast.LENGTH_SHORT).show()
+            },
+                onFailure = { e ->
+//                    Toast.makeText(context, "Error al eliminar encuesta: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.e(TAG,"Error al eliminar encuesta Firebase: ${e.message}" )
+                })
         }
 
         return binding.root

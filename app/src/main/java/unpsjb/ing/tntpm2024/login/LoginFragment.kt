@@ -40,11 +40,11 @@ class LoginFragment : Fragment() {
         binding.password.text = viewModel.password.value
 
         binding.btnIngresar.setOnClickListener {
-           // if(!binding.username.text.toString().isEmpty() && !binding.password.text.toString().isEmpty()){
+//            if(!binding.username.text.toString().isEmpty() && !binding.password.text.toString().isEmpty()){
                 loginUser(binding.username.text.toString(),binding.password.text.toString())
-           // }else{
-            //    Toast.makeText(context, "Ingrese Email y Password", Toast.LENGTH_SHORT).show()
-           // }
+//            }else{
+//                Toast.makeText(context, "Ingrese Email y Password", Toast.LENGTH_SHORT).show()
+//            }
 
 
         }
@@ -57,7 +57,7 @@ class LoginFragment : Fragment() {
 
     fun loginUser(email: String, password: String) {
         findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
-        /*auth.signInWithEmailAndPassword(email, password)
+       /* auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // El inicio de sesión fue exitoso
