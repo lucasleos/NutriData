@@ -21,7 +21,7 @@ class InicioFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_inicio2, container, false)
 
         binding.btnEncuesta.setOnClickListener {
-            findNavController().navigate(R.id.action_inicioFragment_to_encuestaFragment2)
+            findNavController().navigate(R.id.action_inicioFragment_to_mapsFragment)
         }
 
         binding.btnEncuestas.setOnClickListener {

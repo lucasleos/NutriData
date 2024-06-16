@@ -11,6 +11,7 @@ data class Encuesta(
     @ColumnInfo(name = "fecha")
     var fecha: Long,
     @ColumnInfo(name = "encuestaCompletada")
-    var encuestaCompletada: Boolean
-
+    var encuestaCompletada: Boolean,
+    @ColumnInfo(name = "zona")
+    var zona: String,
 )

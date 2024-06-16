@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
@@ -19,7 +19,10 @@ import java.util.Date
 
 class NuevaEncuestaFragment : Fragment() {
 
-    var isSaved: Boolean = false
+    private var isSaved: Boolean = false
+    private var isEditZonaClicked: Boolean =
+        false // Variable para controlar si se hace clic en btnEditZona
+    private val args: NuevaEncuestaFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentNuevaEncuestaBinding
     private lateinit var viewModel: EncuestaViewModel
@@ -41,6 +44,9 @@ class NuevaEncuestaFragment : Fragment() {
 
         val t = inflater.inflate(R.layout.fragment_nueva_encuesta, container, false)
 
+        val tvZona = binding.tvZona
+        tvZona.text = args.zona
+
         val autoCompletePorcion = binding.autoCompleteTextViewPorcion
         val itemsPorcion = resources.getStringArray(R.array.opcionesPorcion)
         val adapterPorcion =
@@ -60,7 +66,39 @@ class NuevaEncuestaFragment : Fragment() {
                 findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
             }
         }
+
+        binding.btnEditZona.setOnClickListener {
+            isEditZonaClicked = true
+            findNavController().navigate(
+                NuevaEncuestaFragmentDirections.actionNuevaEncuestaFragmentToMapsFragment(
+                    false
+                )
+            )
+        }
+
         return binding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!isSaved && !isEditZonaClicked)
+            guardarEncuesta(false)
+    }
+
+    private fun guardarEncuesta(encuestaCompletada: Boolean) {
+        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
+        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
+        val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
+        val fechaLong: Long = fechaActual.time // Convierte Date a Long
+        val valorVeces: String = binding.inputVeces.text.toString()
+
+        val encuesta = Encuesta(
+            fecha = fechaLong,
+            encuestaCompletada = encuestaCompletada,
+            zona = args.zona
+        )
+
+        viewModel.insert(encuesta)
     }
 
     private fun validarInputs(): Boolean {
@@ -85,27 +123,5 @@ class NuevaEncuestaFragment : Fragment() {
         }
 
         return esValido
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (!isSaved)
-            guardarEncuesta(false)
-    }
-
-    private fun guardarEncuesta(encuestaCompletada: Boolean) {
-        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
-        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
-        val valorVeces: String = binding.inputVeces.text.toString()
-        val fechaActual: Date = Date() // Crea un objeto Date con la fecha actual
-        val fechaLong: Long = fechaActual.time // Convierte Date a Long
-
-
-        val encuesta = Encuesta(
-            fecha = fechaLong,
-            encuestaCompletada = encuestaCompletada
-        )
-
-        viewModel.insert(encuesta)
     }
 }

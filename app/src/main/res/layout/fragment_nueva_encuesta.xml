@@ -33,16 +33,16 @@
             android:id="@+id/tfPorcion"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/bone_white"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="128dp"
             android:layout_marginEnd="16dp"
             android:hint="Porción"
+            app:boxBackgroundColor="@color/bone_white"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas">
+            app:layout_constraintTop_toBottomOf="@+id/tvZona">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextViewPorcion"
@@ -106,6 +106,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvZona"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="64dp"
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas" />
+
+        <ImageButton
+            android:id="@+id/btnEditZona"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas"
+            app:srcCompat="@drawable/edit_ico" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

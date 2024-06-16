@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1ed6530e948dc4cf278ad8b063c6ca63",
+    "identityHash": "54c118df086ba842f151a99461bf6deb",
     "entities": [
       {
         "tableName": "tabla_encuesta",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`encuestaId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fecha` INTEGER NOT NULL, `encuestaCompletada` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`encuestaId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fecha` INTEGER NOT NULL, `encuestaCompletada` INTEGER NOT NULL, `zona` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "encuestaId",
@@ -24,6 +24,12 @@
             "fieldPath": "encuestaCompletada",
             "columnName": "encuestaCompletada",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zona",
+            "columnName": "zona",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -129,7 +135,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ed6530e948dc4cf278ad8b063c6ca63')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '54c118df086ba842f151a99461bf6deb')"
     ]
   }
 }

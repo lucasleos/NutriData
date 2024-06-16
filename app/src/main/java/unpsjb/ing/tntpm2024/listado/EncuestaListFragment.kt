@@ -16,8 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
@@ -30,15 +28,10 @@ class EncuestaListFragment : Fragment() {
 
     val TAG = "EncuestaListFragment"
 
-    //private lateinit var adapterList :  EncuestaListAdapter
     private val adapterList: EncuestaListAdapter by lazy { EncuestaListAdapter(requireContext()) }
 
     private lateinit var encuestaViewModel: EncuestaViewModel
-    private lateinit var dataList: ArrayList<Encuesta>
-
-    private lateinit var searchList: ArrayList<Encuesta>
     private lateinit var searchView: SearchView
-    private lateinit var recyclerView: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,12 +83,6 @@ class EncuestaListFragment : Fragment() {
                 }
             )
 
-
-        //val btnCrearEncuesta = binding.botonFlotante
-        // btnCrearEncuesta.setOnClickListener {
-        //    findNavController().navigate(EncuestaListFragmentDirections.actionEncuestalistToNuevaEncuestaFragment())
-        //}
-
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
@@ -130,7 +117,8 @@ class EncuestaListFragment : Fragment() {
                     frecuencia = "Dia",
                     porcion = "100 ml",
                     veces = "5",
-                    encuestaCompletada = it.encuestaCompletada
+                    encuestaCompletada = it.encuestaCompletada,
+                    zona = it.zona
                 )
             )
         }
@@ -139,7 +127,8 @@ class EncuestaListFragment : Fragment() {
             val encuesta = Encuesta(
                 it.encuestaId,
                 123455,
-                true
+                true,
+                zona = it.zona
             )
 
             encuestaViewModel.deleteEncuesta(encuesta)

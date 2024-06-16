@@ -29,8 +29,8 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
         return repository.getEncuesta(searchQuery)
-    }
 
+    }
     fun deleteEncuesta(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
         repository.eliminarEncuesta(encuesta)
     }
@@ -51,6 +51,20 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
     fun encuestaCompletada() {
         _encuestaCompletada.value = true
+    }
+
+    private val _zona = MutableLiveData<String>()
+    val zona: LiveData<String> get() = _zona
+    fun setZona(value: String) {
+        _zona.value = value
+
+    }
+
+    private val _id = MutableLiveData<Int>()
+    val id: LiveData<Int> get() = _id
+
+    fun setId(value: Int) {
+        _id.value = value
     }
 }
 

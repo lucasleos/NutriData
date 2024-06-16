@@ -1,4 +1,4 @@
-package unpsjb.ing.tnt.listado.listado
+package unpsjb.ing.tntpm2024.listado
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -32,6 +32,7 @@ class EncuestaListAdapter internal constructor(
         val frecuenciaTextView: TextView = itemView.findViewById(R.id.tvFrecuencia)
         val vecesTextView: TextView = itemView.findViewById(R.id.tvVeces)
         val encuestaIdTextView: TextView = itemView.findViewById(R.id.tvEncuestaId)
+        val zonaTextView: TextView = itemView.findViewById(R.id.tvzona)
     }
 
 
@@ -48,6 +49,7 @@ class EncuestaListAdapter internal constructor(
         holder.porcionTextView.text = "Porción: 250 ml"
         holder.frecuenciaTextView.text = "Frecuencia: Semana"
         holder.vecesTextView.text = "Veces: 3"
+        holder.zonaTextView.text = encuesta.zona
 
         if (encuesta.encuestaCompletada) {
             holder.imageView.setImageResource(R.drawable.view_ico)

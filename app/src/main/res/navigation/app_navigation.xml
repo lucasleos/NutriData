@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/loginFragment"
-    >
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/encuestalist"
@@ -23,13 +21,10 @@
         android:id="@+id/loginFragment"
         android:name="unpsjb.ing.tntpm2024.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_inicioFragment"
             app:destination="@id/inicioFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/nuevaEncuestaFragment"
@@ -39,6 +34,14 @@
         <action
             android:id="@+id/action_nuevaEncuestaFragment_to_encuestalist"
             app:destination="@id/encuestalist"
+            app:popUpTo="@+id/nuevaEncuestaFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="zona"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nuevaEncuestaFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment"
             app:popUpTo="@+id/nuevaEncuestaFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -81,13 +84,21 @@
         <argument
             android:name="encuestaId"
             app:argType="integer" />
+        <argument
+            android:name="zona"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_editarEncuestaFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment"
+            app:popUpTo="@+id/editarEncuestaFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/inicioFragment"
         android:name="unpsjb.ing.tntpm2024.inicio.InicioFragment"
         android:label="fragment_inicio2"
-        tools:layout="@layout/fragment_inicio2" >
+        tools:layout="@layout/fragment_inicio2">
         <action
             android:id="@+id/action_inicioFragment_to_encuestalist"
             app:destination="@id/encuestalist" />
@@ -95,8 +106,8 @@
             android:id="@+id/action_inicioFragment_to_estadisticaFragment"
             app:destination="@id/estadisticaFragment" />
         <action
-            android:id="@+id/action_inicioFragment_to_encuestaFragment2"
-            app:destination="@id/nuevaEncuestaFragment" />
+            android:id="@+id/action_inicioFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/estadisticaFragment"
@@ -107,6 +118,24 @@
         android:id="@+id/mapsFragment"
         android:name="unpsjb.ing.tntpm2024.encuesta.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" />
-
+        tools:layout="@layout/fragment_maps">
+        <argument
+            android:name="isEdit"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_mapsFragment_to_nuevaEncuestaFragment"
+            app:destination="@id/nuevaEncuestaFragment"
+            app:popUpTo="@+id/mapsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mapsFragment_to_editarEncuestaFragment"
+            app:destination="@id/editarEncuestaFragment"
+            app:popUpTo="@+id/mapsFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="encuestaId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

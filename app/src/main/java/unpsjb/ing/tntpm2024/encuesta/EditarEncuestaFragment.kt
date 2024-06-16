@@ -2,6 +2,7 @@ package unpsjb.ing.tntpm2024.encuesta
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputLayout
 import unpsjb.ing.tntpm2024.R
@@ -22,6 +24,7 @@ import java.util.Date
 class EditarEncuestaFragment : Fragment() {
 
     var isSaved: Boolean = false
+    var isEditZonaClicked: Boolean = false // Variable para controlar si se hace clic en btnEditZona
     val args: EditarEncuestaFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentEditarEncuestaBinding
@@ -41,6 +44,9 @@ class EditarEncuestaFragment : Fragment() {
 
         binding.encuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val tvZona = binding.tvZona
+        tvZona.text = args.zona
 
         binding.inputVeces.text =
             Editable.Factory.getInstance().newEditable(args.veces?.toString() ?: "")
@@ -64,6 +70,17 @@ class EditarEncuestaFragment : Fragment() {
                 requireActivity().supportFragmentManager.popBackStack()
             }
         }
+
+        binding.btnEditZona.setOnClickListener {
+            isEditZonaClicked = true // Marcar que btnEditZona fue clickeado
+            findNavController().navigate(
+                EditarEncuestaFragmentDirections.actionEditarEncuestaFragmentToMapsFragment(
+                    true,
+                    args.encuestaId
+                )
+            )
+        }
+
         return binding.root
     }
 
@@ -101,7 +118,8 @@ class EditarEncuestaFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        if (!isSaved) editarEncuesta(false)
+        if (!isSaved && !isEditZonaClicked) // Solo guarda si no se ha hecho clic en btnEditZona
+            editarEncuesta(false)
     }
 
     private fun editarEncuesta(encuestaCompletada: Boolean) {
@@ -112,7 +130,8 @@ class EditarEncuestaFragment : Fragment() {
             Encuesta(
                 id,
                 fechaActual,
-                encuestaCompletada
+                encuestaCompletada,
+                args.zona
             )
         )
     }

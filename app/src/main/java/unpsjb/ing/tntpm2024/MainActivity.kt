@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.firebase.FirebaseApp
-import unpsjb.ing.tnt.listado.listado.EncuestaListAdapter
+import unpsjb.ing.tntpm2024.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.databinding.ActivityMainBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
