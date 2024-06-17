@@ -1,13 +1,10 @@
 package unpsjb.ing.tntpm2024.basededatos
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.flow.Flow
-import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
 class Repository(private val encuestaDAO: EncuestaDAO) {
 
@@ -36,6 +33,9 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         encuestaDAO.editEncuesta(encuesta)
     }
 
+    fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuestaDetalles>> {
+        return encuestaDAO.getAlimentosByEncuestaId(encuestaId)
+    }
 //    fun uploadEncuestaToFirebase(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
 //
 //        val db = FirebaseFirestore.getInstance()

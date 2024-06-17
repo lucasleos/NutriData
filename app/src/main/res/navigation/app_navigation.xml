@@ -51,11 +51,14 @@
         android:label="DetailFragment"
         tools:layout="@layout/fragment_detail">
         <argument
+            android:name="encuestaId"
+            app:argType="integer" />
+<!--        <argument
             android:name="title"
             app:argType="string" />
         <argument
             android:name="desc"
-            app:argType="string" />
+            app:argType="string" />-->
     </fragment>
     <fragment
         android:id="@+id/editarEncuestaFragment"

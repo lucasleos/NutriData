@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.Repository
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
 class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
@@ -55,7 +56,10 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
         return repository.getEncuesta(searchQuery)
+    }
 
+    fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuestaDetalles>> {
+        return repository.getAlimentosByEncuestaId(encuestaId)
     }
 
     fun deleteEncuesta(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {

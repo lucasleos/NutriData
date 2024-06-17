@@ -85,7 +85,16 @@ class EncuestaListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        adapterList.onItemClick = {
+
+        adapterList.onItemClick = { encuesta ->
+            val action = EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(encuesta.encuestaId)
+            findNavController().navigate(action)
+        }
+
+        // lo manda hardcode porque ya no puede sacar los valores de la encuesta.
+        // eso ahora esta en la tabla_aliemnto_encuesta
+
+    /*    adapterList.onItemClick = {
             val encuestaId = it.encuestaId
             val porcion = "100 ml"
             val alimento = "Yogur bebible"
@@ -105,7 +114,7 @@ class EncuestaListFragment : Fragment() {
                     desc = desc
                 )
             )
-        }
+        }*/
 
         adapterList.onItemClickEditEncuesta = {
             findNavController().navigate(
