@@ -40,10 +40,11 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
     //    fun uploadEncuesta(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
     fun uploadEncuesta(
         encuesta: Encuesta,
+        alimentoEncuestaDetalles: List<AlimentoEncuestaDetalles>,
         onSuccess: () -> Unit,
         onFailure: (DatabaseError) -> Unit
     ) = viewModelScope.launch(Dispatchers.IO) {
-        repository.uploadEncuestaToFirebase(encuesta, onSuccess, onFailure)
+        repository.uploadEncuestaToFirebase(encuesta, alimentoEncuestaDetalles, onSuccess, onFailure)
     }
 
     fun deleteEncuestaFromFirebase(

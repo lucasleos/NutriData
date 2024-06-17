@@ -15,11 +15,11 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/tvIdEncuesta"
+            android:id="@+id/tvNombreAlimento"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Id Encuesta"
+            android:text="Alimento"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -35,18 +35,8 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvIdEncuesta" />
+            app:layout_constraintTop_toBottomOf="@id/tvNombreAlimento" />
 
-        <TextView
-            android:id="@+id/tvNombreAlimento"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Alimento"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvIdAlimento" />
 
         <TextView
             android:id="@+id/tvPorcion"
@@ -57,7 +47,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNombreAlimento" />
+            app:layout_constraintTop_toBottomOf="@id/tvIdAlimento" />
 
         <TextView
             android:id="@+id/tvFrecuencia"
@@ -86,6 +76,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textSize="16sp"
             android:textColor="@color/black"
             android:text="Categoria"
             app:layout_constraintStart_toStartOf="parent"
@@ -96,6 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textSize="16sp"
             android:textColor="@color/black"
             android:text="Medida"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,6 +99,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:layout_marginTop="4dp"
+            android:textSize="16sp"
             android:text="Porcentaje Graso"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvMedida" />

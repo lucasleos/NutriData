@@ -8,12 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
 
-class AlimentoListAdapter(private val context: Context) : RecyclerView.Adapter<AlimentoListAdapter.AlimentoViewHolder>() {
+class AlimentoEncuestaListAdapter(private val context: Context) : RecyclerView.Adapter<AlimentoEncuestaListAdapter.AlimentoViewHolder>() {
 
     private var alimentosEncuestaDetalle = emptyList<AlimentoEncuestaDetalles>()
 
     class AlimentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvIdEncuesta : TextView = itemView.findViewById(R.id.tvIdEncuesta)
         val tvIdAlimento : TextView = itemView.findViewById(R.id.tvIdAlimento)
         val tvNombreAlimento : TextView = itemView.findViewById(R.id.tvNombreAlimento)
         val tvPorcion : TextView = itemView.findViewById(R.id.tvPorcion)
@@ -26,15 +25,14 @@ class AlimentoListAdapter(private val context: Context) : RecyclerView.Adapter<A
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlimentoViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_alimento, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_alimento_encuesta, parent, false)
         return AlimentoViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: AlimentoViewHolder, position: Int) {
         val alimentoEncuestaDetalle = alimentosEncuestaDetalle[position]
-        holder.tvIdEncuesta.text = "Encuesta N° ${alimentoEncuestaDetalle.encuestaId.toString()}"
         holder.tvIdAlimento.text = "Alimento N° ${alimentoEncuestaDetalle.alimentoId.toString()}"
-        holder.tvNombreAlimento.text = "Nombre Alimento: ${alimentoEncuestaDetalle.nombre}"
+        holder.tvNombreAlimento.text = "Alimento: ${alimentoEncuestaDetalle.nombre}"
         holder.tvPorcion.text = "Porcion: ${alimentoEncuestaDetalle.porcion}"
         holder.tvFrecuencia.text = "Frecuencia: ${alimentoEncuestaDetalle.frecuencia}"
         holder.tvVeces.text = "Veces Consumido: ${alimentoEncuestaDetalle.veces}"

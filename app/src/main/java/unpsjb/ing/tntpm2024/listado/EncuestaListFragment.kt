@@ -91,9 +91,6 @@ class EncuestaListFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        // lo manda hardcode porque ya no puede sacar los valores de la encuesta.
-        // eso ahora esta en la tabla_aliemnto_encuesta
-
     /*    adapterList.onItemClick = {
             val encuestaId = it.encuestaId
             val porcion = "100 ml"
@@ -132,28 +129,24 @@ class EncuestaListFragment : Fragment() {
         }
 
         adapterList.onItemClickUploadInCloud = { encuesta ->
-            encuestaViewModel.uploadEncuesta(encuesta,
-                onSuccess = {
-                    Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
-                },
-                onFailure = { e ->
-                    Toast.makeText(
-                        context,
-                        "Error al subir encuesta: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.i(TAG, "Error al subir encuesta: ${e.message}")
+
+            encuestaViewModel.getAlimentosByEncuestaId(encuesta.encuestaId).observe(viewLifecycleOwner, Observer { alimentosEncuesta ->
+                alimentosEncuesta?.let { alimentosEncuestaDetalles ->
+
+                    encuestaViewModel.uploadEncuesta(encuesta, alimentosEncuestaDetalles,
+                        onSuccess = {
+                            Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = { e ->
+                            Toast.makeText(context,"Error al subir encuesta: ${e.message}",Toast.LENGTH_SHORT).show()
+                            Log.e(TAG, "Error al subir encuesta: ${e.message}")
+                        }
+                    )
                 }
-            )
+            })
         }
 
-        adapterList.onSwipToDeleteCallback = {
-            val encuesta = Encuesta(
-                it.encuestaId,
-                123455,
-                true,
-                zona = it.zona
-            )
+        adapterList.onSwipToDeleteCallback = { encuesta ->
 
             encuestaViewModel.deleteEncuesta(encuesta)
             Toast.makeText(context, "Encuesta borrada", Toast.LENGTH_SHORT).show()
