@@ -17,9 +17,11 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import unpsjb.ing.tntpm2024.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.R
+import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentEstadisticaBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
+import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
 
 
 class EstadisticaFragment : Fragment() {
@@ -60,9 +62,13 @@ class EstadisticaFragment : Fragment() {
         consumoSemanal = binding.consumoSemanalText.toString()
         consumoMensual = binding.consumoMensualText.toString()
 
+        val database = EncuestasDatabase.getInstance(requireContext())
+        val factory = EncuestaViewModelFactory(database)
+
         pieChart = binding.pieChart
 
-        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
+//        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
+        encuestaViewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
 
         encuestaViewModel.todasLasEncuestas
             .observe(

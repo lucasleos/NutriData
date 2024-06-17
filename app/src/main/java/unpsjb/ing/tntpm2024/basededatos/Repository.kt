@@ -49,14 +49,14 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
 //    }
 
     fun uploadEncuestaToFirebase(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (DatabaseError) -> Unit) {
-        dbRef.child("encuestas/encuestaId" + encuesta.encuestaId)
+        dbRef.child("encuestas/encuestaId" + encuesta.encuestaId + "" + encuesta.fecha)
             .setValue(encuesta)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
     }
 
     fun deleteEncuestaFromFirebase(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (DatabaseError) -> Unit) {
-        dbRef.child("encuestas/encuestaId" + encuesta.encuestaId)
+        dbRef.child("encuestas/encuestaId" + encuesta.encuestaId + "" + encuesta.fecha)
             .removeValue()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
