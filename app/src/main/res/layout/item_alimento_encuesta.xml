@@ -39,7 +39,7 @@
 
 
         <TextView
-            android:id="@+id/tvPorcion"
+            android:id="@+id/tvEncuestaCompletada"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -58,7 +58,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPorcion" />
+            app:layout_constraintTop_toBottomOf="@id/tvEncuestaCompletada" />
 
         <TextView
             android:id="@+id/tvVeces"

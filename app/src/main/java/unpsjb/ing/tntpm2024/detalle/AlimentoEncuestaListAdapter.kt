@@ -15,7 +15,7 @@ class AlimentoEncuestaListAdapter(private val context: Context) : RecyclerView.A
     class AlimentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvIdAlimento : TextView = itemView.findViewById(R.id.tvIdAlimento)
         val tvNombreAlimento : TextView = itemView.findViewById(R.id.tvNombreAlimento)
-        val tvPorcion : TextView = itemView.findViewById(R.id.tvPorcion)
+        val tvPorcion : TextView = itemView.findViewById(R.id.tvEncuestaCompletada)
         val tvFrecuencia : TextView = itemView.findViewById(R.id.tvFrecuencia)
         val tvVeces :  TextView = itemView.findViewById(R.id.tvVeces)
         val medida: TextView = itemView.findViewById(R.id.tvMedida)
