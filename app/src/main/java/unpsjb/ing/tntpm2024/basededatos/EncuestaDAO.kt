@@ -25,6 +25,9 @@ interface EncuestaDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEncuesta(encuesta: Encuesta)
 
+    @Insert
+    suspend fun insert(encuesta: Encuesta): Long
+
     @Delete
     fun deleteEncuesta(encuesta: Encuesta)
 

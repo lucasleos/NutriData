@@ -26,6 +26,10 @@ abstract class EncuestasDatabase : RoomDatabase() {
 
     abstract val encuestaDAO: EncuestaDAO
 
+    abstract fun alimentoDao(): AlimentoDAO
+
+    abstract fun alimentoEncuestaDao(): AlimentoEncuestaDao
+
     companion object {
         @Volatile
         private var INSTANCE: EncuestasDatabase? = null
@@ -55,7 +59,35 @@ abstract class EncuestasDatabase : RoomDatabase() {
             INSTANCE?.let { database ->
                 scope.launch {
                     cargarDatabase(database.encuestaDAO)
+                    populateDatabase(database.alimentoDao())
                 }
+            }
+        }
+
+        suspend fun populateDatabase(alimentoDao: AlimentoDAO) {
+
+            if (alimentoDao.getCantidadAlimentos() == 0) {
+                val alimentos = listOf(
+                    Alimento(
+                        nombre = "Manzana",
+                        categoria = "Fruta",
+                        medida = "Unidad",
+                        porcentajeGraso = 0.2
+                    ),
+                    Alimento(
+                        nombre = "Leche",
+                        categoria = "Lácteo",
+                        medida = "Litro",
+                        porcentajeGraso = 3.5
+                    ),
+                    Alimento(
+                        nombre = "Pan",
+                        categoria = "Cereal",
+                        medida = "Gramo",
+                        porcentajeGraso = 1.0
+                    )
+                )
+                alimentoDao.insertAll(alimentos)
             }
         }
 

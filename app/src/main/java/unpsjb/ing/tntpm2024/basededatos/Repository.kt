@@ -28,6 +28,10 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         encuestaDAO.insertEncuesta(encuesta)
     }
 
+    suspend fun cargarEncuesta(encuesta: Encuesta): Long {
+        return encuestaDAO.insert(encuesta)
+    }
+
     fun editarEncuesta(encuesta: Encuesta) {
         encuestaDAO.editEncuesta(encuesta)
     }

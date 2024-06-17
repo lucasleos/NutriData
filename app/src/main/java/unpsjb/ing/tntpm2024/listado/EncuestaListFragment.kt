@@ -74,7 +74,6 @@ class EncuestaListFragment : Fragment() {
         val factory = EncuestaViewModelFactory(database)
         encuestaViewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
 
-
         encuestaViewModel.todasLasEncuestas
             .observe(
                 viewLifecycleOwner,
@@ -124,18 +123,20 @@ class EncuestaListFragment : Fragment() {
         }
 
         adapterList.onItemClickUploadInCloud = { encuesta ->
-                encuestaViewModel.uploadEncuesta(encuesta,
-                    onSuccess = {
-                        Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
-                    },
-                    onFailure = { e ->
-                        Toast.makeText(context, "Error al subir encuesta: ${e.message}", Toast.LENGTH_SHORT).show()
-                        Log.i(TAG,"Error al subir encuesta: ${e.message}" )
-                    }
-                )
-            }
-
-
+            encuestaViewModel.uploadEncuesta(encuesta,
+                onSuccess = {
+                    Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = { e ->
+                    Toast.makeText(
+                        context,
+                        "Error al subir encuesta: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.i(TAG, "Error al subir encuesta: ${e.message}")
+                }
+            )
+        }
 
         adapterList.onSwipToDeleteCallback = {
             val encuesta = Encuesta(
@@ -152,7 +153,7 @@ class EncuestaListFragment : Fragment() {
             },
                 onFailure = { e ->
 //                    Toast.makeText(context, "Error al eliminar encuesta: ${e.message}", Toast.LENGTH_SHORT).show()
-                    Log.e(TAG,"Error al eliminar encuesta Firebase: ${e.message}" )
+                    Log.e(TAG, "Error al eliminar encuesta Firebase: ${e.message}")
                 })
         }
 
