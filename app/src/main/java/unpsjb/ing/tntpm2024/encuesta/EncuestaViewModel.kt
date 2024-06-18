@@ -1,6 +1,5 @@
 package unpsjb.ing.tntpm2024.encuesta
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,12 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.Repository
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
 class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
@@ -30,19 +29,45 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
         repository.insertarEncuesta(encuesta)
     }
 
+    fun cargarEncuesta(encuesta: Encuesta, callback: (Long) -> Unit) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val id = repository.cargarEncuesta(encuesta)
+            viewModelScope.launch(Dispatchers.Main) {
+                callback(id)
+            }
+        }
+
     //    fun uploadEncuesta(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-    fun uploadEncuesta(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (DatabaseError) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        repository.uploadEncuestaToFirebase(encuesta, onSuccess, onFailure)
+    fun uploadEncuesta(
+        encuesta: Encuesta,
+        alimentoEncuestaDetalles: List<AlimentoEncuestaDetalles>,
+        onSuccess: () -> Unit,
+        onFailure: (DatabaseError) -> Unit
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        repository.uploadEncuestaToFirebase(
+            encuesta,
+            alimentoEncuestaDetalles,
+            onSuccess,
+            onFailure
+        )
     }
 
-    fun deleteEncuestaFromFirebase(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (DatabaseError) -> Unit) = viewModelScope.launch(Dispatchers.IO){
+    fun deleteEncuestaFromFirebase(
+        encuesta: Encuesta,
+        onSuccess: () -> Unit,
+        onFailure: (DatabaseError) -> Unit
+    ) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteEncuestaFromFirebase(encuesta, onSuccess, onFailure)
     }
 
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
         return repository.getEncuesta(searchQuery)
-
     }
+
+    fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuestaDetalles>> {
+        return repository.getAlimentosByEncuestaId(encuestaId)
+    }
+
     fun deleteEncuesta(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {
         repository.eliminarEncuesta(encuesta)
     }
@@ -52,6 +77,12 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
             repository.editarEncuesta(encuesta)
         }
     }
+
+    fun getEncuestaById(id: Int): LiveData<Encuesta> {
+        return repository.getEncuestaById(id)
+
+    }
+
 
     private var _fecha = MutableLiveData<Long>()
     val fecha: LiveData<Long>

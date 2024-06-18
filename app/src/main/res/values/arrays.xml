@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filtro_encuestas">
+        <item>Todas</item>
+        <item>Completadas</item>
+        <item>Incompletas</item>
+    </string-array>
+</resources>
