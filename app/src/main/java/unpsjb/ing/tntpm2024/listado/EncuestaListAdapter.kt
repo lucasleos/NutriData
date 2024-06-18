@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 class EncuestaListAdapter internal constructor(
@@ -30,11 +33,9 @@ class EncuestaListAdapter internal constructor(
     inner class EncuestaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val imageUpload: ImageView = itemView.findViewById(R.id.imageUpload)
-        val alimentoTextView: TextView = itemView.findViewById(R.id.tvAlimento)
-        val porcionTextView: TextView = itemView.findViewById(R.id.tvPorcion)
-        val frecuenciaTextView: TextView = itemView.findViewById(R.id.tvFrecuencia)
-        val vecesTextView: TextView = itemView.findViewById(R.id.tvVeces)
         val encuestaIdTextView: TextView = itemView.findViewById(R.id.tvEncuestaId)
+        val fechaTextView: TextView = itemView.findViewById(R.id.tvFecha)
+        val encuestaCompletadaTextView: TextView = itemView.findViewById(R.id.tvEncuestaCompletada)
         val zonaTextView: TextView = itemView.findViewById(R.id.tvzona)
     }
 
@@ -47,11 +48,17 @@ class EncuestaListAdapter internal constructor(
     override fun onBindViewHolder(holder: EncuestaViewHolder, position: Int) {
         val encuesta = encuestas[position]
 
+        val fechaLong: Long = encuesta.fecha
+
+        val fechaLocalDateTime: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(fechaLong), ZoneId.systemDefault())
+
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val fechaFormateada: String = fechaLocalDateTime.format(formatter)
+
+
         holder.encuestaIdTextView.text = "Encuesta N° ${encuesta.encuestaId}"
-        holder.alimentoTextView.text = "Alimento: Yogur bebible"
-        holder.porcionTextView.text = "Porción: 250 ml"
-        holder.frecuenciaTextView.text = "Frecuencia: Semana"
-        holder.vecesTextView.text = "Veces: 3"
+        holder.fechaTextView.text = "Fecha: $fechaFormateada"
+        holder.encuestaCompletadaTextView.text = if (encuesta.encuestaCompletada) "Encuesta completada" else "Encuesta incompleta"
         holder.zonaTextView.text = encuesta.zona
 
         if (encuesta.encuestaCompletada) {
