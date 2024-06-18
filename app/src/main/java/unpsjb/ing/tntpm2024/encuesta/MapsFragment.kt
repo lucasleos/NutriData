@@ -149,7 +149,8 @@ class MapsFragment : Fragment() {
                 )
             } else {
                 MapsFragmentDirections.actionMapsFragmentToNuevaEncuestaFragment(
-                    zona = selectedPolygonInfo!!.zona
+                    zona = selectedPolygonInfo!!.zona,
+                    args.encuestaId
                 )
             }
 

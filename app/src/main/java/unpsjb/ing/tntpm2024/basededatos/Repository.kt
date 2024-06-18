@@ -18,6 +18,10 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         return encuestaDAO.getEncuesta(searchQuery)
     }
 
+    fun getEncuestaById(id: Int): LiveData<Encuesta> {
+        return encuestaDAO.getEncuestasById(id)
+    }
+
     fun eliminarEncuesta(encuesta: Encuesta) {
         encuestaDAO.deleteEncuesta(encuesta)
     }

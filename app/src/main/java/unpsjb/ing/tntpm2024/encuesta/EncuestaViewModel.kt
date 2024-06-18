@@ -44,7 +44,12 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
         onSuccess: () -> Unit,
         onFailure: (DatabaseError) -> Unit
     ) = viewModelScope.launch(Dispatchers.IO) {
-        repository.uploadEncuestaToFirebase(encuesta, alimentoEncuestaDetalles, onSuccess, onFailure)
+        repository.uploadEncuestaToFirebase(
+            encuesta,
+            alimentoEncuestaDetalles,
+            onSuccess,
+            onFailure
+        )
     }
 
     fun deleteEncuestaFromFirebase(
@@ -72,6 +77,12 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
             repository.editarEncuesta(encuesta)
         }
     }
+
+    fun getEncuestaById(id: Int): LiveData<Encuesta> {
+        return repository.getEncuestaById(id)
+
+    }
+
 
     private var _fecha = MutableLiveData<Long>()
     val fecha: LiveData<Long>

@@ -1,6 +1,7 @@
 package unpsjb.ing.tntpm2024.encuesta
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,7 @@ import java.util.Date
 class NuevaEncuestaFragment : Fragment() {
 
     private var isSaved: Boolean = false
-    private var isEditZonaClicked: Boolean = false
+    var isFirstload: Boolean = true
     private val args: NuevaEncuestaFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentNuevaEncuestaBinding
@@ -33,6 +34,10 @@ class NuevaEncuestaFragment : Fragment() {
     private lateinit var alimentoEncuestaViewModel: AlimentoEncuestaViewModel
 
     private var listaAlimentos: List<Alimento> = listOf()
+
+    private var encuestaId = 0
+    private lateinit var encuesta: Encuesta
+    private var i = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,15 +49,12 @@ class NuevaEncuestaFragment : Fragment() {
 
         val database = EncuestasDatabase.getInstance(requireContext())
 
-        // EncuestaViewModel
         val factory = EncuestaViewModelFactory(database)
         viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
 
-        // AlimentoViewModel
         val alimentoFactory = AlimentoViewModelFactory(database)
         alimentoViewModel = ViewModelProvider(this, alimentoFactory)[AlimentoViewModel::class.java]
 
-        // AlimentoEncuestaViewModel
         val alimentoEncuestaFactory = AlimentoEncuestaViewModelFactory(database)
         alimentoEncuestaViewModel =
             ViewModelProvider(this, alimentoEncuestaFactory)[AlimentoEncuestaViewModel::class.java]
@@ -82,20 +84,24 @@ class NuevaEncuestaFragment : Fragment() {
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsFrecuencia)
         autoCompleteFrecuencia.setAdapter(adapterFrecuencia)
 
+        encuestaId = args.encuestaId
 
-        // TODO: Ver eso de la encuesta completa o no.
-        val encuesta = Encuesta(
-            fecha = Date().time,
-            encuestaCompletada = true,
-            zona = args.zona
-        )
+        fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
-        var encuestaId: Long = 0
-        viewModel.cargarEncuesta(encuesta) { id ->
-            encuestaId = id
+        if (encuestaId == 0) {
+            encuesta = Encuesta(
+                fecha = Date().time,
+                encuestaCompletada = false,
+                zona = args.zona
+            )
+
+            viewModel.cargarEncuesta(encuesta) { id ->
+                encuestaId = id.toInt()
+            }
+
+        } else {
+            setupObservers()
         }
-
-        var i = 0
 
         binding.btnGuardar.setOnClickListener {
 
@@ -105,7 +111,7 @@ class NuevaEncuestaFragment : Fragment() {
 
             if (validarInputs()) {
                 val alimentoEncuesta = AlimentoEncuesta(
-                    encuestaId = encuestaId.toInt(),
+                    encuestaId = encuestaId,
                     alimentoId = listaAlimentos[i].alimentoId,
                     porcion = binding.autoCompleteTextViewPorcion.text.toString(),
                     frecuencia = binding.autoCompleteTextViewFrecuencia.text.toString(),
@@ -126,13 +132,19 @@ class NuevaEncuestaFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     isSaved = true
-                    //encuesta.encuestaCompletada = true
-                    //completarEncuesta(encuesta)
+                    encuesta.encuestaCompletada = true
+                    viewModel.editEncuesta(
+                        Encuesta(
+                            encuestaId = encuestaId,
+                            fecha = Date().time,
+                            encuestaCompletada = true,
+                            zona = args.zona
+                        )
+                    )
                     findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
                 } else {
                     binding.tvListadoEncuestas.text = listaAlimentos[++i].nombre
 
-                    // Limpiar los campos de autocompletar y de texto
                     binding.autoCompleteTextViewPorcion.setText("")
                     binding.autoCompleteTextViewFrecuencia.setText("")
                     binding.inputVeces.setText("")
@@ -141,10 +153,10 @@ class NuevaEncuestaFragment : Fragment() {
         }
 
         binding.btnEditZona.setOnClickListener {
-            isEditZonaClicked = true
             findNavController().navigate(
                 NuevaEncuestaFragmentDirections.actionNuevaEncuestaFragmentToMapsFragment(
-                    false
+                    false,
+                    encuestaId
                 )
             )
         }
@@ -152,27 +164,60 @@ class NuevaEncuestaFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (!isSaved && !isEditZonaClicked)
-            println("Hola")
+    private fun setupObservers() {
+        viewModel.getEncuestaById(encuestaId).observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                encuesta = response
+                viewModel.getAlimentosByEncuestaId(encuestaId)
+                    .observe(viewLifecycleOwner) { alimentos ->
+                        if (isFirstload) {
+                            i = alimentos.size - 1
+                            binding.tvListadoEncuestas.text = listaAlimentos[i].nombre
+                            if (alimentos.isNotEmpty()) {
+                                binding.tvListadoEncuestas.text = listaAlimentos[i].nombre
+                                if (alimentos[i].porcion.isNotEmpty()) binding.autoCompleteTextViewPorcion.text =
+                                    alimentos[i].porcion.toEditable()
+                                if (alimentos[i].frecuencia.isNotEmpty()) binding.autoCompleteTextViewFrecuencia.text =
+                                    alimentos[i].frecuencia.toEditable()
+                                if (alimentos[i].veces.isNotEmpty()) binding.inputVeces.text =
+                                    alimentos[i].veces.toEditable()
+                                isFirstload = false
+                            }
+                        }
+                    }
+            }
+        }
     }
 
-    /*
-        private fun guardarEncuesta(encuestaCompletada: Boolean) {
-            viewModel.insert(
-                Encuesta(
-                    fecha = Date().time,
-                    encuestaCompletada = encuestaCompletada,
-                    zona = args.zona
-                )
-            )
-        }*/
+    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
-    private fun completarEncuesta(encuesta: Encuesta) {
-        Log.i("NUEVA", "ENTREEEEEEE COMPLETAR ENCUESTA")
-        Log.i("NUEVA", encuesta.encuestaCompletada.toString())
-        viewModel.editEncuesta(encuesta)
+    override fun onStop() {
+        super.onStop()
+        Log.i("NUEVA ENCUESTA", "ENTRE ONSTOP")
+        if (!isSaved) {
+            Log.i("NUEVA ENCUESTA", "ENTRE ONSTOP")
+            val porcion = binding.autoCompleteTextViewPorcion.text.toString()
+            val frecuencia = binding.autoCompleteTextViewFrecuencia.text.toString()
+            val veces = binding.inputVeces.text.toString()
+
+            // Guardar el AlimentoEncuesta si al menos uno de los campos tiene datos.
+            if (porcion.isNotEmpty() || frecuencia.isNotEmpty() || veces.isNotEmpty()) {
+                val alimentoEncuesta = AlimentoEncuesta(
+                    encuestaId = encuestaId,
+                    alimentoId = listaAlimentos.getOrNull(i)?.alimentoId ?: 0,
+                    porcion = porcion,
+                    frecuencia = frecuencia,
+                    veces = veces
+                )
+                alimentoEncuestaViewModel.insert(alimentoEncuesta)
+                Log.i("NuevaEncuestaFragment", "AlimentoEncuesta guardado en onStop")
+            } else {
+                Log.i(
+                    "NuevaEncuestaFragment",
+                    "No hay datos suficientes para guardar AlimentoEncuesta en onStop"
+                )
+            }
+        }
     }
 
     private fun validarInputs(): Boolean {

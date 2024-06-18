@@ -13,6 +13,9 @@ interface EncuestaDAO {
     @Query("SELECT * from tabla_encuesta")
     fun getEncuestas(): LiveData<List<Encuesta>>
 
+    @Query("SELECT * from tabla_encuesta e WHERE e.encuestaId == :id")
+    fun getEncuestasById(id: Int): LiveData<Encuesta>
+
     @Query("SELECT * FROM tabla_encuesta encuestas " +
             "INNER JOIN tabla_alimento_encuesta ae ON encuestas.encuestaId = ae.encuestaId " +
             "INNER JOIN tabla_alimento alimentos ON alimentos.alimentoId = ae.alimentoId " +
