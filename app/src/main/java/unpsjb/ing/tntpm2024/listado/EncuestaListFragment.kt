@@ -6,6 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
@@ -28,27 +31,74 @@ class EncuestaListFragment : Fragment() {
 
     val TAG = "EncuestaListFragment"
 
+    private lateinit var filterSpinner: Spinner
+    private lateinit var zoneSpinner: Spinner
+
     private val adapterList: EncuestaListAdapter by lazy { EncuestaListAdapter(requireContext()) }
 
     private lateinit var encuestaViewModel: EncuestaViewModel
-    private lateinit var searchView: SearchView
+//    private lateinit var searchView: SearchView
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+
+        // Inicializar los Spinners
+        val statusOptions = listOf("Todas", "Completadas", "Incompletas")
+        val statusAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statusOptions)
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        filterSpinner.adapter = statusAdapter
+
+
+        val zones = listOf("Todas las zonas", "Zona Sur", "Zona Norte", "Zona Oeste")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, zones)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        zoneSpinner.adapter = adapter
+
+        encuestaViewModel = ViewModelProvider(this)[EncuestaViewModel::class.java]
+        filterSpinner = view.findViewById(R.id.filterSpinner)
+        zoneSpinner = view.findViewById(R.id.zoneSpinner)
+        // Configuración del Spinner de filtro
+        filterSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateFilters()
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                val searchQuery = "%$newText%"
-                encuestaViewModel.getEncuesta(searchQuery).observe(viewLifecycleOwner) { list ->
-                    list.let { adapterList.setEncuestas(it) }
-                }
-                return false
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         })
+
+        zoneSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateFilters()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
+
+        encuestaViewModel.todasLasEncuestas.observe(viewLifecycleOwner) { encuestas ->
+            encuestas?.let {
+                adapterList.setEncuestas(it)
+                updateFilters() // Aplicar filtros actuales
+            }
+        }
+    }
+
+    private fun updateFilters() {
+        val selectedStatus = when (filterSpinner.selectedItemPosition) {
+            0 -> null // Todas las encuestas
+            1 -> true // Encuestas completadas
+            2 -> false // Encuestas incompletas
+            else -> null
+        }
+
+        val selectedZone = if (zoneSpinner.selectedItem == null || zoneSpinner.selectedItemPosition == 0) {
+            null // Todas las zonas
+        } else {
+            zoneSpinner.selectedItem.toString()
+        }
+
+        adapterList.filterEncuestas(selectedStatus, selectedZone)
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -62,7 +112,9 @@ class EncuestaListFragment : Fragment() {
             inflater, R.layout.fragment_inicio, container, false
         )
 
-        searchView = binding.searchView
+        filterSpinner = binding.filterSpinner
+        zoneSpinner = binding.zoneSpinner
+//        searchView = binding.searchView
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapterList
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
@@ -74,14 +126,6 @@ class EncuestaListFragment : Fragment() {
         val factory = EncuestaViewModelFactory(database)
         encuestaViewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
 
-        encuestaViewModel.todasLasEncuestas
-            .observe(
-                viewLifecycleOwner,
-                Observer { encuestas ->
-                    encuestas?.let { adapterList.setEncuestas(it) }
-                }
-            )
-
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
@@ -90,28 +134,6 @@ class EncuestaListFragment : Fragment() {
             val action = EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(encuesta.encuestaId)
             findNavController().navigate(action)
         }
-
-    /*    adapterList.onItemClick = {
-            val encuestaId = it.encuestaId
-            val porcion = "100 ml"
-            val alimento = "Yogur bebible"
-            val veces = "5"
-            val frecuencia = "Dia"
-            val estado = if (it.encuestaCompletada) "Completada" else "Incompleta"
-
-            val title = "Detalle Encuesta $encuestaId"
-            val desc = """
-        Usted consume $porcion de $alimento, $veces cada $frecuencia
-        Estado: $estado
-    """.trimIndent()
-
-            findNavController().navigate(
-                EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(
-                    title = title,
-                    desc = desc
-                )
-            )
-        }*/
 
         adapterList.onItemClickEditEncuesta = {
             findNavController().navigate(

@@ -24,23 +24,73 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+
+        <LinearLayout
+            android:id="@+id/filterLayout"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/searchview_background"
-            android:focusable="false"
-            android:queryHint="Buscar encuesta"
-            app:iconifiedByDefault="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
             app:layout_constraintTop_toBottomOf="@id/tvListadoEncuestas"
-            app:searchHintIcon="@null" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="5dp">
+                <TextView
+                    android:id="@+id/tvFilterTitleZona"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Filtro zona"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+                <Spinner
+                    android:id="@+id/zoneSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_margin="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvFilterTitleZona" />
+
+            </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvFilterTitleEncuestas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filtro Estado Encuestas"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <Spinner
+                android:id="@+id/filterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tvFilterTitleEncuestas"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="8dp" />
+
+        </LinearLayout>
+
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -51,7 +101,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchView" />
+            app:layout_constraintTop_toBottomOf="@id/filterLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+
+
+<!--<androidx.appcompat.widget.SearchView-->
+<!--android:id="@+id/searchView"-->
+<!--android:layout_width="0dp"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="4dp"-->
+<!--android:layout_marginTop="16dp"-->
+<!--android:layout_marginEnd="4dp"-->
+<!--android:layout_marginBottom="16dp"-->
+<!--android:background="@drawable/searchview_background"-->
+<!--android:focusable="false"-->
+<!--android:queryHint="Buscar encuesta"-->
+<!--app:iconifiedByDefault="false"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@id/tvListadoEncuestas"-->
+<!--app:searchHintIcon="@null" />-->

@@ -1,6 +1,7 @@
 package unpsjb.ing.tntpm2024.listado
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +27,11 @@ class EncuestaListAdapter internal constructor(
     var onItemClickUploadInCloud: ((Encuesta) -> Unit)? = null
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    //private var encuestas = emptyList<Encuesta>() // Copia cache de los encuestas
     private var encuestas = mutableListOf<Encuesta>() // Copia cache de los encuestas
+    private var encuestasFiltradas = mutableListOf<Encuesta>() // Lista filtrada
+
+    private var filtroCompletada: Boolean? = null
+    private var filtroZona: String? = null
 
     inner class EncuestaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
@@ -46,7 +49,8 @@ class EncuestaListAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: EncuestaViewHolder, position: Int) {
-        val encuesta = encuestas[position]
+//        val encuesta = encuestas[position]
+        val encuesta = encuestasFiltradas[position]
 
         val fechaLong: Long = encuesta.fecha
 
@@ -88,13 +92,20 @@ class EncuestaListAdapter internal constructor(
         }
     }
 
+//    internal fun setEncuestas(encuestas: List<Encuesta>) {
+//        //this.encuestas = encuestas
+//        this.encuestas = encuestas.toMutableList()
+//        notifyDataSetChanged()
+//    }
     internal fun setEncuestas(encuestas: List<Encuesta>) {
-        //this.encuestas = encuestas
         this.encuestas = encuestas.toMutableList()
-        notifyDataSetChanged()
+        filterEncuestas(filtroCompletada, filtroZona) // Mostrar todas las encuestas al inicio
     }
 
-    override fun getItemCount() = encuestas.size
+//    override fun getItemCount() = encuestas.size
+    override fun getItemCount(): Int {
+        return encuestasFiltradas.size
+    }
 
     fun showDeleteConfirmationDialog(position: Int) {
         AlertDialog.Builder(context).apply {
@@ -120,6 +131,20 @@ class EncuestaListAdapter internal constructor(
         encuestas.removeAt(position)
         onSwipToDeleteCallback?.invoke(encuesta)
         notifyItemRemoved(position)
+    }
+
+    // Método para filtrar las encuestas por completadas o incompletas
+    fun filterEncuestas(completada: Boolean?, zona: String?) {
+        filtroCompletada = completada
+        filtroZona = zona
+
+        encuestasFiltradas.clear()
+        encuestasFiltradas.addAll(encuestas.filter {
+            (completada == null || it.encuestaCompletada == completada) &&
+                    (zona == null || it.zona == zona)
+        })
+        Log.i("EncuestaListAdapter", "Tamaño de las encuestas filtradas: " + encuestasFiltradas.size)
+        notifyDataSetChanged()
     }
 
 }
