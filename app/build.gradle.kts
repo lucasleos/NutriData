@@ -62,12 +62,12 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
     implementation("androidx.media3:media3-common:1.3.1")
+
     val navVersion = "2.7.7"
     val nav_version = "2.3.5"
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
-
 
     // Navigation Kotlin
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")

@@ -92,11 +92,6 @@ class EncuestaListAdapter internal constructor(
         }
     }
 
-//    internal fun setEncuestas(encuestas: List<Encuesta>) {
-//        //this.encuestas = encuestas
-//        this.encuestas = encuestas.toMutableList()
-//        notifyDataSetChanged()
-//    }
     internal fun setEncuestas(encuestas: List<Encuesta>) {
         this.encuestas = encuestas.toMutableList()
         filterEncuestas(filtroCompletada, filtroZona) // Mostrar todas las encuestas al inicio

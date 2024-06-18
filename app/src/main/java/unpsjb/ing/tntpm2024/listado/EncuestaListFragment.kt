@@ -25,7 +25,7 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
-import unpsjb.ing.tntpm2024.util.SwipToDeleteCallback
+import unpsjb.ing.tntpm2024.listado.SwipeToDeleteCallback
 
 class EncuestaListFragment : Fragment() {
 
@@ -119,7 +119,10 @@ class EncuestaListFragment : Fragment() {
         recyclerView.adapter = adapterList
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
 
-        val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
+        //val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
+        //itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapterList))
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         val database = EncuestasDatabase.getInstance(requireContext())
