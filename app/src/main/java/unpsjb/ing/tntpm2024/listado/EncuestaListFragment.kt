@@ -122,7 +122,11 @@ class EncuestaListFragment : Fragment() {
         //val itemTouchHelper = ItemTouchHelper(SwipToDeleteCallback(adapterList))
         //itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapterList))
+//        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapterList))
+//        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(requireContext(), adapterList))
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         val database = EncuestasDatabase.getInstance(requireContext())

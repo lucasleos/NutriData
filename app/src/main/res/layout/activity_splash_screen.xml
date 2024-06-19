@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<com.airbnb.lottie.LottieAnimationView
+    android:id="@+id/lottieAnimationView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    app:lottie_fileName="splashAnimation.json"
+    app:lottie_autoPlay="true"
+    app:lottie_loop="true" />
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="450dp"
+        android:fontFamily="@font/radio_canada_big"
+        android:gravity="center"
+        android:text="Nutri Data"
+        android:textColor="#fff"
+        android:textSize="55sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitulo"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="app encuestas alimentarias"
+        android:textColor="#fff"
+        android:textSize="20sp" />
+
+
+    <Button
+        android:id="@+id/btnIngresar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_below="@+id/tvDescripcion"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/rounded_btn"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="Ingresar"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:stateListAnimator="@null"
+        android:elevation="5dp"/>
+
+
+
+</RelativeLayout>
+    <!-- #FF70FF00 -->

@@ -54,6 +54,9 @@ android {
 
 dependencies {
 
+    // animacion splash_screen
+    implementation("com.airbnb.android:lottie:4.2.0")
+
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 
     implementation("com.google.firebase:firebase-analytics:21.0.0")
@@ -62,6 +65,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
     implementation("androidx.media3:media3-common:1.3.1")
+    implementation("androidx.core:core-animation:1.0.0")
+    implementation("androidx.activity:activity:1.8.0")
 
     val navVersion = "2.7.7"
     val nav_version = "2.3.5"

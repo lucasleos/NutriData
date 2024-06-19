@@ -1,5 +1,6 @@
 package unpsjb.ing.tntpm2024.listado
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,15 +12,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
 
-import android.animation.ValueAnimator
-class SwipeToDeleteCallback(
-    private val adapter: EncuestaListAdapter
-) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 
-    private val deleteIcon: Drawable? = ContextCompat.getDrawable(adapter.context, R.drawable.baseline_delete_black_24dp)
-    private val intrinsicWidth = deleteIcon?.intrinsicWidth ?: 0
-    private val intrinsicHeight = deleteIcon?.intrinsicHeight ?: 0
-    private val background = ColorDrawable(Color.RED)
+
+
+class SwipeToDeleteCallback(
+    val context: Context,
+    private val adapter: EncuestaListAdapter
+) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -43,27 +44,27 @@ class SwipeToDeleteCallback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        val itemView = viewHolder.itemView
-        val itemHeight = itemView.bottom - itemView.top
-
-        // Dibujar el fondo rojo
-        background.setBounds(
-            itemView.left, itemView.top,
-            itemView.left + dX.toInt(), itemView.bottom
-        )
-        background.draw(c)
-
-        // Calcular la posición del ícono de eliminación
-        val deleteIconTop = itemView.top + (itemHeight - intrinsicHeight) / 2
-        val deleteIconMargin = (itemHeight - intrinsicHeight) / 2
-        val deleteIconLeft = itemView.left + deleteIconMargin
-        val deleteIconRight = deleteIconLeft + intrinsicWidth
-        val deleteIconBottom = deleteIconTop + intrinsicHeight
-
-        // Dibujar el ícono de eliminación
-        deleteIcon?.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
-        deleteIcon?.draw(c)
-
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
+        val itemView = viewHolder.itemView
+        val background = Paint().apply { color = Color.RED }
+        val icon = ContextCompat.getDrawable(context, R.drawable.baseline_delete_black_24dp)!!
+
+        val iconMargin = (itemView.height - icon.intrinsicHeight) / 2
+        val iconTop = itemView.top + iconMargin
+        val iconBottom = iconTop + icon.intrinsicHeight
+        val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
+        val iconRight = itemView.right - iconMargin
+
+        if (dX < 0) { // Swipe to the left
+            val left = itemView.right + dX
+            val right = itemView.right.toFloat()
+            val top = itemView.top.toFloat()
+            val bottom = itemView.bottom.toFloat()
+
+            c.drawRect(left, top, right, bottom, background)
+            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            icon.draw(c)
+        }
     }
 }
