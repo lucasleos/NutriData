@@ -36,7 +36,7 @@ android:layout_height="match_parent">
         android:layout_marginTop="5dp"
         android:fontFamily="@font/roboto_regular"
         android:gravity="center"
-        android:text="app encuestas alimentarias"
+        android:text="App encuestas alimentarias"
         android:textColor="#fff"
         android:textSize="20sp" />
 
