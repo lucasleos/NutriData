@@ -1,6 +1,7 @@
 package unpsjb.ing.tntpm2024.listado
 
 import android.content.Context
+import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +41,7 @@ class EncuestaListAdapter internal constructor(
         val fechaTextView: TextView = itemView.findViewById(R.id.tvFecha)
         val encuestaCompletadaTextView: TextView = itemView.findViewById(R.id.tvEncuestaCompletada)
         val zonaTextView: TextView = itemView.findViewById(R.id.tvzona)
+        val imageCheck: ImageView = itemView.findViewById(R.id.ivCheck)
     }
 
 
@@ -61,8 +63,8 @@ class EncuestaListAdapter internal constructor(
 
 
         holder.encuestaIdTextView.text = "Encuesta N° ${encuesta.encuestaId}"
-        holder.fechaTextView.text = "Fecha: $fechaFormateada"
-        holder.encuestaCompletadaTextView.text = if (encuesta.encuestaCompletada) "Encuesta completada" else "Encuesta incompleta"
+        holder.fechaTextView.text = fechaFormateada
+        holder.encuestaCompletadaTextView.text = if (encuesta.encuestaCompletada) "Completa" else "Incompleta"
         holder.zonaTextView.text = encuesta.zona
 
         if (encuesta.encuestaCompletada) {
@@ -70,6 +72,7 @@ class EncuestaListAdapter internal constructor(
             holder.imageUpload.setImageResource(R.drawable.cloud_upload_icon)
         } else {
             holder.imageView.setImageResource(R.drawable.edit_ico)
+            holder.imageCheck.setImageResource(R.drawable.wrong)
         }
 
         holder.imageView.setOnClickListener {

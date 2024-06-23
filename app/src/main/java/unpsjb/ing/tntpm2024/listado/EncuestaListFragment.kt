@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,11 +20,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
-import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
-import unpsjb.ing.tntpm2024.listado.SwipeToDeleteCallback
 
 class EncuestaListFragment : Fragment() {
 
@@ -46,7 +43,8 @@ class EncuestaListFragment : Fragment() {
 
         // Inicializar los Spinners
         val statusOptions = listOf("Todas", "Completadas", "Incompletas")
-        val statusAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statusOptions)
+        val statusAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statusOptions)
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterSpinner.adapter = statusAdapter
 
@@ -60,21 +58,31 @@ class EncuestaListFragment : Fragment() {
         filterSpinner = view.findViewById(R.id.filterSpinner)
         zoneSpinner = view.findViewById(R.id.zoneSpinner)
         // Configuración del Spinner de filtro
-        filterSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 updateFilters()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
+        }
 
-        zoneSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        zoneSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 updateFilters()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
+        }
 
         encuestaViewModel.todasLasEncuestas.observe(viewLifecycleOwner) { encuestas ->
             encuestas?.let {
@@ -92,11 +100,12 @@ class EncuestaListFragment : Fragment() {
             else -> null
         }
 
-        val selectedZone = if (zoneSpinner.selectedItem == null || zoneSpinner.selectedItemPosition == 0) {
-            null // Todas las zonas
-        } else {
-            zoneSpinner.selectedItem.toString()
-        }
+        val selectedZone =
+            if (zoneSpinner.selectedItem == null || zoneSpinner.selectedItemPosition == 0) {
+                null // Todas las zonas
+            } else {
+                zoneSpinner.selectedItem.toString()
+            }
 
         adapterList.filterEncuestas(selectedStatus, selectedZone)
     }
@@ -138,7 +147,8 @@ class EncuestaListFragment : Fragment() {
 
 
         adapterList.onItemClick = { encuesta ->
-            val action = EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(encuesta.encuestaId)
+            val action =
+                EncuestaListFragmentDirections.actionEncuestalistToDetailFragment(encuesta.encuestaId)
             findNavController().navigate(action)
         }
 
@@ -159,20 +169,29 @@ class EncuestaListFragment : Fragment() {
 
         adapterList.onItemClickUploadInCloud = { encuesta ->
 
-            encuestaViewModel.getAlimentosByEncuestaId(encuesta.encuestaId).observe(viewLifecycleOwner, Observer { alimentosEncuesta ->
-                alimentosEncuesta?.let { alimentosEncuestaDetalles ->
+            encuestaViewModel.getAlimentosByEncuestaId(encuesta.encuestaId)
+                .observe(viewLifecycleOwner, Observer { alimentosEncuesta ->
+                    alimentosEncuesta?.let { alimentosEncuestaDetalles ->
 
-                    encuestaViewModel.uploadEncuesta(encuesta, alimentosEncuestaDetalles,
-                        onSuccess = {
-                            Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
-                        },
-                        onFailure = { e ->
-                            Toast.makeText(context,"Error al subir encuesta: ${e.message}",Toast.LENGTH_SHORT).show()
-                            Log.e(TAG, "Error al subir encuesta: ${e.message}")
-                        }
-                    )
-                }
-            })
+                        encuestaViewModel.uploadEncuesta(encuesta, alimentosEncuestaDetalles,
+                            onSuccess = {
+                                Toast.makeText(
+                                    context,
+                                    "Encuesta subida con éxito",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            onFailure = { e ->
+                                Toast.makeText(
+                                    context,
+                                    "Error al subir encuesta: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.e(TAG, "Error al subir encuesta: ${e.message}")
+                            }
+                        )
+                    }
+                })
         }
 
         adapterList.onSwipToDeleteCallback = { encuesta ->

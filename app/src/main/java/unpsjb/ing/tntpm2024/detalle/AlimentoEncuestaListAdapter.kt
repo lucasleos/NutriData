@@ -32,7 +32,7 @@ class AlimentoEncuestaListAdapter(private val context: Context) : RecyclerView.A
     override fun onBindViewHolder(holder: AlimentoViewHolder, position: Int) {
         val alimentoEncuestaDetalle = alimentosEncuestaDetalle[position]
         holder.tvIdAlimento.text = "Alimento N° ${alimentoEncuestaDetalle.alimentoId.toString()}"
-        holder.tvNombreAlimento.text = "Alimento: ${alimentoEncuestaDetalle.nombre}"
+        holder.tvNombreAlimento.text = alimentoEncuestaDetalle.nombre
         holder.tvPorcion.text = "Porcion: ${alimentoEncuestaDetalle.porcion}"
         holder.tvFrecuencia.text = "Frecuencia: ${alimentoEncuestaDetalle.frecuencia}"
         holder.tvVeces.text = "Veces Consumido: ${alimentoEncuestaDetalle.veces}"

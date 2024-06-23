@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="encuestaId"
             type="Integer" />
@@ -15,33 +14,30 @@
         android:id="@+id/detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context=".detalle.DetailFragment"
-        android:background="@drawable/fondo_encuesta_alimento_1_redim">
+        android:background="@drawable/fondo_encuesta_alimento_1_redim"
+        tools:context=".detalle.DetailFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/encuestaTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{"Encuesta ID: " + encuestaId}'
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/lato_bold"
+                android:text='@{"Encuesta " + encuestaId}'
+                android:textSize="25sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/alimentoRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="8dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

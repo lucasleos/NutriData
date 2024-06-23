@@ -23,10 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/indigo_daisy"
+            android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:text="Encuesta Alimentaria"
-            android:textSize="55sp"
+            android:textSize="30sp"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="16dp" />
 
@@ -35,7 +35,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="158dp"
             android:hint="Email"
             app:boxBackgroundColor="@color/bone_white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -53,7 +54,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="44dp"
             android:hint="Password"
             app:boxBackgroundColor="@color/bone_white"
             app:endIconMode="password_toggle"
@@ -65,6 +66,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +76,7 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_btn"
-            android:fontFamily="@font/roboto_regular"
+            android:fontFamily="@font/lato_bold"
             android:text="Iniciar Sesión"
             android:textColor="@color/white"
             android:textSize="16sp"
