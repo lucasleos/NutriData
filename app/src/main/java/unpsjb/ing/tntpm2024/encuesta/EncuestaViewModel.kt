@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.Repository
+import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentosEnEncuestas
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
@@ -18,6 +19,7 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
     private val repository: Repository
     val todasLasEncuestas: LiveData<List<Encuesta>>
+//    val todasLosAlimentosEncuestas: LiveData<List<AlimentosEnEncuestas>>
 
     init {
         val dao = database.encuestaDAO
@@ -60,12 +62,16 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
         repository.deleteEncuestaFromFirebase(encuesta, onSuccess, onFailure)
     }
 
-    fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
-        return repository.getEncuesta(searchQuery)
+    fun obtenerEncuestasDesdeFireBase() : LiveData<List<AlimentosEnEncuestas>>{
+        return repository.obtenerEncuestasDesdeFirebase()
     }
 
     fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuestaDetalles>> {
         return repository.getAlimentosByEncuestaId(encuestaId)
+    }
+
+    fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>> {
+        return repository.getEncuesta(searchQuery)
     }
 
     fun deleteEncuesta(encuesta: Encuesta) = viewModelScope.launch(Dispatchers.IO) {

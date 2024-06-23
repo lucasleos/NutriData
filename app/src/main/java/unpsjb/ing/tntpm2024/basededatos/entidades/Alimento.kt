@@ -18,3 +18,6 @@ data class Alimento(
     @ColumnInfo(name = "porcentaje_graso")
     var porcentajeGraso: Double,
 )
+{
+    constructor() : this(0, "", "", "", 0.0)
+}

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
 @Entity(tableName = "tabla_encuesta")
 data class Encuesta(
     @PrimaryKey(autoGenerate = true)
@@ -15,3 +16,6 @@ data class Encuesta(
     @ColumnInfo(name = "zona")
     var zona: String,
 )
+{
+    constructor() : this(0, 0, true, "")
+}

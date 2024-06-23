@@ -23,6 +23,7 @@ import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
+import unpsjb.ing.tntpm2024.util.SwipeToDeleteCallback
 
 class EncuestaListFragment : Fragment() {
 

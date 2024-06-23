@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="16dp">
+
+    <TextView
+        android:id="@+id/childNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Nombre"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/childMedida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Medida"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/childCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categoria"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/childPorcentajeGraso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Porcentaje Graso"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#DC696969" />
+
+</LinearLayout>

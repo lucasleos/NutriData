@@ -2,8 +2,13 @@ package unpsjb.ing.tntpm2024.basededatos
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
+import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentosEnEncuestas
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
@@ -41,45 +46,67 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
     fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuestaDetalles>> {
         return encuestaDAO.getAlimentosByEncuestaId(encuestaId)
     }
-//    fun uploadEncuestaToFirebase(encuesta: Encuesta, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-//
-//        val db = FirebaseFirestore.getInstance()
-//        Log.i("Repository", "instancia db" + db.collection("encuestas").toString())
-//        db.collection("encuestas")
-//            .add(encuesta)
-//            .addOnSuccessListener {
-//                Log.i("Repository", "encuesta se guardo con exito")
-//                onSuccess()
-//            }
-//            .addOnFailureListener { e ->
-//                Log.i("Repository", "encuesta fallo al guardar")
-//                onFailure(e)
-//            }
-//    }
 
+    fun obtenerEncuestasDesdeFirebase(): LiveData<List<AlimentosEnEncuestas>> {
+        val database = FirebaseDatabase.getInstance()
+        val encuestasRef = database.getReference("encuestas")
+        val liveData = MutableLiveData<List<AlimentosEnEncuestas>>()
+
+        encuestasRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val encuestasList = mutableListOf<AlimentosEnEncuestas>()
+                for (encuestaSnapshot in snapshot.children) {
+                    val encuestaData = encuestaSnapshot.child("encuesta").getValue(Encuesta::class.java)
+                    val alimentosList = mutableListOf<Alimento>()
+                    encuestaSnapshot.child("alimentos").children.forEach { alimentoSnapshot ->
+                        val alimento = alimentoSnapshot.getValue(Alimento::class.java)
+                        if (alimento != null) {
+                            Log.i("EncuestaRepository", "alimento recuperado: " + alimento.toString())
+                            alimentosList.add(alimento)
+                        }
+                    }
+                    if (encuestaData != null) {
+                        val alimentosEnEncuestas = AlimentosEnEncuestas(encuesta = encuestaData, alimentos = alimentosList)
+                        Log.i("EncuestaRepository", "obtener encuestas en repository: " + alimentosEnEncuestas.toString())
+                        encuestasList.add(alimentosEnEncuestas)
+                    }
+                }
+                liveData.value = encuestasList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("EncuestaRepository", "Error al obtener encuestas: ${error.message}")
+            }
+        })
+
+        return liveData
+    }
 
     fun uploadEncuestaToFirebase(
         encuesta: Encuesta,
         alimentoEncuestaDetalles: List<AlimentoEncuestaDetalles>,
         onSuccess: () -> Unit,
         onFailure: (DatabaseError) -> Unit
-    ) { // Crear un mapa para los detalles de la encuesta
+    ) {
+        // Crear un mapa para los detalles de la encuesta
         val encuestaMap = mutableMapOf<String, Any>(
-            "encuestaId" to encuesta.encuestaId,
-            "fecha" to encuesta.fecha,
-            "zona" to encuesta.zona,
-            "encuestaCompletada" to encuesta.encuestaCompletada
+            "encuesta" to mapOf(
+                "encuestaId" to encuesta.encuestaId,
+                "fecha" to encuesta.fecha,
+                "zona" to encuesta.zona,
+                "encuestaCompletada" to encuesta.encuestaCompletada
+            )
         )
 
         // Crear una lista de mapas para los detalles de los alimentos
-        val alimentosList = alimentoEncuestaDetalles.mapIndexed { index, alimento ->
+        val alimentosList = alimentoEncuestaDetalles.map { alimento ->
             mapOf(
                 "alimentoId" to alimento.alimentoId,
                 "categoria" to alimento.categoria,
                 "frecuencia" to alimento.frecuencia,
                 "medida" to alimento.medida,
                 "nombre" to alimento.nombre,
-                "porcentaje_graso" to alimento.porcentaje_graso,
+                "porcentajeGraso" to alimento.porcentaje_graso.toDouble(),
                 "porcion" to alimento.porcion,
                 "veces" to alimento.veces
             )
@@ -104,4 +131,5 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
     }
+
 }

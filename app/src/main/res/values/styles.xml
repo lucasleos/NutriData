@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+       <!-- &lt;!&ndash; Base application theme &ndash;&gt;
+        <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        &lt;!&ndash; Customize your theme here &ndash;&gt;
+                <item name="colorPrimary">#ffff</item>
+                <item name="colorPrimaryDark">#fffa</item>
+                <item name="colorAccent">#fff3</item>
+                <item name="windowActionBar">false</item>
+                <item name="windowNoTitle">true</item>
+        </style>-->
+
+</resources>
