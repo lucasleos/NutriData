@@ -12,8 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ListaEncuestasActivity">
+        tools:context=".listadoFireBase.ListaEncuestasFireBaseActivity">
 
+        <TextView
+            android:id="@+id/tvTituloEncuestas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Encuestas subidas FireBase"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/noEncuestasTextView"
@@ -24,7 +32,6 @@
             android:text="No hay encuestas subidas"
             android:visibility="gone"
             android:textSize="18sp" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/expandable_recycler_view"

@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <group android:id="@+id/authenticated_user_group">
+
         <item
             android:id="@+id/nav_lista_encuestas"
             android:icon="@drawable/cloudy_ico"
             android:title="Encuestas subidas Firebase"
             />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Cerrar sesión" />
+        </group>
+
+<!--        <item-->
+<!--            android:id="@+id/nav_login"-->
+<!--            android:icon="@drawable/ic_login"-->
+<!--            android:title="Iniciar sesión" />-->
 </menu>

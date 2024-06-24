@@ -199,13 +199,12 @@ class EncuestaListFragment : Fragment() {
 
             encuestaViewModel.deleteEncuesta(encuesta)
             Toast.makeText(context, "Encuesta borrada", Toast.LENGTH_SHORT).show()
-            encuestaViewModel.deleteEncuestaFromFirebase(encuesta, onSuccess = {
-//                Toast.makeText(context, "Encuesta Firebase eliminada con éxito", Toast.LENGTH_SHORT).show()
+           // elimina tambien de firebase
+            /* encuestaViewModel.deleteEncuestaFromFirebase(encuesta, onSuccess = {
             },
                 onFailure = { e ->
-//                    Toast.makeText(context, "Error al eliminar encuesta: ${e.message}", Toast.LENGTH_SHORT).show()
                     Log.e(TAG, "Error al eliminar encuesta Firebase: ${e.message}")
-                })
+                }) */
         }
 
         return binding.root

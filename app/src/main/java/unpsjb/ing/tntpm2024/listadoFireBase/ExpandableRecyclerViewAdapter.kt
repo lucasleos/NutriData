@@ -58,6 +58,7 @@ class ExpandableRecyclerViewAdapter(
     override fun getItemCount(): Int {
         return parentItemList.size
     }
+
 }
 
 class ChildAdapter(private val childItemList: List<Alimento>) : RecyclerView.Adapter<ChildAdapter.ChildViewHolder>() {

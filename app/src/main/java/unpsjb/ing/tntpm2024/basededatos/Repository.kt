@@ -3,6 +3,7 @@ package unpsjb.ing.tntpm2024.basededatos
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -48,26 +49,32 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
     }
 
     fun obtenerEncuestasDesdeFirebase(): LiveData<List<AlimentosEnEncuestas>> {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+
         val database = FirebaseDatabase.getInstance()
         val encuestasRef = database.getReference("encuestas")
         val liveData = MutableLiveData<List<AlimentosEnEncuestas>>()
 
-        encuestasRef.addValueEventListener(object : ValueEventListener {
+        if(userId != null){
+        // volver a cambiar esto, que muestre todas las encuestas que hay subidas
+            //encuestasRef.orderByChild("encuesta/userId").equalTo(userId).addValueEventListener(object : ValueEventListener {
+            encuestasRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val encuestasList = mutableListOf<AlimentosEnEncuestas>()
                 for (encuestaSnapshot in snapshot.children) {
-                    val encuestaData = encuestaSnapshot.child("encuesta").getValue(Encuesta::class.java)
+                    val encuestaData =
+                        encuestaSnapshot.child("encuesta").getValue(Encuesta::class.java)
                     val alimentosList = mutableListOf<Alimento>()
                     encuestaSnapshot.child("alimentos").children.forEach { alimentoSnapshot ->
                         val alimento = alimentoSnapshot.getValue(Alimento::class.java)
                         if (alimento != null) {
-                            Log.i("EncuestaRepository", "alimento recuperado: " + alimento.toString())
                             alimentosList.add(alimento)
                         }
                     }
                     if (encuestaData != null) {
-                        val alimentosEnEncuestas = AlimentosEnEncuestas(encuesta = encuestaData, alimentos = alimentosList)
-                        Log.i("EncuestaRepository", "obtener encuestas en repository: " + alimentosEnEncuestas.toString())
+                        val alimentosEnEncuestas =
+                            AlimentosEnEncuestas(encuesta = encuestaData, alimentos = alimentosList)
                         encuestasList.add(alimentosEnEncuestas)
                     }
                 }
@@ -78,9 +85,11 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                 Log.e("EncuestaRepository", "Error al obtener encuestas: ${error.message}")
             }
         })
-
+    }else{
+            Log.e("EncuestaRepository", "Usuario no autenticado")
+        }
         return liveData
-    }
+}
 
     fun uploadEncuestaToFirebase(
         encuesta: Encuesta,
@@ -88,13 +97,17 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         onSuccess: () -> Unit,
         onFailure: (DatabaseError) -> Unit
     ) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid ?: return onFailure(DatabaseError.fromException(Exception("Usuario no autenticado")))
+
         // Crear un mapa para los detalles de la encuesta
         val encuestaMap = mutableMapOf<String, Any>(
             "encuesta" to mapOf(
                 "encuestaId" to encuesta.encuestaId,
                 "fecha" to encuesta.fecha,
                 "zona" to encuesta.zona,
-                "encuestaCompletada" to encuesta.encuestaCompletada
+                "encuestaCompletada" to encuesta.encuestaCompletada,
+                "userId" to userId  // Agregar el UID del usuario
             )
         )
 
