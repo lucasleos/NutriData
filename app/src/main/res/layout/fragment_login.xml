@@ -70,11 +70,12 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <Button
             android:id="@+id/btnIngresar"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="80dp"
             android:background="@drawable/rounded_btn"
             android:fontFamily="@font/lato_bold"
             android:text="Iniciar Sesión"
@@ -85,5 +86,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <Button
+            android:id="@+id/btnGoogleSignIn"
+            android:drawableStart="@drawable/ic_google"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_btn"
+            android:fontFamily="@font/lato_bold"
+            android:text="Iniciar sesión con Google"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/btnIngresar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

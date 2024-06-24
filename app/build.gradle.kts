@@ -53,7 +53,8 @@ android {
 }
 
 dependencies {
-
+    implementation("com.google.firebase:firebase-auth:21.0.6")
+    implementation("com.google.android.gms:play-services-auth:20.1.0")
     // animacion splash_screen
     implementation("com.airbnb.android:lottie:4.2.0")
 

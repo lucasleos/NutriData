@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "633050958720",
+    "firebase_url": "https://appencuestas-4d4b0-default-rtdb.firebaseio.com",
     "project_id": "appencuestas-4d4b0",
     "storage_bucket": "appencuestas-4d4b0.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "unpsjb.ing.tntpm2024"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "633050958720-r00r2ah2ibav9htila2lhj9l6f0c4t43.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "unpsjb.ing.tntpm2024",
+            "certificate_hash": "a98415bcb8133a56fea3a7c9edab7bbbd312da9e"
+          }
+        },
+        {
+          "client_id": "633050958720-eh80gt7lue0cdo1magqbpu2raeah222n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA-1Tf53Az-6S9qDqSqB7vyXJgp40gnWgY"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633050958720-eh80gt7lue0cdo1magqbpu2raeah222n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
