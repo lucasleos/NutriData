@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.auth.FirebaseAuth
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
@@ -38,6 +39,8 @@ class NuevaEncuestaFragment : Fragment() {
     private var encuestaId = 0
     private lateinit var encuesta: Encuesta
     private var i = 0
+
+    var user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,7 +95,9 @@ class NuevaEncuestaFragment : Fragment() {
             encuesta = Encuesta(
                 fecha = Date().time,
                 encuestaCompletada = false,
-                zona = args.zona
+                zona = args.zona,
+                userId = user?.uid,
+                userEmail = user?.email
             )
 
             viewModel.cargarEncuesta(encuesta) { id ->

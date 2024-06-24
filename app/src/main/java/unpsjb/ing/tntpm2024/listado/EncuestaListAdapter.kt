@@ -70,6 +70,7 @@ class EncuestaListAdapter internal constructor(
         if (encuesta.encuestaCompletada) {
             holder.imageView.setImageResource(R.drawable.view_ico)
             holder.imageUpload.setImageResource(R.drawable.cloud_upload_icon)
+            holder.imageCheck.setImageResource(R.drawable.check)
         } else {
             holder.imageView.setImageResource(R.drawable.edit_ico)
             holder.imageCheck.setImageResource(R.drawable.wrong)
