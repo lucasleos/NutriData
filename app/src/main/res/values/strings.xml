@@ -6,7 +6,6 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string-array name="opcionesPorcion">
         <item>100ml</item>
         <item>200ml</item>
@@ -14,10 +13,11 @@
     </string-array>
 
     <string-array name="opcionesFrecuencia">
-        <item>Dia</item>
-        <item>Semana</item>
-        <item>Mes</item>
-        <item>Año</item>
+        <item>Nunca</item>
+        <item>Diaria</item>
+        <item>Semanal</item>
+        <item>Mensual</item>
+        <item>Anual</item>
     </string-array>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>

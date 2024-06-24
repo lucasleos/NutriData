@@ -1,7 +1,6 @@
 package unpsjb.ing.tntpm2024.basededatos
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -20,14 +19,12 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
         Alimento::class,
         AlimentoEncuesta::class
     ],
-    exportSchema = true
+    exportSchema = false
 )
 abstract class EncuestasDatabase : RoomDatabase() {
 
     abstract val encuestaDAO: EncuestaDAO
-
     abstract fun alimentoDao(): AlimentoDAO
-
     abstract fun alimentoEncuestaDao(): AlimentoEncuestaDao
 
     companion object {
@@ -41,8 +38,8 @@ abstract class EncuestasDatabase : RoomDatabase() {
                     EncuestasDatabase::class.java,
                     "encuestas_db"
                 )
-                    .addCallback(EncuestasDatabaseCallback(CoroutineScope(Dispatchers.IO)))
                     .fallbackToDestructiveMigration()
+                    .addCallback(EncuestasDatabaseCallback(CoroutineScope(Dispatchers.IO)))
                     .build().also {
                         INSTANCE = it
                     }
@@ -58,33 +55,76 @@ abstract class EncuestasDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    cargarDatabase(database.encuestaDAO)
-                    populateDatabase(database.alimentoDao())
+                    // Uncomment these methods if you want to populate the database on open
+                    // populateDatabase(database.alimentoDao())
+                    // cargarDatabase(database.encuestaDAO)
                 }
             }
         }
 
+        /*
         suspend fun populateDatabase(alimentoDao: AlimentoDAO) {
-
             if (alimentoDao.getCantidadAlimentos() == 0) {
                 val alimentos = listOf(
                     Alimento(
-                        nombre = "Manzana",
-                        categoria = "Fruta",
-                        medida = "Unidad",
-                        porcentajeGraso = 0.2
+                        nombre = "Leche en polvo entera",
+                        categoria = "Leche y yogur",
+                        medida = "ml",
+                        kcal = 494.04,
+                        carbohidratos = 38.05,
+                        proteinas = 26.15,
+                        grasas = 26.36,
+                        alcohol = 0.0,
+                        coresterol = 80.48,
+                        fibra = 0.0,
                     ),
                     Alimento(
-                        nombre = "Leche",
-                        categoria = "Lácteo",
-                        medida = "Litro",
-                        porcentajeGraso = 3.5
+                        nombre = "Leche fluida entera",
+                        categoria = "Leche y yogur",
+                        medida = "ml",
+                        kcal = 57.92,
+                        carbohidratos = 4.63,
+                        proteinas = 3.1,
+                        grasas = 3.0,
+                        alcohol = 0.0,
+                        coresterol = 10.11,
+                        fibra = 0.0,
                     ),
                     Alimento(
-                        nombre = "Pan",
-                        categoria = "Cereal",
-                        medida = "Gramo",
-                        porcentajeGraso = 1.0
+                        nombre = "De pasta dura (ej. Sardo, Romano, Provolone, Reggianito, Parmesano)",
+                        categoria = "Grasas animales",
+                        medida = "g",
+                        kcal = 373.83,
+                        carbohidratos = 0.34,
+                        proteinas = 32.39,
+                        grasas = 26.99,
+                        alcohol = 0.0,
+                        coresterol = 82.99,
+                        fibra = 0.0,
+                    ),
+                    Alimento(
+                        nombre = "De pasta semidura/azul (ej. Holanda, Gouda, Fontina, Pategras, Dambo)",
+                        categoria = "Grasas animales",
+                        medida = "g",
+                        kcal = 328.16,
+                        carbohidratos = 0.1,
+                        proteinas = 25.33,
+                        grasas = 25.16,
+                        alcohol = 0.0,
+                        coresterol = 72.14,
+                        fibra = 0.0,
+                    ),
+                    Alimento(
+                        nombre = "Manteca",
+                        categoria = "Grasas animales",
+                        medida = "g",
+                        kcal = 745.35,
+                        carbohidratos = 0.0,
+                        proteinas = 0.33,
+                        grasas = 82.67,
+                        alcohol = 0.0,
+                        coresterol = 223.0,
+                        fibra = 0.0,
                     )
                 )
                 alimentoDao.insertAll(alimentos)
@@ -93,9 +133,8 @@ abstract class EncuestasDatabase : RoomDatabase() {
 
         suspend fun cargarDatabase(encuestaDAO: EncuestaDAO) {
             Log.i("EncuestasDatabase", "cargarDatabase")
-            // Descomentar para precargar datos iniciales
-            /*
-            if(encuestaDAO.getCantidadAlimentos() == 0) {
+            // Uncomment to preload data
+            if (encuestaDAO.getCantidadAlimentos() == 0) {
                 encuestaDAO.insertAlimento(
                     Alimento(
                         1,
@@ -106,7 +145,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                     )
                 )
             }
-            */
         }
+        */
     }
 }
