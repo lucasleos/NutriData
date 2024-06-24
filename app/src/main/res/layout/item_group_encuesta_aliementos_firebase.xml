@@ -27,11 +27,11 @@
                 android:gravity="center"
                 android:text="CodingSTUFF"
                 android:textColor="@color/medium_green"
-                android:textSize="16sp"
+                android:layout_marginHorizontal="5dp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/expandButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

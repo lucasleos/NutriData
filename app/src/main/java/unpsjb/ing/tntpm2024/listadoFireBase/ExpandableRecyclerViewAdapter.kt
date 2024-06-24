@@ -37,9 +37,9 @@ class ExpandableRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ParentViewHolder, position: Int) {
             val parentItem = parentItemList[position]
 
-
+        var userNickName = parentItem.encuesta.userEmail?.substringBefore("@")
             holder.tvTitleEncuesta.text =
-                "Encuesta ID: ${parentItem.encuesta.encuestaId}, Zona: ${parentItem.encuesta.zona}"
+                "Encuesta ID: ${parentItem.encuesta.encuestaId}, ${parentItem.encuesta.zona}, Encuestador: ${userNickName}"
 
             val childAdapter = ChildAdapter(parentItem.alimentos)
             holder.recyclerViewChild.adapter = childAdapter

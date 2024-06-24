@@ -41,9 +41,13 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
     }*/
 
     suspend fun insertarEncuesta(encuesta: Encuesta) {
-        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+        val user = FirebaseAuth.getInstance().currentUser
+        val idUser = user?.uid
+        val emailUser = user?.email
+
         //if (idUser != null) {
             encuesta.userId = idUser
+            encuesta.userEmail = emailUser
             encuestaDAO.insertEncuesta(encuesta)
         //} else {
         //    throw IllegalStateException("No authenticated user")
@@ -55,8 +59,11 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
     }
 
     fun editarEncuesta(encuesta: Encuesta) {
-        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+        val user = FirebaseAuth.getInstance().currentUser
+        val idUser = user?.uid
+        val emailUser = user?.email
         encuesta.userId = idUser
+        encuesta.userEmail = emailUser
         encuestaDAO.editEncuesta(encuesta)
     }
 
@@ -114,7 +121,9 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         onFailure: (DatabaseError) -> Unit
     ) {
         val currentUser = FirebaseAuth.getInstance().currentUser
+
         val userId = currentUser?.uid ?: return onFailure(DatabaseError.fromException(Exception("Usuario no autenticado")))
+        val userEmail = currentUser?.email ?: return onFailure(DatabaseError.fromException(Exception("Usuario no autenticado")))
 
         // Crear un mapa para los detalles de la encuesta
         val encuestaMap = mutableMapOf<String, Any>(
@@ -123,7 +132,8 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                 "fecha" to encuesta.fecha,
                 "zona" to encuesta.zona,
                 "encuestaCompletada" to encuesta.encuestaCompletada,
-                "userId" to userId  // Agregar el UID del usuario
+                "userId" to userId,  // Agregar el UID del usuario
+                "userEmail" to userEmail
             )
         )
 
