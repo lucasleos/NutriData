@@ -13,13 +13,13 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         Encuesta::class,
         Alimento::class,
         AlimentoEncuesta::class
     ],
-    exportSchema = false
+    exportSchema = true
 )
 abstract class EncuestasDatabase : RoomDatabase() {
 
@@ -55,14 +55,12 @@ abstract class EncuestasDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    // Uncomment these methods if you want to populate the database on open
-                    // populateDatabase(database.alimentoDao())
+                    populateDatabase(database.alimentoDao())
                     // cargarDatabase(database.encuestaDAO)
                 }
             }
         }
 
-        /*
         suspend fun populateDatabase(alimentoDao: AlimentoDAO) {
             if (alimentoDao.getCantidadAlimentos() == 0) {
                 val alimentos = listOf(
@@ -130,7 +128,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                 alimentoDao.insertAll(alimentos)
             }
         }
-
+/*
         suspend fun cargarDatabase(encuestaDAO: EncuestaDAO) {
             Log.i("EncuestasDatabase", "cargarDatabase")
             // Uncomment to preload data
@@ -146,6 +144,6 @@ abstract class EncuestasDatabase : RoomDatabase() {
                 )
             }
         }
-        */
+*/
     }
 }
