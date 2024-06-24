@@ -37,6 +37,7 @@ class ExpandableRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ParentViewHolder, position: Int) {
             val parentItem = parentItemList[position]
 
+
             holder.tvTitleEncuesta.text =
                 "Encuesta ID: ${parentItem.encuesta.encuestaId}, Zona: ${parentItem.encuesta.zona}"
 

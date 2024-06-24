@@ -28,12 +28,26 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         return encuestaDAO.getEncuestasById(id)
     }
 
+    fun getEncuestasByUserId(userId: String): LiveData<List<Encuesta>> {
+        return encuestaDAO.getEncuestasByUserId(userId)
+    }
+
     fun eliminarEncuesta(encuesta: Encuesta) {
         encuestaDAO.deleteEncuesta(encuesta)
     }
 
-    suspend fun insertarEncuesta(encuesta: Encuesta) {
+    /*suspend fun insertarEncuesta(encuesta: Encuesta) {
         encuestaDAO.insertEncuesta(encuesta)
+    }*/
+
+    suspend fun insertarEncuesta(encuesta: Encuesta) {
+        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+        //if (idUser != null) {
+            encuesta.userId = idUser
+            encuestaDAO.insertEncuesta(encuesta)
+        //} else {
+        //    throw IllegalStateException("No authenticated user")
+       // }
     }
 
     suspend fun cargarEncuesta(encuesta: Encuesta): Long {
@@ -41,6 +55,8 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
     }
 
     fun editarEncuesta(encuesta: Encuesta) {
+        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+        encuesta.userId = idUser
         encuestaDAO.editEncuesta(encuesta)
     }
 

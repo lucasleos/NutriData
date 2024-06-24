@@ -26,7 +26,6 @@ class InicioFragment : Fragment() {
             binding.tvTitulo.text = "Bienvenido: " + user.email?.substringBefore("@")
 
 
-
         binding.btnEncuesta.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_mapsFragment)
         }

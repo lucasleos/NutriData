@@ -15,6 +15,8 @@ data class Encuesta(
     var encuestaCompletada: Boolean,
     @ColumnInfo(name = "zona")
     var zona: String,
+    @ColumnInfo(name = "userId")
+    var userId: String? = null
 )
 {
     constructor() : this(0, 0, true, "")

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
@@ -85,10 +86,15 @@ class EncuestaListFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        encuestaViewModel.todasLasEncuestas.observe(viewLifecycleOwner) { encuestas ->
-            encuestas?.let {
-                adapterList.setEncuestas(it)
-                updateFilters() // Aplicar filtros actuales
+
+        val idUser = FirebaseAuth.getInstance().currentUser?.uid
+        //if (idUser != null) {
+        if (idUser != null) {
+            encuestaViewModel.getEncuestasByUserId(idUser).observe(viewLifecycleOwner) { encuestas ->
+                encuestas?.let {
+                    adapterList.setEncuestas(it)
+                    updateFilters() // Aplicar filtros actuales
+                }
             }
         }
     }
@@ -200,11 +206,11 @@ class EncuestaListFragment : Fragment() {
             encuestaViewModel.deleteEncuesta(encuesta)
             Toast.makeText(context, "Encuesta borrada", Toast.LENGTH_SHORT).show()
            // elimina tambien de firebase
-            /* encuestaViewModel.deleteEncuestaFromFirebase(encuesta, onSuccess = {
+            encuestaViewModel.deleteEncuestaFromFirebase(encuesta, onSuccess = {
             },
                 onFailure = { e ->
                     Log.e(TAG, "Error al eliminar encuesta Firebase: ${e.message}")
-                }) */
+                })
         }
 
         return binding.root

@@ -89,6 +89,10 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
 
     }
 
+    fun getEncuestasByUserId(userId: String): LiveData<List<Encuesta>> {
+        return repository.getEncuestasByUserId(userId)
+    }
+
 
     private var _fecha = MutableLiveData<Long>()
     val fecha: LiveData<Long>

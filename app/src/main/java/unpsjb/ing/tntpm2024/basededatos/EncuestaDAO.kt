@@ -1,7 +1,13 @@
 package unpsjb.ing.tntpm2024.basededatos
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
@@ -21,6 +27,9 @@ interface EncuestaDAO {
             "INNER JOIN tabla_alimento alimentos ON alimentos.alimentoId = ae.alimentoId " +
             "WHERE alimentos.nombre LIKE :searchQuery")
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>>
+
+    @Query("SELECT * FROM tabla_encuesta WHERE userId = :userId")
+    fun getEncuestasByUserId(userId: String): LiveData<List<Encuesta>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEncuesta(encuesta: Encuesta)

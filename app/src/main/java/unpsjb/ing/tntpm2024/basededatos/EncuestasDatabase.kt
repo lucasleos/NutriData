@@ -14,7 +14,7 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         Encuesta::class,
         Alimento::class,
@@ -25,9 +25,7 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 abstract class EncuestasDatabase : RoomDatabase() {
 
     abstract val encuestaDAO: EncuestaDAO
-
     abstract fun alimentoDao(): AlimentoDAO
-
     abstract fun alimentoEncuestaDao(): AlimentoEncuestaDao
 
     companion object {
@@ -65,7 +63,6 @@ abstract class EncuestasDatabase : RoomDatabase() {
         }
 
         suspend fun populateDatabase(alimentoDao: AlimentoDAO) {
-
             if (alimentoDao.getCantidadAlimentos() == 0) {
                 val alimentos = listOf(
                     Alimento(
