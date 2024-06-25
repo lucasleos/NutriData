@@ -16,7 +16,8 @@ interface EncuestaDAO {
 
 //TRANSACCIONES DE ENCUESTAS
 
-    @Query("SELECT * from tabla_encuesta")
+//    @Query("SELECT * from tabla_encuesta")
+    @Query("SELECT * from tabla_encuesta ORDER BY fecha DESC")
     fun getEncuestas(): LiveData<List<Encuesta>>
 
     @Query("SELECT * from tabla_encuesta e WHERE e.encuestaId == :id")
@@ -28,7 +29,7 @@ interface EncuestaDAO {
             "WHERE alimentos.nombre LIKE :searchQuery")
     fun getEncuesta(searchQuery: String): LiveData<List<Encuesta>>
 
-    @Query("SELECT * FROM tabla_encuesta WHERE userId = :userId")
+    @Query("SELECT * FROM tabla_encuesta WHERE userId = :userId ORDER BY fecha DESC")
     fun getEncuestasByUserId(userId: String): LiveData<List<Encuesta>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -87,7 +87,7 @@ class LoginFragment : Fragment() {
             } catch (e: ApiException) {
                 // El inicio de sesión de Google falló
                 Log.w("LoginFragment", "Google sign in failed", e)
-                Toast.makeText(context, "Google sign in failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Inicio de sesión Google fallo", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -104,12 +104,12 @@ class LoginFragment : Fragment() {
                     (requireActivity() as MainActivity).updateDrawerMenu(menu, FirebaseAuth.getInstance().currentUser)
 
                     Log.d("LoginFragment", "signInWithCredential:success")
-                    Toast.makeText(context, "Google sign in successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Inicio de sesión Google exitoso", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
                 } else {
                     // Si el inicio de sesión falla, muestra un mensaje al usuario
                     Log.w("LoginFragment", "signInWithCredential:failure", task.exception)
-                    Toast.makeText(context, "Google sign in failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Inicio de sesión Google fallo", Toast.LENGTH_SHORT).show()
                 }
             }
     }
