@@ -123,6 +123,30 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         coresterol = 223.0,
                         fibra = 0.0,
+                    ),
+                    Alimento(
+                        nombre = "Empanadas de Carne",
+                        categoria = "Grasas animales",
+                        medida = "g",
+                        kcal = 214.4,
+                        carbohidratos = 14.8,
+                        proteinas = 10.1,
+                        grasas = 12.7,
+                        alcohol = 0.0,
+                        coresterol = 68.9,
+                        fibra = 3.0,
+                    ),
+                    Alimento(
+                        nombre = "Banana",
+                        categoria = "Frutas",
+                        medida = "g",
+                        kcal = 98.7,
+                        carbohidratos = 22.8,
+                        proteinas = 1.1,
+                        grasas = 0.3,
+                        alcohol = 0.0,
+                        coresterol = 0.0,
+                        fibra = 2.6,
                     )
                 )
                 alimentoDao.insertAll(alimentos)

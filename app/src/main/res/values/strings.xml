@@ -7,9 +7,9 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string-array name="opcionesPorcion">
-        <item>100ml</item>
-        <item>200ml</item>
-        <item>275ml</item>
+        <item>100</item>
+        <item>200</item>
+        <item>275</item>
     </string-array>
 
     <string-array name="opcionesFrecuencia">
