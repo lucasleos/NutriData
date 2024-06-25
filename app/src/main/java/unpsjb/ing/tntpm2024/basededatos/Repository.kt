@@ -82,8 +82,9 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         if(userId != null){
         // volver a cambiar esto, que muestre todas las encuestas que hay subidas
             //encuestasRef.orderByChild("encuesta/userId").equalTo(userId).addValueEventListener(object : ValueEventListener {
-            encuestasRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+//            encuestasRef.addValueEventListener(object : ValueEventListener { // sin orden
+                encuestasRef.orderByChild("encuesta/fecha").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
                 val encuestasList = mutableListOf<AlimentosEnEncuestas>()
                 for (encuestaSnapshot in snapshot.children) {
                     val encuestaData =
@@ -101,7 +102,9 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                         encuestasList.add(alimentosEnEncuestas)
                     }
                 }
-                liveData.value = encuestasList
+                    liveData.value =  encuestasList.reversed()
+//                liveData.value = encuestasList
+
             }
 
             override fun onCancelled(error: DatabaseError) {
