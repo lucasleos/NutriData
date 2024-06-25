@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,7 +25,8 @@ import java.util.Date
 class NuevaEncuestaFragment : Fragment() {
 
     private var isSaved: Boolean = false
-    var isFirstload: Boolean = true
+    private var isEmptyList: Boolean = true
+    private var isFirstload: Boolean = true
     private val args: NuevaEncuestaFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentNuevaEncuestaBinding
@@ -35,7 +35,6 @@ class NuevaEncuestaFragment : Fragment() {
     private lateinit var alimentoEncuestaViewModel: AlimentoEncuestaViewModel
 
     private var listaAlimentos: List<Alimento> = listOf()
-
     private var encuestaId = 0
     private lateinit var encuesta: Encuesta
     private var i = 0
@@ -65,12 +64,12 @@ class NuevaEncuestaFragment : Fragment() {
         binding.nuevaEncuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        alimentoViewModel.allAlimentos.observe(viewLifecycleOwner, Observer { alimentos ->
+        alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
             listaAlimentos = alimentos
             if (listaAlimentos.isNotEmpty()) {
                 binding.tvListadoEncuestas.text = listaAlimentos[0].nombre
             }
-        })
+        }
 
         val tvZona = binding.tvZona
         tvZona.text = args.zona
@@ -88,8 +87,6 @@ class NuevaEncuestaFragment : Fragment() {
         autoCompleteFrecuencia.setAdapter(adapterFrecuencia)
 
         encuestaId = args.encuestaId
-
-        fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
         if (encuestaId == 0) {
             encuesta = Encuesta(
@@ -148,6 +145,7 @@ class NuevaEncuestaFragment : Fragment() {
                     )
                     findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
                 } else {
+                    isEmptyList = false
                     binding.tvListadoEncuestas.text = listaAlimentos[++i].nombre
 
                     binding.autoCompleteTextViewPorcion.setText("")
@@ -175,8 +173,8 @@ class NuevaEncuestaFragment : Fragment() {
                 encuesta = response
                 viewModel.getAlimentosByEncuestaId(encuestaId)
                     .observe(viewLifecycleOwner) { alimentos ->
-                        if (isFirstload) {
-                            i = alimentos.size - 1
+                        if (isFirstload && isEmptyList) {
+                            i = if (alimentos.isNotEmpty()) alimentos.size - 1 else 0
                             binding.tvListadoEncuestas.text = listaAlimentos[i].nombre
                             if (alimentos.isNotEmpty()) {
                                 binding.tvListadoEncuestas.text = listaAlimentos[i].nombre
@@ -193,8 +191,6 @@ class NuevaEncuestaFragment : Fragment() {
             }
         }
     }
-
-    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
     override fun onStop() {
         super.onStop()
@@ -229,7 +225,7 @@ class NuevaEncuestaFragment : Fragment() {
         val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
         val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
         val valorVeces: String = binding.inputVeces.text.toString()
-        var esValido: Boolean = true
+        var esValido = true
 
         if (valorPorcion.isEmpty()) {
             binding.tfPorcion.error = "Error: Input Vacío."
@@ -248,4 +244,6 @@ class NuevaEncuestaFragment : Fragment() {
 
         return esValido
     }
+
+    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 }

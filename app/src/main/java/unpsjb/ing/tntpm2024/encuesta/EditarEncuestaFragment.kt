@@ -12,7 +12,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -29,6 +28,7 @@ class EditarEncuestaFragment : Fragment() {
 
     var isSaved: Boolean = false
     var isFirstload: Boolean = true
+    private var isEmptyList: Boolean = true
     val args: EditarEncuestaFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentEditarEncuestaBinding
@@ -65,12 +65,12 @@ class EditarEncuestaFragment : Fragment() {
         binding.encuestaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        alimentoViewModel.allAlimentos.observe(viewLifecycleOwner, Observer { alimentos ->
+        alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
             listaAlimentos = alimentos
             if (listaAlimentos.isNotEmpty()) {
                 binding.tvListadoEncuestas.text = listaAlimentos[0].nombre
             }
-        })
+        }
 
         val tvZona = binding.tvZona
         tvZona.text = args.zona
@@ -124,6 +124,7 @@ class EditarEncuestaFragment : Fragment() {
                     editarEncuesta(true)
                     requireActivity().supportFragmentManager.popBackStack()
                 } else {
+                    isEmptyList = false
                     binding.tvListadoEncuestas.text = listaAlimentos[++i].nombre
 
                     binding.autoCompleteTextViewPorcion.setText("")
@@ -158,7 +159,7 @@ class EditarEncuestaFragment : Fragment() {
                 encuesta = response
                 viewModel.getAlimentosByEncuestaId(encuestaId)
                     .observe(viewLifecycleOwner) { alimentos ->
-                        if(isFirstload) {
+                        if(isFirstload && isEmptyList) {
                             i = alimentos.size - 1
                             Log.i("Editar ENCUESTA", "ENTRE OTRA VEZ")
                             binding.tvListadoEncuestas.text = listaAlimentos[i].nombre

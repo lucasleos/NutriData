@@ -38,7 +38,7 @@ class AlimentoEncuestaListAdapter(private val context: Context) : RecyclerView.A
         holder.tvVeces.text = "Veces Consumido: ${alimentoEncuestaDetalle.veces}"
         holder.medida.text = "Medida: ${alimentoEncuestaDetalle.medida}"
         holder.categoria.text = "Categoria : ${alimentoEncuestaDetalle.categoria}"
-        holder.porcentajeGraso.text = "Porcentaje Graso: ${alimentoEncuestaDetalle.porcentaje_graso}"
+        holder.porcentajeGraso.text = "Porcentaje Graso: ${alimentoEncuestaDetalle.kcal_totales}"
     }
 
     override fun getItemCount() = alimentosEncuestaDetalle.size
