@@ -81,7 +81,7 @@ class ChildAdapter(private val childItemList: List<Alimento>) : RecyclerView.Ada
         holder.textViewChildNombre.text =  "Alimento: ${childItem.nombre} "
         holder.textViewChildMedida.text = "Medida: ${ childItem.medida} "
         holder.textViewChildCategoria.text = "Categoria: ${ childItem.categoria} "
-        holder.textViewChildPorcentajeGraso.text = "Porcentaje Graso: ${ childItem.porcentajeGraso} "
+        holder.textViewChildPorcentajeGraso.text = "Calorias: ${ childItem.kcal} "
     }
 
     override fun getItemCount(): Int {

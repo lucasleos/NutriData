@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d22edf9dff0b2f207d1b2a33add094a9",
+    "identityHash": "71167c8fedc88928992ce597ebc788ed",
     "entities": [
       {
         "tableName": "tabla_encuesta",
@@ -56,7 +56,7 @@
       },
       {
         "tableName": "tabla_alimento",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`alimentoId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `categoria` TEXT NOT NULL, `medida` TEXT NOT NULL, `porcentaje_graso` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`alimentoId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `categoria` TEXT NOT NULL, `medida` TEXT NOT NULL, `kcal_totales` REAL NOT NULL, `carbohidratos` REAL NOT NULL, `proteinas` REAL NOT NULL, `grasas` REAL NOT NULL, `alcohol` REAL NOT NULL, `coresterol` REAL NOT NULL, `fibra` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "alimentoId",
@@ -83,8 +83,44 @@
             "notNull": true
           },
           {
-            "fieldPath": "porcentajeGraso",
-            "columnName": "porcentaje_graso",
+            "fieldPath": "kcal",
+            "columnName": "kcal_totales",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "carbohidratos",
+            "columnName": "carbohidratos",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proteinas",
+            "columnName": "proteinas",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grasas",
+            "columnName": "grasas",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alcohol",
+            "columnName": "alcohol",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coresterol",
+            "columnName": "coresterol",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fibra",
+            "columnName": "fibra",
             "affinity": "REAL",
             "notNull": true
           }
@@ -147,7 +183,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd22edf9dff0b2f207d1b2a33add094a9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71167c8fedc88928992ce597ebc788ed')"
     ]
   }
 }

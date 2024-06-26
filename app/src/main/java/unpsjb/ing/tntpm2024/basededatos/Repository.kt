@@ -148,7 +148,12 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                 "frecuencia" to alimento.frecuencia,
                 "medida" to alimento.medida,
                 "nombre" to alimento.nombre,
-                "porcentajeGraso" to alimento.porcentaje_graso.toDouble(),
+                "kcal" to alimento.kcal_totales.toDouble(),
+                "carbohidratos" to alimento.carbohidratos.toDouble(),
+                "proteinas" to alimento.proteinas.toDouble(),
+                "grasas" to alimento.grasas.toDouble(),
+                "alcohol" to alimento.alcohol.toDouble(),
+                "coresterol" to alimento.coresterol.toDouble(),
                 "porcion" to alimento.porcion,
                 "veces" to alimento.veces
             )
