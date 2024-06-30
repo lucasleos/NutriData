@@ -1,4 +1,4 @@
-# AppTnt - NutriData
+# NutriData
 
 NutriData es una aplicación móvil desarrollada con Kotlin y Android Studio diseñada para encuestar los hábitos alimenticios de las personas. La aplicación genera estadísticas con el fin de estimar la ingesta habitual de alimentos, nutrientes y energía de la población argentina.
 
