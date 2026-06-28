@@ -5,12 +5,10 @@ import androidx.room.Room
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 
 class AndroidApp : Application() {
-    lateinit var database: EncuestasDatabase
-        private set
 
-    override fun onCreate() {
-        super.onCreate()
-        database = Room.databaseBuilder(
+    // Inicialización perezosa (lazy) para no bloquear el inicio de la app
+    val database: EncuestasDatabase by lazy {
+        Room.databaseBuilder(
             applicationContext,
             EncuestasDatabase::class.java,
             "database"

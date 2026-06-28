@@ -4,120 +4,206 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="inicioViewModel"
-            type="unpsjb.ing.tntpm2024.inicio.InicioViewModel" />
+        <variable name="inicioViewModel" type="unpsjb.ing.tntpm2024.inicio.InicioViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_light"
         tools:context=".inicio.InicioFragment">
 
-        <Button
-            android:id="@+id/btnEncuestas"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="64dp"
-            android:background="@drawable/rounded_btn"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/btnEncuestas"
-            android:textSize="16sp"
+        <!-- Cabecera con gradiente sutil -->
+        <View
+            android:id="@+id/headerBackground"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:background="@drawable/gradient_green_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnEncuesta"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:textSize="16sp"
-            android:drawablePadding="8dp"
-            android:background="@drawable/rounded_btn"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/btnEncuesta"
-            app:layout_constraintBottom_toTopOf="@+id/btnEstadistica"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnEncuestas" />
-
-        <Button
-            android:id="@+id/btnEstadistica"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:textSize="16sp"
-            android:fontFamily="@font/lato_bold"
-            android:background="@drawable/rounded_btn"
-            android:layout_marginBottom="64dp"
-            android:text="@string/btnEstadistica"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+        <!-- Texto de bienvenida y nombre -->
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="409dp"
-            android:layout_height="200dp"
-            android:background="@color/dark_green"
+            android:id="@+id/welcomeContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/headerBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/headerBackground">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tvSaludo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="¡Hola!"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:alpha="0.9" />
 
-                <TextView
-                    android:id="@+id/tvTitulo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:includeFontPadding="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="25sp"
-                    android:fontFamily="@font/lato_bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@{inicioViewModel.mensajeBienvenida}"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                tools:text="María García" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:contentDescription="@string/btnEncuestas"
-            app:layout_constraintBottom_toBottomOf="@+id/btnEncuestas"
-            app:layout_constraintStart_toStartOf="@+id/btnEncuestas"
-            app:layout_constraintTop_toTopOf="@+id/btnEncuestas"
-            app:srcCompat="@drawable/bullet_list" />
+        <!-- Contenedor de acciones con scroll por si hay muchas -->
+        <ScrollView
+            android:id="@+id/scrollActions"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintTop_toBottomOf="@id/headerBackground"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:contentDescription="@string/btnEncuesta"
-            app:layout_constraintBottom_toBottomOf="@+id/btnEncuesta"
-            app:layout_constraintStart_toStartOf="@+id/btnEncuesta"
-            app:layout_constraintTop_toTopOf="@+id/btnEncuesta"
-            app:srcCompat="@drawable/hacer_encuesta_icon" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:contentDescription="@string/btnEstadistica"
-            app:layout_constraintBottom_toBottomOf="@+id/btnEstadistica"
-            app:layout_constraintStart_toStartOf="@+id/btnEstadistica"
-            app:layout_constraintTop_toTopOf="@+id/btnEstadistica"
-            app:srcCompat="@drawable/statistic" />
+                <!-- Tarjeta 1: Mis Encuestas -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="0dp"
+                    app:contentPadding="0dp"
+                    android:layout_marginBottom="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="4dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/bullet_list"
+                            android:contentDescription="Encuestas" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/lato_bold"
+                            android:text="Mis Encuestas"
+                            android:textColor="@color/grey_900"
+                            android:textSize="18sp" />
+
+                        <ImageButton
+                            android:id="@+id/btnEncuestas"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_arrow_forward"
+                            android:contentDescription="Ir a encuestas" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Tarjeta 2: Nueva Encuesta -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:contentPadding="0dp"
+                    android:layout_marginBottom="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="4dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/hacer_encuesta_icon" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/lato_bold"
+                            android:text="Nueva Encuesta"
+                            android:textColor="@color/grey_900"
+                            android:textSize="18sp" />
+
+                        <ImageButton
+                            android:id="@+id/btnEncuesta"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_arrow_forward" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Tarjeta 3: Estadísticas -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:contentPadding="0dp"
+                    android:layout_marginBottom="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="4dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/statistic" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/lato_bold"
+                            android:text="Estadísticas"
+                            android:textColor="@color/grey_900"
+                            android:textSize="18sp" />
+
+                        <ImageButton
+                            android:id="@+id/btnEstadistica"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_arrow_forward" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

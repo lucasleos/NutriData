@@ -7,37 +7,15 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "tabla_alimento")
 data class Alimento(
     @PrimaryKey(autoGenerate = true)
-    var alimentoId: Int = 0,
-
-    @ColumnInfo(name = "nombre")
-    var nombre: String,
-
-    @ColumnInfo(name = "categoria")
-    var categoria: String,
-
-    @ColumnInfo(name = "medida")
-    var medida: String,
-
-    @ColumnInfo(name = "kcal_totales")
-    var kcal: Double,
-
-    @ColumnInfo(name = "carbohidratos")
-    var carbohidratos: Double,
-
-    @ColumnInfo(name = "proteinas")
-    var proteinas: Double,
-
-    @ColumnInfo(name = "grasas")
-    var grasas: Double,
-
-    @ColumnInfo(name = "alcohol")
-    var alcohol: Double,
-
-    @ColumnInfo(name = "coresterol")
-    var coresterol: Double,
-
-    @ColumnInfo(name = "fibra")
-    var fibra: Double,
-) {
-    constructor() : this(0, "", "", "", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-}
+    val alimentoId: Int = 0,
+    @ColumnInfo(name = "nombre") val nombre: String = "",
+    @ColumnInfo(name = "categoria") val categoria: String = "",
+    @ColumnInfo(name = "medida") val medida: String = "",
+    @ColumnInfo(name = "kcal_totales") val kcal: Double = 0.0,
+    @ColumnInfo(name = "carbohidratos") val carbohidratos: Double = 0.0,
+    @ColumnInfo(name = "proteinas") val proteinas: Double = 0.0,
+    @ColumnInfo(name = "grasas") val grasas: Double = 0.0,
+    @ColumnInfo(name = "alcohol") val alcohol: Double = 0.0,
+    @ColumnInfo(name = "colesterol") val colesterol: Double = 0.0,
+    @ColumnInfo(name = "fibra") val fibra: Double = 0.0
+)

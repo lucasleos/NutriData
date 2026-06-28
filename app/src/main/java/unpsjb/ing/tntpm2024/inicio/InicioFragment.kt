@@ -6,26 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentInicio2Binding
 
 class InicioFragment : Fragment() {
 
     private lateinit var binding: FragmentInicio2Binding
+    private val viewModel: InicioViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_inicio2, container, false)
+        binding.inicioViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        var user = FirebaseAuth.getInstance().currentUser
-        if(user != null)
-            binding.tvTitulo.text = "Bienvenido: " + user.email?.substringBefore("@")
+        configurarBotones()
 
+        return binding.root
+    }
 
+    private fun configurarBotones() {
         binding.btnEncuesta.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_mapsFragment)
         }
@@ -37,8 +41,5 @@ class InicioFragment : Fragment() {
         binding.btnEstadistica.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_estadisticaFragment)
         }
-
-        return binding.root
     }
-
 }

@@ -19,21 +19,9 @@ interface AlimentoEncuestaDao {
     @Query(
         """
     SELECT 
-        ae.encuestaId, 
-        ae.alimentoId, 
-        ae.porcion, 
-        ae.frecuencia, 
-        ae.veces, 
-        a.nombre, 
-        a.categoria, 
-        a.medida, 
-        a.kcal_totales, 
-        a.carbohidratos, 
-        a.proteinas, 
-        a.grasas, 
-        a.alcohol, 
-        a.coresterol, 
-        a.fibra 
+        ae.encuestaId, ae.alimentoId, ae.porcion, ae.frecuencia, ae.veces, 
+        a.nombre, a.categoria, a.medida, a.kcal_totales, a.carbohidratos, 
+        a.proteinas, a.grasas, a.alcohol, a.colesterol, a.fibra 
     FROM tabla_alimento_encuesta ae
     INNER JOIN tabla_alimento a ON ae.alimentoId = a.alimentoId
     WHERE 

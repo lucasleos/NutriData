@@ -1,7 +1,6 @@
 package unpsjb.ing.tntpm2024.listado
 
 import android.content.Context
-import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
@@ -16,7 +16,6 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-
 
 class EncuestaListAdapter internal constructor(
     val context: Context
@@ -28,8 +27,12 @@ class EncuestaListAdapter internal constructor(
     var onItemClickUploadInCloud: ((Encuesta) -> Unit)? = null
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var encuestas = mutableListOf<Encuesta>() // Copia cache de los encuestas
-    private var encuestasFiltradas = mutableListOf<Encuesta>() // Lista filtrada
+
+    // Lista original sin alterar (Cache)
+    private var encuestasOriginales = mutableListOf<Encuesta>()
+
+    // Lista que realmente se muestra y se manda al DiffUtil
+    private var encuestasVisibles = mutableListOf<Encuesta>()
 
     private var filtroCompletada: Boolean? = null
     private var filtroZona: String? = null
@@ -44,26 +47,18 @@ class EncuestaListAdapter internal constructor(
         val imageCheck: ImageView = itemView.findViewById(R.id.ivCheck)
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EncuestaViewHolder {
         val itemView = inflater.inflate(R.layout.item_layout, parent, false)
         return EncuestaViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: EncuestaViewHolder, position: Int) {
-//        val encuesta = encuestas[position]
-        val encuesta = encuestasFiltradas[position]
-
-        val fechaLong: Long = encuesta.fecha
-
-        val fechaLocalDateTime: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(fechaLong), ZoneId.systemDefault())
-
+        val encuesta = encuestasVisibles[position]
+        val fechaLocalDateTime: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(encuesta.fecha), ZoneId.systemDefault())
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val fechaFormateada: String = fechaLocalDateTime.format(formatter)
-
 
         holder.encuestaIdTextView.text = "Encuesta N° ${encuesta.encuestaId}"
-        holder.fechaTextView.text = fechaFormateada
+        holder.fechaTextView.text = fechaLocalDateTime.format(formatter)
         holder.encuestaCompletadaTextView.text = if (encuesta.encuestaCompletada) "Completa" else "Incompleta"
         holder.zonaTextView.text = encuesta.zona
 
@@ -84,67 +79,82 @@ class EncuestaListAdapter internal constructor(
             }
         }
 
-    /*    if (encuesta.encuestaSubidaANube) {
-            holder.imageView.setImageResource(R.drawable.view_ico) // icono subida ok
-        } else {
-            holder.imageView.setImageResource(R.drawable.edit_ico) // icono subir
-        }*/
-
-        holder.imageUpload.setOnClickListener{
+        holder.imageUpload.setOnClickListener {
             onItemClickUploadInCloud?.invoke(encuesta)
-//            Toast.makeText(context, "Encuesta subida a la nube", Toast.LENGTH_SHORT).show()
         }
     }
 
-    internal fun setEncuestas(encuestas: List<Encuesta>) {
-        this.encuestas = encuestas.toMutableList()
-        filterEncuestas(filtroCompletada, filtroZona) // Mostrar todas las encuestas al inicio
+    override fun getItemCount(): Int = encuestasVisibles.size
+
+    internal fun setEncuestas(nuevasEncuestas: List<Encuesta>) {
+        this.encuestasOriginales = nuevasEncuestas.toMutableList()
+        aplicarFiltros()
     }
 
-//    override fun getItemCount() = encuestas.size
-    override fun getItemCount(): Int {
-        return encuestasFiltradas.size
+    fun filterEncuestas(completada: Boolean?, zona: String?) {
+        filtroCompletada = completada
+        filtroZona = zona
+        aplicarFiltros()
+    }
+
+    private fun aplicarFiltros() {
+        val listaFiltrada = encuestasOriginales.filter {
+            (filtroCompletada == null || it.encuestaCompletada == filtroCompletada) &&
+                    (filtroZona == null || it.zona == filtroZona)
+        }
+
+        // Uso de DiffUtil para calcular las animaciones
+        val diffCallback = EncuestaDiffCallback(encuestasVisibles, listaFiltrada)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        encuestasVisibles.clear()
+        encuestasVisibles.addAll(listaFiltrada)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun getEncuestaAt(position: Int): Encuesta {
+        return encuestasVisibles[position]
     }
 
     fun showDeleteConfirmationDialog(position: Int) {
         AlertDialog.Builder(context).apply {
-            setTitle("Confirmar eliminacion")
-            setMessage("Esta seguro que desea borrar la encuesta?")
-            setPositiveButton("Confirmar") { dialog, wich ->
+            setTitle("Confirmar eliminación")
+            setMessage("¿Está seguro que desea borrar la encuesta?")
+            setPositiveButton("Confirmar") { dialog, _ ->
                 removeAt(position)
+                dialog.dismiss()
             }
-            setNegativeButton("Cancelar") { dialog, wich ->
+            setNegativeButton("Cancelar") { dialog, _ ->
+                notifyItemChanged(position) // Revierte el swipe visualmente si cancela
                 dialog.dismiss()
             }
             create()
             show()
         }
-        notifyItemRangeChanged(
-            position,
-            itemCount
-        ) // actualiza las posiciones de los elementos restantes
     }
 
     private fun removeAt(position: Int) {
-        val encuesta = encuestas[position]
-        encuestas.removeAt(position)
-        onSwipToDeleteCallback?.invoke(encuesta)
-        notifyItemRemoved(position)
+        val encuestaAEliminar = encuestasVisibles[position]
+        // Se notifica al Fragment para borrarla de la Base de Datos
+        onSwipToDeleteCallback?.invoke(encuestaAEliminar)
     }
-
-    // Método para filtrar las encuestas por completadas o incompletas
-    fun filterEncuestas(completada: Boolean?, zona: String?) {
-        filtroCompletada = completada
-        filtroZona = zona
-
-        encuestasFiltradas.clear()
-        encuestasFiltradas.addAll(encuestas.filter {
-            (completada == null || it.encuestaCompletada == completada) &&
-                    (zona == null || it.zona == zona)
-        })
-        Log.i("EncuestaListAdapter", "Tamaño de las encuestas filtradas: " + encuestasFiltradas.size)
-        notifyDataSetChanged()
-    }
-
 }
 
+class EncuestaDiffCallback(
+    private val oldList: List<Encuesta>,
+    private val newList: List<Encuesta>
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
+
+    // Verifica si es el mismo elemento (Mismo ID)
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].encuestaId == newList[newItemPosition].encuestaId
+    }
+
+    // Verifica si el contenido cambió (Por ejemplo, si se completó)
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
+    }
+}

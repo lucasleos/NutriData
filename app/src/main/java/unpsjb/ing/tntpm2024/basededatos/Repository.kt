@@ -46,12 +46,12 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         val emailUser = user?.email
 
         //if (idUser != null) {
-            encuesta.userId = idUser
-            encuesta.userEmail = emailUser
-            encuestaDAO.insertEncuesta(encuesta)
+        encuesta.userId = idUser
+        encuesta.userEmail = emailUser
+        encuestaDAO.insertEncuesta(encuesta)
         //} else {
         //    throw IllegalStateException("No authenticated user")
-       // }
+        // }
     }
 
     suspend fun cargarEncuesta(encuesta: Encuesta): Long {
@@ -80,42 +80,42 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         val liveData = MutableLiveData<List<AlimentosEnEncuestas>>()
 
         if(userId != null){
-        // volver a cambiar esto, que muestre todas las encuestas que hay subidas
+            // volver a cambiar esto, que muestre todas las encuestas que hay subidas
             //encuestasRef.orderByChild("encuesta/userId").equalTo(userId).addValueEventListener(object : ValueEventListener {
 //            encuestasRef.addValueEventListener(object : ValueEventListener { // sin orden
-                encuestasRef.orderByChild("encuesta/fecha").addValueEventListener(object : ValueEventListener {
+            encuestasRef.orderByChild("encuesta/fecha").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                val encuestasList = mutableListOf<AlimentosEnEncuestas>()
-                for (encuestaSnapshot in snapshot.children) {
-                    val encuestaData =
-                        encuestaSnapshot.child("encuesta").getValue(Encuesta::class.java)
-                    val alimentosList = mutableListOf<Alimento>()
-                    encuestaSnapshot.child("alimentos").children.forEach { alimentoSnapshot ->
-                        val alimento = alimentoSnapshot.getValue(Alimento::class.java)
-                        if (alimento != null) {
-                            alimentosList.add(alimento)
+                    val encuestasList = mutableListOf<AlimentosEnEncuestas>()
+                    for (encuestaSnapshot in snapshot.children) {
+                        val encuestaData =
+                            encuestaSnapshot.child("encuesta").getValue(Encuesta::class.java)
+                        val alimentosList = mutableListOf<Alimento>()
+                        encuestaSnapshot.child("alimentos").children.forEach { alimentoSnapshot ->
+                            val alimento = alimentoSnapshot.getValue(Alimento::class.java)
+                            if (alimento != null) {
+                                alimentosList.add(alimento)
+                            }
+                        }
+                        if (encuestaData != null) {
+                            val alimentosEnEncuestas =
+                                AlimentosEnEncuestas(encuesta = encuestaData, alimentos = alimentosList)
+                            encuestasList.add(alimentosEnEncuestas)
                         }
                     }
-                    if (encuestaData != null) {
-                        val alimentosEnEncuestas =
-                            AlimentosEnEncuestas(encuesta = encuestaData, alimentos = alimentosList)
-                        encuestasList.add(alimentosEnEncuestas)
-                    }
-                }
                     liveData.value =  encuestasList.reversed()
 //                liveData.value = encuestasList
 
-            }
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("EncuestaRepository", "Error al obtener encuestas: ${error.message}")
-            }
-        })
-    }else{
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("EncuestaRepository", "Error al obtener encuestas: ${error.message}")
+                }
+            })
+        }else{
             Log.e("EncuestaRepository", "Usuario no autenticado")
         }
         return liveData
-}
+    }
 
     fun uploadEncuestaToFirebase(
         encuesta: Encuesta,
@@ -153,7 +153,7 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                 "proteinas" to alimento.proteinas.toDouble(),
                 "grasas" to alimento.grasas.toDouble(),
                 "alcohol" to alimento.alcohol.toDouble(),
-                "coresterol" to alimento.coresterol.toDouble(),
+                "colesterol" to alimento.colesterol.toDouble(),
                 "porcion" to alimento.porcion,
                 "veces" to alimento.veces
             )

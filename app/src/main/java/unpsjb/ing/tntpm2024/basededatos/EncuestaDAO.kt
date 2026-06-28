@@ -16,7 +16,7 @@ interface EncuestaDAO {
 
 //TRANSACCIONES DE ENCUESTAS
 
-//    @Query("SELECT * from tabla_encuesta")
+    //    @Query("SELECT * from tabla_encuesta")
     @Query("SELECT * from tabla_encuesta ORDER BY fecha DESC")
     fun getEncuestas(): LiveData<List<Encuesta>>
 
@@ -55,7 +55,7 @@ interface EncuestaDAO {
     SELECT tabla_alimento_encuesta.encuestaId, tabla_alimento.alimentoId, tabla_alimento.nombre, 
             tabla_alimento.categoria, tabla_alimento.medida, tabla_alimento.kcal_totales,
             tabla_alimento.carbohidratos, tabla_alimento.proteinas, tabla_alimento.grasas, 
-            tabla_alimento.alcohol, tabla_alimento.coresterol, tabla_alimento.fibra, 
+            tabla_alimento.alcohol, tabla_alimento.colesterol, tabla_alimento.fibra, 
             tabla_alimento_encuesta.porcion, tabla_alimento_encuesta.frecuencia, 
             tabla_alimento_encuesta.veces
     FROM tabla_alimento_encuesta

@@ -2,230 +2,88 @@ package unpsjb.ing.tntpm2024
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import unpsjb.ing.tntpm2024.databinding.ActivityMainBinding
-import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
-import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
-import unpsjb.ing.tntpm2024.listado.EncuestaListAdapter
 import unpsjb.ing.tntpm2024.listadoFireBase.ListaEncuestasFireBaseActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var drawerLayout: DrawerLayout
-    private val adapterList: EncuestaListAdapter by lazy { EncuestaListAdapter(this) }
-    private lateinit var encuestaViewModel: EncuestaViewModel
-    lateinit var navView: NavigationView
-    private lateinit var toolbar: Toolbar
-    private lateinit var toggle: ActionBarDrawerToggle
-
-    val TAG = "MainActivity"
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 1. Uso puro de ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
-        navView = findViewById(R.id.nav_view)
-        toolbar = findViewById(R.id.tool_bar)
-        drawerLayout = findViewById(R.id.drawer_layout)
+        setSupportActionBar(binding.toolBar)
 
-        // Configura la toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // 2. Configuración moderna del Navigation Component
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.theNavHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
 
-        toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        // Enlaza el DrawerLayout y la Toolbar con el grafo de navegación automáticamente
+        appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.navView.setupWithNavController(navController)
 
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        updateDrawerMenu(navView.menu, currentUser)
-
-        navView.setNavigationItemSelectedListener { menuItem ->
+        // 3. Manejo de eventos del menú lateral
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_lista_encuestas -> {
-                    val intent = Intent(this, ListaEncuestasFireBaseActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, ListaEncuestasFireBaseActivity::class.java))
                 }
-                R.id.nav_logout -> {
-                    logout()
-                }
+                R.id.nav_logout -> logout()
             }
-            drawerLayout.closeDrawers()
+            binding.drawerLayout.closeDrawers()
             true
         }
 
-        // Inicializar Firebase
-        FirebaseApp.initializeApp(this)
-
-        // Obtener la instancia de la base de datos desde AndroidApp
-        val database = (application as AndroidApp).database
-
-        // Crear el ViewModel utilizando el ViewModelFactory
-        val viewModelFactory = EncuestaViewModelFactory(database)
-        encuestaViewModel = ViewModelProvider(this, viewModelFactory)[EncuestaViewModel::class.java]
-
-        encuestaViewModel.todasLasEncuestas.observe(this) { encuestas ->
-            encuestas?.let { adapterList.setEncuestas(it) }
-        }
+        actualizarVisibilidadMenu()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.drawer_menu, menu)
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        updateDrawerMenu(menu, currentUser)
-        return true
+    override fun onStart() {
+        super.onStart()
+        // Asegura que el menú se actualice si el usuario vuelve a la app
+        actualizarVisibilidadMenu()
     }
 
-    fun updateDrawerMenu(menu: Menu?, user: FirebaseUser?) {
-        menu?.let {
-            val authGroup = it.findItem(R.id.authenticated_user_group)
-            val logoutItem = it.findItem(R.id.nav_logout)
-            val listaEncuestasItem = it.findItem(R.id.nav_lista_encuestas)
+    private fun actualizarVisibilidadMenu() {
+        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val menu = binding.navView.menu
 
-            logoutItem.isVisible = user != null
-            listaEncuestasItem.isVisible = user != null
-        }
+        menu.findItem(R.id.nav_logout)?.isVisible = user != null
+        menu.findItem(R.id.nav_lista_encuestas)?.isVisible = user != null
     }
 
     private fun logout() {
         FirebaseAuth.getInstance().signOut()
-        // Asegúrate de que la cuenta de Google se cierre también
-        GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut().addOnCompleteListener {
-            val intent = Intent(this, MainActivity::class.java) // Redirige al LoginActivity
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+        GoogleSignIn.getClient(this, gso).signOut().addOnCompleteListener {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             startActivity(intent)
             finish()
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
+    // 4. Delega el botón "Atrás" / "Hamburguesa" al NavController
     override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.theNavHostFragment)
-        return NavigationUI.navigateUp(navController, drawerLayout)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
-/*
-
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var drawerLayout: DrawerLayout
-    private val adapterList: EncuestaListAdapter by lazy { EncuestaListAdapter(this) }
-    private lateinit var encuestaViewModel: EncuestaViewModel
-    lateinit var navView: NavigationView
-    private lateinit var toolbar: Toolbar
-    private lateinit var toggle: ActionBarDrawerToggle
-
-    val TAG = "MainActivity"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        navView = findViewById(R.id.nav_view)
-        toolbar = findViewById(R.id.tool_bar)
-        drawerLayout = findViewById(R.id.drawer_layout)
-
-        // Configura la toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        updateDrawerMenu(navView.menu, currentUser)
-
-        navView.setNavigationItemSelectedListener { menuItem ->
-             when (menuItem.itemId) {
-                R.id.nav_lista_encuestas -> {
-                        val intent = Intent(this, ListaEncuestasFireBaseActivity::class.java)
-                        startActivity(intent)
-                }
-                R.id.nav_logout -> {
-                    logout()
-                }
-            }
-            drawerLayout.closeDrawers()
-            true
-        }
-
-        // Inicializar Firebase
-        FirebaseApp.initializeApp(this)
-
-        // Obtener la instancia de la base de datos desde AndroidApp
-        val database = (application as AndroidApp).database
-
-        // Crear el ViewModel utilizando el ViewModelFactory
-        val viewModelFactory = EncuestaViewModelFactory(database)
-        encuestaViewModel = ViewModelProvider(this, viewModelFactory)[EncuestaViewModel::class.java]
-
-        encuestaViewModel.todasLasEncuestas.observe(this) { encuestas ->
-            encuestas?.let { adapterList.setEncuestas(it) }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.drawer_menu, menu)
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        updateDrawerMenu(menu, currentUser)
-        return true
-    }
-
-    fun updateDrawerMenu(menu: Menu?, user: FirebaseUser?) {
-        menu?.let {
-            val authGroup = it.findItem(R.id.authenticated_user_group)
-            val logoutItem = it.findItem(R.id.nav_logout)
-            val listaEncuestasItem = it.findItem(R.id.nav_lista_encuestas)
-
-            logoutItem.isVisible = user != null
-            listaEncuestasItem.isVisible = user != null
-        }
-    }
-
-    private fun logout() {
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.theNavHostFragment)
-        return NavigationUI.navigateUp(navController, drawerLayout)
-    }
-}
-*/

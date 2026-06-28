@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import unpsjb.ing.tntpm2024.MainActivity
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentLoginBinding
 
@@ -25,217 +25,100 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by viewModels()
-    private lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 9001
+
+    // 1. Nueva API para reemplazar onActivityResult
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch (e: ApiException) {
+            Log.w("LoginFragment", "Google sign in failed", e)
+            mostrarMensaje("El inicio de sesión con Google falló")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.loginViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        auth = FirebaseAuth.getInstance()
-
-        // Configuración de Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id)) // Usa tu ID de cliente web de Firebase
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-        // Listener para el botón de inicio de sesión con email y contraseña
-        binding.btnIngresar.setOnClickListener {
-            if (!binding.username.text.toString().isEmpty() && !binding.password.text.toString().isEmpty()) {
-                loginUser(binding.username.text.toString(), binding.password.text.toString())
-            } else {
-                Toast.makeText(context, "Ingrese Email y Password", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        // Listener para el botón de inicio de sesión con Google
-        binding.btnGoogleSignIn.setOnClickListener {
-            signInWithGoogle()
-        }
-
+        configurarBotones()
         return binding.root
     }
 
-    private fun signInWithGoogle() {
-        // Invalida cualquier sesión anterior para forzar la selección de cuenta
-        googleSignInClient.signOut().addOnCompleteListener {
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+    private fun configurarBotones() {
+        binding.btnIngresar.setOnClickListener {
+            // Obtenemos los textos actuales sincronizados desde el ViewModel
+            val email = viewModel.usuario.value?.trim() ?: ""
+            val pwd = viewModel.password.value?.trim() ?: ""
+
+            // --- INICIO DEL BYPASS (PUERTA TRASERA DE DESARROLLO) ---
+            if (email == "admin" && pwd == "admin") {
+                mostrarMensaje("Modo Desarrollador: Ingreso offline")
+                navegarAInicio()
+                return@setOnClickListener // Fundamental: Cortamos la ejecución aquí para que no llame a Firebase
+            }
+            // --- FIN DEL BYPASS ---
+
+            // Flujo normal de producción
+            if (email.isNotEmpty() && pwd.isNotEmpty()) {
+                loginUser(email, pwd)
+            } else {
+                mostrarMensaje("Ingrese Email y Password")
+            }
         }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Resultado devuelto al iniciar la intención desde GoogleSignInApi.getSignInIntent(...)
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Inicio de sesión de Google fue exitoso, autenticar con Firebase
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d("LoginFragment", "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                // El inicio de sesión de Google falló
-                Log.w("LoginFragment", "Google sign in failed", e)
-                Toast.makeText(context, "Inicio de sesión Google fallo", Toast.LENGTH_SHORT).show()
+        binding.btnGoogleSignIn.setOnClickListener {
+            googleSignInClient.signOut().addOnCompleteListener {
+                val signInIntent = googleSignInClient.signInIntent
+                googleSignInLauncher.launch(signInIntent)
             }
         }
     }
-
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // Inicio de sesión fue exitoso
-//                    val user = auth.currentUser
-
-                    val menu = (requireActivity() as MainActivity).navView.menu
-                    (requireActivity() as MainActivity).updateDrawerMenu(menu, FirebaseAuth.getInstance().currentUser)
-
-                    Log.d("LoginFragment", "signInWithCredential:success")
-                    Toast.makeText(context, "Inicio de sesión Google exitoso", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
+                    mostrarMensaje("Inicio de sesión Google exitoso")
+                    navegarAInicio()
                 } else {
-                    // Si el inicio de sesión falla, muestra un mensaje al usuario
-                    Log.w("LoginFragment", "signInWithCredential:failure", task.exception)
-                    Toast.makeText(context, "Inicio de sesión Google fallo", Toast.LENGTH_SHORT).show()
+                    mostrarMensaje("El inicio de sesión con Google falló")
                 }
             }
     }
 
-    fun loginUser(email: String, password: String) {
+    private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    val menu = (requireActivity() as MainActivity).navView.menu
-                    (requireActivity() as MainActivity).updateDrawerMenu(menu, FirebaseAuth.getInstance().currentUser)
-
-                    Log.d("Login", "Inicio de sesión exitoso: ${user?.email}")
-                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
+                    mostrarMensaje("Inicio de sesión exitoso")
+                    navegarAInicio()
                 } else {
-                    Toast.makeText(context, "Datos ingresados incorrectos", Toast.LENGTH_SHORT).show()
-                    Log.e("Login", "Error: ${task.exception?.message}")
+                    mostrarMensaje("Datos ingresados incorrectos")
                 }
             }
+    }
+
+    private fun navegarAInicio() {
+        findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
+    }
+
+    private fun mostrarMensaje(mensaje: String) {
+        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
     }
 }
-
-/*
-
-class LoginFragment : Fragment() {
-
-    private lateinit var binding: FragmentLoginBinding
-    private val viewModel: LoginViewModel by viewModels()
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-
-
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-
-        binding.loginViewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        binding.username.text = viewModel.usuario.value
-        binding.password.text = viewModel.password.value
-
-        binding.btnIngresar.setOnClickListener {
-            if(!binding.username.text.toString().isEmpty() && !binding.password.text.toString().isEmpty()){
-                loginUser(binding.username.text.toString(),binding.password.text.toString())
-            }else{
-                Toast.makeText(context, "Ingrese Email y Password", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-        return binding.root
-
-    }
-
-
-    fun loginUser(email: String, password: String) {
-//        findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // El inicio de sesión fue exitoso
-                    val user = auth.currentUser
-                    Log.d("Login", "Inicio de sesión exitoso: ${user?.email}")
-                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                    val userId = auth.currentUser?.uid
-                    val menu = (requireActivity() as MainActivity).navView.menu
-                    (requireActivity() as MainActivity).updateDrawerMenu(menu, FirebaseAuth.getInstance().currentUser)
-                    if (userId != null) {
-                        // Obtenemos los datos del usuario desde Realtime Database
-                        getUserData(user)
-                    }
-                    findNavController().navigate(R.id.action_loginFragment_to_inicioFragment)
-                } else {
-                    // El inicio de sesión falló
-                    Toast.makeText(context, "Datos ingresados incorrectos", Toast.LENGTH_SHORT).show()
-                    Log.e("Login", "Error: ${task.exception?.message}")
-                }
-            }
-    }
-
-    // obtener datos del usuario desde Realtime Database
-    fun getUserData(user: FirebaseUser?) {
-        val database = FirebaseDatabase.getInstance().reference
-        val userRef = user?.let { database.child("users").child(it.uid) }
-
-        if (userRef != null) {
-            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Aquí obtienes los datos del usuario
-                    val userName = snapshot.child("name").getValue(String::class.java)
-                    val userEmail = snapshot.child("email").getValue(String::class.java)
-
-                    // Puedes hacer algo con los datos del usuario
-                    Log.d("Login", "Name: $userName, Email: $userEmail")
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Manejo de errores
-                    Log.e("Login", "Error: ${error.message}")
-                }
-            })
-        }
-    }
-
-    /*
-    // metodo para registrar un usuario
-    fun registerUser(email: String, password: String) {
-    auth.createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // El registro fue exitoso
-                val user = auth.currentUser
-                Log.d("Register", "Registro exitoso: ${user?.email}")
-            } else {
-                // El registro falló
-                Log.e("Register", "Error: ${task.exception?.message}")
-            }
-        }
-}
-     */
-
-
-
-}*/

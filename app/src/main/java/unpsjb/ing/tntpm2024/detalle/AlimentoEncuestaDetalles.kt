@@ -14,7 +14,7 @@ data class AlimentoEncuestaDetalles(
     val proteinas: String,
     val grasas: String,
     val alcohol: String,
-    val coresterol: String,
+    val colesterol: String,
     val fibra: String,
     val porcion: String,
     val frecuencia: String,

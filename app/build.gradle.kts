@@ -53,6 +53,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.google.firebase:firebase-auth:21.0.6")
     implementation("com.google.android.gms:play-services-auth:20.1.0")
     // animacion splash_screen

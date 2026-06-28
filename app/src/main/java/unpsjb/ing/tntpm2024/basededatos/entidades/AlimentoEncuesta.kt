@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 
 @Entity(tableName = "tabla_alimento_encuesta",
-        primaryKeys= ["encuestaId","alimentoId"])
+    primaryKeys= ["encuestaId","alimentoId"])
 data class AlimentoEncuesta(
     val encuestaId: Int,
     val alimentoId: Int,

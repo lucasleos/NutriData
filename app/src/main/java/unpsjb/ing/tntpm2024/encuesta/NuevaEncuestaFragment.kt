@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
@@ -24,226 +25,140 @@ import java.util.Date
 
 class NuevaEncuestaFragment : Fragment() {
 
-    private var isSaved: Boolean = false
-    private var isEmptyList: Boolean = true
-    private var isFirstload: Boolean = true
     private val args: NuevaEncuestaFragmentArgs by navArgs()
+    private var _binding: FragmentNuevaEncuestaBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var binding: FragmentNuevaEncuestaBinding
     private lateinit var viewModel: EncuestaViewModel
     private lateinit var alimentoViewModel: AlimentoViewModel
-    private lateinit var alimentoEncuestaViewModel: AlimentoEncuestaViewModel
+    private lateinit var aeViewModel: AlimentoEncuestaViewModel
 
-    private var listaAlimentos: List<Alimento> = listOf()
+    private var listaAlimentos = emptyList<Alimento>()
     private var encuestaId = 0
-    private lateinit var encuesta: Encuesta
-    private var i = 0
+    private var isSaved = false
 
-    var user = FirebaseAuth.getInstance().currentUser
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_nueva_encuesta, container, false
-        )
-
-        val database = EncuestasDatabase.getInstance(requireContext())
-
-        val factory = EncuestaViewModelFactory(database)
-        viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
-
-        val alimentoFactory = AlimentoViewModelFactory(database)
-        alimentoViewModel = ViewModelProvider(this, alimentoFactory)[AlimentoViewModel::class.java]
-
-        val alimentoEncuestaFactory = AlimentoEncuestaViewModelFactory(database)
-        alimentoEncuestaViewModel =
-            ViewModelProvider(this, alimentoEncuestaFactory)[AlimentoEncuestaViewModel::class.java]
-
-        binding.nuevaEncuestaViewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
-            listaAlimentos = alimentos
-            if (listaAlimentos.isNotEmpty()) {
-                binding.tvListadoEncuestas.text = listaAlimentos[0].nombre
-            }
-        }
-
-        val tvZona = binding.tvZona
-        tvZona.text = args.zona
-
-        val autoCompletePorcion = binding.autoCompleteTextViewPorcion
-        val itemsPorcion = resources.getStringArray(R.array.opcionesPorcion)
-        val adapterPorcion =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsPorcion)
-        autoCompletePorcion.setAdapter(adapterPorcion)
-
-        val autoCompleteFrecuencia = binding.autoCompleteTextViewFrecuencia
-        val itemsFrecuencia = resources.getStringArray(R.array.opcionesFrecuencia)
-        val adapterFrecuencia =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsFrecuencia)
-        autoCompleteFrecuencia.setAdapter(adapterFrecuencia)
-
-        encuestaId = args.encuestaId
-
-        if (encuestaId == 0) {
-            encuesta = Encuesta(
-                fecha = Date().time,
-                encuestaCompletada = false,
-                zona = args.zona,
-                userId = user?.uid,
-                userEmail = user?.email
-            )
-
-            viewModel.cargarEncuesta(encuesta) { id ->
-                encuestaId = id.toInt()
-            }
-
-        } else {
-            setupObservers()
-        }
-
-        binding.btnGuardar.setOnClickListener {
-
-            binding.tfPorcion.error = null
-            binding.tfFrecuencia.error = null
-            binding.tfVeces.error = null
-
-            if (validarInputs()) {
-                val alimentoEncuesta = AlimentoEncuesta(
-                    encuestaId = encuestaId,
-                    alimentoId = listaAlimentos[i].alimentoId,
-                    porcion = binding.autoCompleteTextViewPorcion.text.toString(),
-                    frecuencia = binding.autoCompleteTextViewFrecuencia.text.toString(),
-                    veces = binding.inputVeces.text.toString()
-                )
-                alimentoEncuestaViewModel.insert(alimentoEncuesta)
-
-                Toast.makeText(
-                    requireContext(),
-                    "Consumo de " + listaAlimentos[i].nombre + " registrado",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                if (i == listaAlimentos.size - 1) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Encuesta Finalizada",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    isSaved = true
-                    encuesta.encuestaCompletada = true
-                    viewModel.editEncuesta(
-                        Encuesta(
-                            encuestaId = encuestaId,
-                            fecha = Date().time,
-                            encuestaCompletada = true,
-                            zona = args.zona
-                        )
-                    )
-                    findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
-                } else {
-                    isEmptyList = false
-                    binding.tvListadoEncuestas.text = listaAlimentos[++i].nombre
-
-                    binding.autoCompleteTextViewPorcion.setText("")
-                    binding.autoCompleteTextViewFrecuencia.setText("")
-                    binding.inputVeces.setText("")
-                }
-            }
-        }
-
-        binding.btnEditZona.setOnClickListener {
-            findNavController().navigate(
-                NuevaEncuestaFragmentDirections.actionNuevaEncuestaFragmentToMapsFragment(
-                    false,
-                    encuestaId
-                )
-            )
-        }
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentNuevaEncuestaBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    private fun setupObservers() {
-        viewModel.getEncuestaById(encuestaId).observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                encuesta = response
-                viewModel.getAlimentosByEncuestaId(encuestaId)
-                    .observe(viewLifecycleOwner) { alimentos ->
-                        if (isFirstload && isEmptyList) {
-                            i = if (alimentos.isNotEmpty()) alimentos.size - 1 else 0
-                            binding.tvListadoEncuestas.text = listaAlimentos[i].nombre
-                            if (alimentos.isNotEmpty()) {
-                                binding.tvListadoEncuestas.text = listaAlimentos[i].nombre
-                                if (alimentos[i].porcion.isNotEmpty()) binding.autoCompleteTextViewPorcion.text =
-                                    alimentos[i].porcion.toEditable()
-                                if (alimentos[i].frecuencia.isNotEmpty()) binding.autoCompleteTextViewFrecuencia.text =
-                                    alimentos[i].frecuencia.toEditable()
-                                if (alimentos[i].veces.isNotEmpty()) binding.inputVeces.text =
-                                    alimentos[i].veces.toEditable()
-                                isFirstload = false
-                            }
-                        }
-                    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        inicializarViewModels()
+        configurarUI()
+        gestionarCreacionOEdicion()
+        observarAlimentos()
+    }
+
+    private fun inicializarViewModels() {
+        val database = EncuestasDatabase.getInstance(requireContext())
+        val factory = AppViewModelFactory(database)
+
+        viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
+        alimentoViewModel = ViewModelProvider(this, factory)[AlimentoViewModel::class.java]
+        aeViewModel = ViewModelProvider(this, factory)[AlimentoEncuestaViewModel::class.java]
+
+        binding.nuevaEncuestaViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun configurarUI() {
+        binding.tvZona.text = args.zona
+        configurarDropdowns()
+
+        binding.btnGuardar.setOnClickListener { procesarGuardadoParcial() }
+        binding.btnEditZona.setOnClickListener {
+            val action = NuevaEncuestaFragmentDirections.actionNuevaEncuestaFragmentToMapsFragment(false, encuestaId)
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun configurarDropdowns() {
+        val adapterPorcion = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.opcionesPorcion))
+        binding.autoCompleteTextViewPorcion.setAdapter(adapterPorcion)
+
+        val adapterFrecuencia = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.opcionesFrecuencia))
+        binding.autoCompleteTextViewFrecuencia.setAdapter(adapterFrecuencia)
+    }
+
+    private fun gestionarCreacionOEdicion() {
+        encuestaId = args.encuestaId
+        if (encuestaId == 0) {
+            val user = FirebaseAuth.getInstance().currentUser
+            val nuevaEncuesta = Encuesta(fecha = Date().time, encuestaCompletada = false, zona = args.zona, userId = user?.uid ?: "admin")
+            viewModel.cargarEncuesta(nuevaEncuesta) { idGenerado -> encuestaId = idGenerado.toInt() }
+        }
+    }
+
+    private fun observarAlimentos() {
+        alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
+            listaAlimentos = alimentos
+
+            // Observamos el índice actual en el ViewModel
+            aeViewModel.indiceAlimentoActual.observe(viewLifecycleOwner) { indice ->
+                if (listaAlimentos.isNotEmpty() && indice < listaAlimentos.size) {
+                    binding.tvListadoEncuestas.text = listaAlimentos[indice].nombre
+                }
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.i("NUEVA ENCUESTA", "ENTRE ONSTOP")
-        if (!isSaved) {
-            Log.i("NUEVA ENCUESTA", "ENTRE ONSTOP")
-            val porcion = binding.autoCompleteTextViewPorcion.text.toString()
-            val frecuencia = binding.autoCompleteTextViewFrecuencia.text.toString()
-            val veces = binding.inputVeces.text.toString()
+    private fun procesarGuardadoParcial() {
+        binding.tfPorcion.error = null
+        binding.tfFrecuencia.error = null
+        binding.tfVeces.error = null
 
-            // Guardar el AlimentoEncuesta si al menos uno de los campos tiene datos.
-            if (porcion.isNotEmpty() || frecuencia.isNotEmpty() || veces.isNotEmpty()) {
-                val alimentoEncuesta = AlimentoEncuesta(
-                    encuestaId = encuestaId,
-                    alimentoId = listaAlimentos.getOrNull(i)?.alimentoId ?: 0,
-                    porcion = porcion,
-                    frecuencia = frecuencia,
-                    veces = veces
-                )
-                alimentoEncuestaViewModel.insert(alimentoEncuesta)
-                Log.i("NuevaEncuestaFragment", "AlimentoEncuesta guardado en onStop")
-            } else {
-                Log.i(
-                    "NuevaEncuestaFragment",
-                    "No hay datos suficientes para guardar AlimentoEncuesta en onStop"
-                )
-            }
+        if (!validarInputs()) return
+
+        val indiceActual = aeViewModel.indiceAlimentoActual.value ?: 0
+
+        val alimentoEncuesta = AlimentoEncuesta(
+            encuestaId = encuestaId,
+            alimentoId = listaAlimentos[indiceActual].alimentoId,
+            porcion = binding.autoCompleteTextViewPorcion.text.toString(),
+            frecuencia = binding.autoCompleteTextViewFrecuencia.text.toString(),
+            veces = binding.inputVeces.text.toString()
+        )
+        aeViewModel.insert(alimentoEncuesta)
+        Toast.makeText(requireContext(), "Consumo registrado", Toast.LENGTH_SHORT).show()
+
+        if (indiceActual == listaAlimentos.size - 1) {
+            finalizarEncuesta()
+        } else {
+            // Limpiar inputs y avanzar de estado
+            binding.autoCompleteTextViewPorcion.text = null
+            binding.autoCompleteTextViewFrecuencia.text = null
+            binding.inputVeces.text = null
+            aeViewModel.avanzarAlSiguienteAlimento()
         }
+    }
+
+    private fun finalizarEncuesta() {
+        isSaved = true
+        viewModel.editEncuesta(Encuesta(encuestaId = encuestaId, fecha = Date().time, encuestaCompletada = true, zona = args.zona))
+        Toast.makeText(requireContext(), "Encuesta Finalizada", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
     }
 
     private fun validarInputs(): Boolean {
-        val valorPorcion: String = binding.autoCompleteTextViewPorcion.text.toString()
-        val valorFrecuencia: String = binding.autoCompleteTextViewFrecuencia.text.toString()
-        val valorVeces: String = binding.inputVeces.text.toString()
-        var esValido = true
-
-        if (valorPorcion.isEmpty()) {
-            binding.tfPorcion.error = "Error: Input Vacío."
-            esValido = false
-        }
-
-        if (valorFrecuencia.isEmpty()) {
-            binding.tfFrecuencia.error = "Error: Input Vacío."
-            esValido = false
-        }
-
-        if (valorVeces.isEmpty()) {
-            binding.tfVeces.error = "Error: Input Vacío."
-            esValido = false
-        }
-
-        return esValido
+        val porcionValida = validarCampo(binding.autoCompleteTextViewPorcion, binding.tfPorcion)
+        val frecValida = validarCampo(binding.autoCompleteTextViewFrecuencia, binding.tfFrecuencia)
+        val vecesValida = validarCampo(binding.inputVeces, binding.tfVeces)
+        return porcionValida && frecValida && vecesValida
     }
 
-    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+    private fun validarCampo(input: EditText, textField: TextInputLayout): Boolean {
+        return if (input.text.isNullOrBlank()) {
+            textField.error = "Campo requerido"
+            false
+        } else {
+            textField.error = null
+            true
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

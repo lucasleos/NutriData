@@ -3,9 +3,7 @@ package unpsjb.ing.tntpm2024.encuesta
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.AlimentoEncuestaRepository
 import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
@@ -13,46 +11,34 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
 class AlimentoEncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
-    private val repository: AlimentoEncuestaRepository
+    private val repository = AlimentoEncuestaRepository(database.alimentoEncuestaDao())
 
-    val allAlimentoEncuestas: LiveData<List<AlimentoEncuesta>>
+    val allAlimentoEncuestas: LiveData<List<AlimentoEncuesta>> = repository.allAlimentoEncuestas
 
     private val _alimentoEncuestaDetalles = MutableLiveData<List<AlimentoEncuestaDetalles>>()
     val alimentoEncuestaDetalles: LiveData<List<AlimentoEncuestaDetalles>> get() = _alimentoEncuestaDetalles
 
+    // Nuevo: Estado de la encuesta en curso (sobrevive a rotación)
+    private val _indiceAlimentoActual = MutableLiveData(0)
+    val indiceAlimentoActual: LiveData<Int> = _indiceAlimentoActual
 
     init {
-        val alimentoEncuestaDao = database.alimentoEncuestaDao()
-        repository = AlimentoEncuestaRepository(alimentoEncuestaDao)
-        allAlimentoEncuestas = repository.allAlimentoEncuestas
         getAlimentoEncuestaDetalles()
     }
 
-    fun getAlimentoEncuestaDetalles() {
-        viewModelScope.launch {
-            val detalles = repository.getAlimentoEncuestaDetalles()
-            _alimentoEncuestaDetalles.postValue(detalles)
-        }
+    fun avanzarAlSiguienteAlimento() {
+        _indiceAlimentoActual.value = (_indiceAlimentoActual.value ?: 0) + 1
+    }
+
+    fun setIndiceInicial(indice: Int) {
+        _indiceAlimentoActual.value = indice
+    }
+
+    private fun getAlimentoEncuestaDetalles() = viewModelScope.launch {
+        _alimentoEncuestaDetalles.postValue(repository.getAlimentoEncuestaDetalles())
     }
 
     fun insert(alimentoEncuesta: AlimentoEncuesta) = viewModelScope.launch {
         repository.insert(alimentoEncuesta)
-    }
-
-    fun insertAll(alimentoEncuestas: List<AlimentoEncuesta>) = viewModelScope.launch {
-        repository.insertAll(alimentoEncuestas)
-    }
-}
-
-class AlimentoEncuestaViewModelFactory(private val database: EncuestasDatabase) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-        return when {
-            modelClass.isAssignableFrom(AlimentoEncuestaViewModel::class.java) -> {
-                AlimentoEncuestaViewModel(database) as T
-            }
-
-            else -> throw IllegalArgumentException("Unknown ViewModel class")
-        }
     }
 }
