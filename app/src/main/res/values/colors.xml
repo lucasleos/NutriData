@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="green_light">#b5e9dd</color>
-    <color name="green_variant">#9BC5BB</color>
-    <color name="medium_green">#3CB371</color>
-    <color name="bone_white">#F0F0F0</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Material 3 Inspired Palette -->
+    <color name="md_theme_light_primary">#2E7D32</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#C8E6C9</color>
+    <color name="md_theme_light_onPrimaryContainer">#003300</color>
+
+    <color name="md_theme_light_secondary">#795548</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#D7CCC8</color>
+    <color name="md_theme_light_onSecondaryContainer">#210F00</color>
+
+    <color name="md_theme_light_background">#FDFDF5</color>
+    <color name="md_theme_light_onBackground">#1A1C18</color>
+    <color name="md_theme_light_surface">#FDFDF5</color>
+    <color name="md_theme_light_onSurface">#1A1C18</color>
+    <color name="md_theme_light_surfaceVariant">#E1E5D5</color>
+    <color name="md_theme_light_onSurfaceVariant">#44483D</color>
+
+    <!-- Legacy / Compatibility Colors (Restored) -->
     <color name="green_700">#2E7D32</color>
     <color name="green_200">#A5D6A7</color>
     <color name="green_900">#1B5E20</color>
     <color name="brown_500">#795548</color>
     <color name="brown_100">#D7CCC8</color>
     <color name="brown_900">#3E2723</color>
-    <color name="background_light">#F9FBF2</color>
-    <color name="white">#FFFFFF</color>
+    <color name="background_light">#FDFDF5</color>
     <color name="grey_900">#212121</color>
     <color name="grey_600">#757575</color>
-    <color name="dark_green">#1B5E20</color> <!-- para mantener compatibilidad -->
+    <color name="bone_white">#F0F0F0</color>
+    <color name="dark_green">#1B5E20</color>
+
+    <!-- Added back for compatibility with drawable resources -->
+    <color name="green_light">#b5e9dd</color>
+    <color name="green_variant">#9BC5BB</color>
+    <color name="medium_green">#3CB371</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
 </resources>

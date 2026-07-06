@@ -1,23 +1,27 @@
 <resources>
     <style name="Theme.HabitosAlimenticios" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Color primario: verde hoja -->
-        <item name="colorPrimary">@color/green_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/green_200</item>
-        <item name="colorOnPrimaryContainer">@color/green_900</item>
-        <!-- Color secundario: tono tierra -->
-        <item name="colorSecondary">@color/brown_500</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">@color/brown_100</item>
-        <item name="colorOnSecondaryContainer">@color/brown_900</item>
-        <!-- Fondo y superficie -->
-        <item name="android:colorBackground">@color/background_light</item>
-        <item name="colorSurface">@color/white</item>
-        <item name="colorOnSurface">@color/grey_900</item>
-        <!-- Tipografía -->
+        <!-- Main Colors -->
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
+
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer</item>
+
+        <item name="android:colorBackground">@color/md_theme_light_background</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
+
+        <!-- Typography -->
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <!-- Forma de componentes -->
+
+        <!-- Components -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Small</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Medium</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Large</item>
@@ -35,9 +39,11 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
     <style name="NavDrawerTextStyle" parent="TextAppearance.Material3.BodyLarge">
         <item name="fontFamily">@font/lato_bold</item>
-        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textColor">@color/md_theme_light_onSurface</item>
     </style>
-    <color name="nav_item_tint">@color/green_700</color>
+
+    <color name="nav_item_tint">@color/md_theme_light_primary</color>
 </resources>

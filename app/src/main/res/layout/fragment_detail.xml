@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
-            name="encuestaId"
-            type="Integer" />
+            name="viewModel"
+            type="unpsjb.ing.tntpm2024.detalle.DetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,8 +29,9 @@
                 android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="@font/lato_bold"
-                android:text='@{"Encuesta " + encuestaId}'
-                android:textSize="25sp" />
+                android:text='@{"Encuesta " + viewModel.encuestaId}'
+                android:textSize="25sp"
+                tools:text="Encuesta 1" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/alimentoRecyclerView"

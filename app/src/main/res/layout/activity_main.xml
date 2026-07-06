@@ -2,9 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-    </data>
-
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -15,18 +12,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                app:titleTextColor="?attr/colorOnPrimary"
+                app:navigationIconTint="?attr/colorOnPrimary" />
 
             <FrameLayout
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/md_theme_light_background">
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/theNavHostFragment"
@@ -47,7 +45,8 @@
             app:headerLayout="@layout/nav_header"
             app:menu="@menu/drawer_menu"
             app:itemTextAppearance="@style/NavDrawerTextStyle"
-            app:itemIconTint="@color/nav_item_tint" />
+            app:itemIconTint="@color/nav_item_tint"
+            android:background="?attr/colorSurface" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
