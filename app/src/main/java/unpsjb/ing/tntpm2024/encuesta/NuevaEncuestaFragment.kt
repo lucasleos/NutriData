@@ -93,24 +93,38 @@ class NuevaEncuestaFragment : Fragment() {
     private fun observarAlimentos() {
         alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
             listaAlimentos = alimentos
-
-            // Observamos el índice actual en el ViewModel
-            aeViewModel.indiceAlimentoActual.observe(viewLifecycleOwner) { indice ->
-                if (listaAlimentos.isNotEmpty() && indice < listaAlimentos.size) {
-                    binding.tvListadoEncuestas.text = listaAlimentos[indice].nombre
-                }
+            Log.d("NuevaEncuesta", "Alimentos cargados: ${alimentos.size}")
+            binding.btnGuardar.isEnabled = alimentos.isNotEmpty()
+            
+            if (alimentos.isEmpty()) {
+                Toast.makeText(requireContext(), "No hay alimentos cargados. Por favor reinicia la app.", Toast.LENGTH_LONG).show()
             }
+            actualizarNombreAlimentoActual()
+        }
+
+        // Observamos el índice actual en el ViewModel por separado
+        aeViewModel.indiceAlimentoActual.observe(viewLifecycleOwner) {
+            actualizarNombreAlimentoActual()
+        }
+    }
+
+    private fun actualizarNombreAlimentoActual() {
+        val indice = aeViewModel.indiceAlimentoActual.value ?: 0
+        if (listaAlimentos.isNotEmpty() && indice < listaAlimentos.size) {
+            binding.tvListadoEncuestas.text = listaAlimentos[indice].nombre
         }
     }
 
     private fun procesarGuardadoParcial() {
-        binding.tfPorcion.error = null
-        binding.tfFrecuencia.error = null
-        binding.tfVeces.error = null
-
-        if (!validarInputs()) return
+        if (listaAlimentos.isEmpty()) {
+            Toast.makeText(requireContext(), "Cargando alimentos...", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val indiceActual = aeViewModel.indiceAlimentoActual.value ?: 0
+        Log.d("NuevaEncuesta", "Procesando alimento $indiceActual de ${listaAlimentos.size}")
+
+        if (!validarInputs()) return
 
         val alimentoEncuesta = AlimentoEncuesta(
             encuestaId = encuestaId,
@@ -120,17 +134,34 @@ class NuevaEncuestaFragment : Fragment() {
             veces = binding.inputVeces.text.toString()
         )
         aeViewModel.insert(alimentoEncuesta)
-        Toast.makeText(requireContext(), "Consumo registrado", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Consumo registrado: ${listaAlimentos[indiceActual].nombre}", Toast.LENGTH_SHORT).show()
 
         if (indiceActual == listaAlimentos.size - 1) {
             finalizarEncuesta()
         } else {
             // Limpiar inputs y avanzar de estado
-            binding.autoCompleteTextViewPorcion.text = null
-            binding.autoCompleteTextViewFrecuencia.text = null
-            binding.inputVeces.text = null
+            limpiarCampos()
             aeViewModel.avanzarAlSiguienteAlimento()
         }
+    }
+
+    private fun limpiarCampos() {
+        binding.autoCompleteTextViewPorcion.setText("", false)
+        binding.autoCompleteTextViewFrecuencia.setText("", false)
+        binding.inputVeces.text = null
+        
+        binding.tfPorcion.error = null
+        binding.tfFrecuencia.error = null
+        binding.tfVeces.error = null
+        
+        binding.tfPorcion.isErrorEnabled = false
+        binding.tfFrecuencia.isErrorEnabled = false
+        binding.tfVeces.isErrorEnabled = false
+        
+        // Reactivamos por si acaso
+        binding.tfPorcion.isErrorEnabled = true
+        binding.tfFrecuencia.isErrorEnabled = true
+        binding.tfVeces.isErrorEnabled = true
     }
 
     private fun finalizarEncuesta() {
