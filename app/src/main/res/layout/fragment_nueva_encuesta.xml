@@ -14,17 +14,19 @@
         android:id="@+id/encuesta_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/md_theme_light_background"
         tools:context=".encuesta.NuevaEncuestaFragment">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGuardar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/rounded_btn"
+            android:layout_marginBottom="16dp"
             android:text="Guardar"
+            android:textSize="18sp"
+            app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

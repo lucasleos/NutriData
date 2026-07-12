@@ -51,7 +51,20 @@ abstract class EncuestasDatabase : RoomDatabase() {
         private val scope: CoroutineScope
     ) : Callback() {
 
-        // Cambiamos onOpen por onCreate para que la carga de prueba se ejecute solo la primera vez
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+            INSTANCE?.let { database ->
+                scope.launch {
+                    val alimentoDao = database.alimentoDao()
+                    // Si la tabla de alimentos está vacía, la poblamos (esto ayuda si no se desinstaló la app)
+                    if (alimentoDao.getCantidadAlimentos() == 0) {
+                        populateDatabase(alimentoDao)
+                    }
+                }
+            }
+        }
+
+        // Mantenemos onCreate para la primera vez
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
@@ -60,7 +73,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                     val encuestaDao = database.encuestaDAO
                     val alimentoEncuestaDao = database.alimentoEncuestaDao()
 
-                    // 1. Primero cargamos los alimentos (es vital por las Claves Foráneas)
+                    // 1. Primero cargamos los alimentos
                     populateDatabase(alimentoDao)
 
                     // 2. Luego cargamos las encuestas y consumos simulados
@@ -70,7 +83,19 @@ abstract class EncuestasDatabase : RoomDatabase() {
         }
 
         suspend fun populateDatabase(alimentoDao: AlimentoDAO) {
-            // ... (Mantené intacto todo el código que ya tenías acá con los 10 alimentos) ...
+            val alimentos = listOf(
+                Alimento(nombre = "Leche fluida entera", categoria = "Lácteos", medida = "Taza", kcal = 60.0),
+                Alimento(nombre = "Yogur entero frutado", categoria = "Lácteos", medida = "Pote", kcal = 100.0),
+                Alimento(nombre = "Queso de pasta blanda", categoria = "Quesos", medida = "Feta", kcal = 280.0),
+                Alimento(nombre = "Huevo entero", categoria = "Huevos", medida = "Unidad", kcal = 155.0),
+                Alimento(nombre = "Carne vacuna magra", categoria = "Carnes", medida = "Gramo", kcal = 120.0),
+                Alimento(nombre = "Pollo sin piel", categoria = "Carnes", medida = "Gramo", kcal = 110.0),
+                Alimento(nombre = "Arroz blanco cocido", categoria = "Cereales", medida = "Taza", kcal = 130.0),
+                Alimento(nombre = "Pan francés", categoria = "Panificados", medida = "Unidad", kcal = 270.0),
+                Alimento(nombre = "Manzana", categoria = "Frutas", medida = "Unidad", kcal = 52.0),
+                Alimento(nombre = "Banana", categoria = "Frutas", medida = "Unidad", kcal = 89.0)
+            )
+            alimentoDao.insertAll(alimentos)
         }
 
         suspend fun cargarEncuestasDePrueba(encuestaDao: EncuestaDAO, aeDao: AlimentoEncuestaDao) {

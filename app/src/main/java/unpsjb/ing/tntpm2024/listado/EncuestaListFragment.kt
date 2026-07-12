@@ -138,8 +138,16 @@ class EncuestaListFragment : Fragment() {
                 .observe(viewLifecycleOwner) { alimentos ->
                     alimentos?.let {
                         encuestaViewModel.uploadEncuesta(encuesta, it,
-                            onSuccess = { Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show() },
-                            onFailure = { e -> Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show() }
+                            onSuccess = {
+                                activity?.runOnUiThread {
+                                    Toast.makeText(context, "Encuesta subida con éxito", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            onFailure = { e ->
+                                activity?.runOnUiThread {
+                                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         )
                     }
                 }
