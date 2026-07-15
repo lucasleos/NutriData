@@ -9,6 +9,9 @@ class AlimentoEncuestaRepository(private val alimentoEncuestaDao: AlimentoEncues
     val allAlimentoEncuestas: LiveData<List<AlimentoEncuesta>> =
         alimentoEncuestaDao.getAllAlimentoEncuestas()
 
+    val alimentoEncuestaDetallesLiveData: LiveData<List<AlimentoEncuestaDetalles>> =
+        alimentoEncuestaDao.getAlimentoEncuestaDetallesLiveData()
+
     suspend fun getAlimentoEncuestaDetalles(): List<AlimentoEncuestaDetalles> {
         return alimentoEncuestaDao.getAlimentoEncuestaDetalles()
     }
