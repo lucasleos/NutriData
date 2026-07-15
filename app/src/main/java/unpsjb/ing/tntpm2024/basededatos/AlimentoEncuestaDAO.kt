@@ -32,6 +32,22 @@ interface AlimentoEncuestaDao {
     )
     suspend fun getAlimentoEncuestaDetalles(): List<AlimentoEncuestaDetalles>
 
+    @Query(
+        """
+    SELECT 
+        ae.encuestaId, ae.alimentoId, ae.porcion, ae.frecuencia, ae.veces, 
+        a.nombre, a.categoria, a.medida, a.kcal_totales, a.carbohidratos, 
+        a.proteinas, a.grasas, a.alcohol, a.colesterol, a.fibra 
+    FROM tabla_alimento_encuesta ae
+    INNER JOIN tabla_alimento a ON ae.alimentoId = a.alimentoId
+    WHERE 
+        (ae.porcion IS NOT NULL AND ae.porcion <> '') AND
+        (ae.frecuencia IS NOT NULL AND ae.frecuencia <> '') AND 
+        (ae.veces IS NOT NULL AND ae.veces <> '')
+"""
+    )
+    fun getAlimentoEncuestaDetallesLiveData(): LiveData<List<AlimentoEncuestaDetalles>>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(alimentoEncuesta: AlimentoEncuesta)
