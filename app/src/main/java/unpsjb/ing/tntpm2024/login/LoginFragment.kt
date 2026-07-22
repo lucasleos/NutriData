@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentLoginBinding
+import unpsjb.ing.tntpm2024.util.LoadingDialogFragment
 
 class LoginFragment : Fragment() {
 
@@ -32,12 +33,16 @@ class LoginFragment : Fragment() {
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        // Se muestra el loading apenas vuelve del selector de cuentas de Google
+        LoadingDialogFragment.show(parentFragmentManager, "Conectando con Google...")
+
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try {
             val account = task.getResult(ApiException::class.java)!!
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
             Log.w("LoginFragment", "Google sign in failed", e)
+            LoadingDialogFragment.hide(parentFragmentManager)
             mostrarMensaje("El inicio de sesión con Google falló")
         }
     }
@@ -83,16 +88,19 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnGoogleSignIn.setOnClickListener {
+            LoadingDialogFragment.show(parentFragmentManager, "Iniciando sesión con Google...")
             googleSignInClient.signOut().addOnCompleteListener {
                 val signInIntent = googleSignInClient.signInIntent
                 googleSignInLauncher.launch(signInIntent)
             }
         }
     }
+
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
+                LoadingDialogFragment.hide(parentFragmentManager)
                 if (task.isSuccessful) {
                     mostrarMensaje("Inicio de sesión Google exitoso")
                     navegarAInicio()
@@ -103,8 +111,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginUser(email: String, password: String) {
+        LoadingDialogFragment.show(parentFragmentManager, "Iniciando sesión...")
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
+                LoadingDialogFragment.hide(parentFragmentManager)
                 if (task.isSuccessful) {
                     mostrarMensaje("Inicio de sesión exitoso")
                     navegarAInicio()
