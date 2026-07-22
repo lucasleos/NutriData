@@ -28,6 +28,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolygonOptions
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentMapsBinding
+import org.json.JSONObject
+
+
 
 class MapsFragment : Fragment() {
 
@@ -97,49 +100,55 @@ class MapsFragment : Fragment() {
         }
     }
 
+    private fun loadBarriosGeoJson(): List<Pair<String, List<LatLng>>> {
+        val barrios = mutableListOf<Pair<String, List<LatLng>>>()
+        try {
+            val json = requireContext().assets.open("barrios_madryn.geojson")
+                .bufferedReader()
+                .use { it.readText() }
+
+            val root = JSONObject(json)
+            val features = root.getJSONArray("features")
+
+            for (i in 0 until features.length()) {
+                val feature = features.getJSONObject(i)
+                val geometry = feature.getJSONObject("geometry")
+
+                // Solo nos interesan los polígonos de barrios (no los puntos de etiquetas)
+                if (geometry.getString("type") != "Polygon") continue
+
+                val properties = feature.getJSONObject("properties")
+                if (!properties.has("name")) continue
+                val name = properties.getString("name")
+
+                // coordinates[0] = anillo exterior del polígono
+                val coordsArray = geometry.getJSONArray("coordinates").getJSONArray(0)
+                val points = mutableListOf<LatLng>()
+                for (j in 0 until coordsArray.length()) {
+                    val coord = coordsArray.getJSONArray(j)
+                    val lng = coord.getDouble(0)
+                    val lat = coord.getDouble(1)
+                    points.add(LatLng(lat, lng))
+                }
+                barrios.add(name to points)
+            }
+        } catch (e: Exception) {
+            Log.e("MapsFragment", "Error cargando barrios_madryn.geojson", e)
+        }
+        return barrios
+    }
+
     private fun setupMap() {
         val madryn = LatLng(-42.7692, -65.03851)
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(madryn, 13f))
-        
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(madryn, 12f))
+
         checkLocationPermissions()
 
-        // Agregar polígonos al mapa
-        addPolygonToMap(
-            listOf(
-                LatLng(-42.788635, -65.013477),
-                LatLng(-42.769431, -65.030652),
-                LatLng(-42.772774, -65.040430),
-                LatLng(-42.790150, -65.029579)
-            ), "Zona Sur"
-        )
-
-        addPolygonToMap(
-            listOf(
-                LatLng(-42.772774, -65.040430),
-                LatLng(-42.775725, -65.049178),
-                LatLng(-42.774003, -65.061113),
-                LatLng(-42.785017, -65.083316),
-                LatLng(-42.795431, -65.077114),
-                LatLng(-42.786510, -65.048428),
-                LatLng(-42.790121, -65.046007),
-                LatLng(-42.785589, -65.032413)
-            ), "Zona Oeste"
-        )
-
-        addPolygonToMap(
-            listOf(
-                LatLng(-42.772774, -65.040430),
-                LatLng(-42.775725, -65.049178),
-                LatLng(-42.774003, -65.061113),
-                LatLng(-42.766533, -65.072836),
-                LatLng(-42.753236, -65.065282),
-                LatLng(-42.749797, -65.044398),
-                LatLng(-42.750066, -65.037039),
-                LatLng(-42.760067, -65.036811),
-                LatLng(-42.769521, -65.031191)
-            ), "Zona Norte"
-        )
+        // Cargar y dibujar todos los barrios desde el GeoJSON
+        loadBarriosGeoJson().forEach { (name, points) ->
+            addPolygonToMap(points, name)
+        }
 
         mMap.setOnMapClickListener {
             selectedPolygonInfo?.let {
@@ -159,7 +168,7 @@ class MapsFragment : Fragment() {
                 selectedPolygonInfo = newlySelectedPolygonInfo
                 animatePolygon(newlySelectedPolygonInfo)
                 showInfoWindow(newlySelectedPolygonInfo)
-                
+
                 binding.tvSelectedZone.text = "Zona Seleccionada: ${newlySelectedPolygonInfo.zona}"
                 binding.btnSeleccionZona.isEnabled = true
             }
