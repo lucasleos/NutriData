@@ -20,6 +20,9 @@ import unpsjb.ing.tntpm2024.databinding.FragmentInicioBinding
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
 import unpsjb.ing.tntpm2024.util.SwipeToDeleteCallback
+import org.json.JSONObject
+import java.text.Collator
+import java.util.Locale
 
 class EncuestaListFragment : Fragment() {
 
@@ -65,6 +68,35 @@ class EncuestaListFragment : Fragment() {
         // 5. Observar Datos
         observarEncuestas()
     }
+    private fun loadBarrioNames(): List<String> {
+        val nombres = mutableListOf<String>()
+        try {
+            val json = requireContext().assets.open("barrios_madryn.geojson")
+                .bufferedReader()
+                .use { it.readText() }
+
+            val root = JSONObject(json)
+            val features = root.getJSONArray("features")
+
+            for (i in 0 until features.length()) {
+                val feature = features.getJSONObject(i)
+                val geometry = feature.getJSONObject("geometry")
+
+                // Solo nos interesan los polígonos (no los puntos de etiqueta)
+                if (geometry.getString("type") != "Polygon") continue
+
+                val properties = feature.getJSONObject("properties")
+                if (!properties.has("name")) continue
+                nombres.add(properties.getString("name"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error cargando nombres de barrios", e)
+        }
+
+        // Orden alfabético correcto para español (tildes, ñ, etc.)
+        val collator = Collator.getInstance(Locale("es", "AR"))
+        return nombres.sortedWith(collator)
+    }
 
     private fun configurarSpinners() {
         val statusOptions = listOf("Todas", "Completadas", "Incompletas")
@@ -72,7 +104,8 @@ class EncuestaListFragment : Fragment() {
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.filterSpinner.adapter = statusAdapter
 
-        val zones = listOf("Todas las zonas", "Zona Sur", "Zona Norte", "Zona Oeste")
+        // Antes: listOf("Todas las zonas", "Zona Sur", "Zona Norte", "Zona Oeste")
+        val zones = mutableListOf("Todas las zonas").apply { addAll(loadBarrioNames()) }
         val zoneAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, zones)
         zoneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.zoneSpinner.adapter = zoneAdapter

@@ -56,7 +56,9 @@
                     <Spinner
                         android:id="@+id/zoneSpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp" />
+                        android:layout_height="48dp"
+                        android:spinnerMode="dialog"
+                        />
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
