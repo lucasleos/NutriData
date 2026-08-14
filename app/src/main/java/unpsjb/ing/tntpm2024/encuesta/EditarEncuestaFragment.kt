@@ -89,7 +89,9 @@ class EditarEncuestaFragment : Fragment() {
             // Observamos el estado del progreso desde el ViewModel
             aeViewModel.indiceAlimentoActual.observe(viewLifecycleOwner) { indice ->
                 if (listaAlimentos.isNotEmpty() && indice < listaAlimentos.size) {
-                    binding.tvListadoEncuestas.text = listaAlimentos[indice].nombre
+                    val alimento = listaAlimentos[indice]
+                    binding.tvListadoEncuestas.text = alimento.nombre
+                    cargarImagenAlimento(alimento.imagenNombre)
                 }
             }
         }
@@ -188,6 +190,20 @@ class EditarEncuestaFragment : Fragment() {
                 aeViewModel.insert(alimentoEncuesta)
                 Log.i("EditarEncuestaFragment", "AlimentoEncuesta guardado en onStop")
             }
+        }
+    }
+
+    private fun cargarImagenAlimento(nombreImagen: String?) {
+        if (nombreImagen.isNullOrEmpty()) {
+            binding.ivAlimento.setImageResource(R.drawable.ic_food_logo)
+            return
+        }
+
+        val resId = resources.getIdentifier(nombreImagen, "drawable", requireContext().packageName)
+        if (resId != 0) {
+            binding.ivAlimento.setImageResource(resId)
+        } else {
+            binding.ivAlimento.setImageResource(R.drawable.ic_food_logo)
         }
     }
 

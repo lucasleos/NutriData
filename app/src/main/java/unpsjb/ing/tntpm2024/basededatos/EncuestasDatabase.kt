@@ -13,7 +13,7 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [
         Encuesta::class,
         Alimento::class,
@@ -96,6 +96,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 80.48,
                         fibra = 0.0,
+                        imagenNombre = "leche_polvo"
                     ),
                     Alimento(
                         nombre = "Leche fluida entera",
@@ -108,6 +109,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 10.11,
                         fibra = 0.0,
+                        imagenNombre = "leche_fluida"
                     ),
                     Alimento(
                         nombre = "Queso de pasta dura",
@@ -120,6 +122,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 82.99,
                         fibra = 0.0,
+                        imagenNombre = "queso_duro"
                     ),
                     Alimento(
                         nombre = "Queso de pasta semidura/azul",
@@ -132,6 +135,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 72.14,
                         fibra = 0.0,
+                        imagenNombre = "queso_azul"
                     ),
                     Alimento(
                         nombre = "Manteca",
@@ -144,6 +148,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 223.0,
                         fibra = 0.0,
+                        imagenNombre = "manteca"
                     ),
                     Alimento(
                         nombre = "Huevo de Gallina",
@@ -156,6 +161,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 449.0,
                         fibra = 0.0,
+                        imagenNombre = "huevo"
                     ),
                     Alimento(
                         nombre = "Huevo Frito",
@@ -168,6 +174,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 401.0,
                         fibra = 0.0,
+                        imagenNombre = "huevo_frito"
                     ),
                     Alimento(
                         nombre = "Carne Vacuna Magra",
@@ -180,6 +187,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 62.3,
                         fibra = 0.0,
+                        imagenNombre = "carne_vacuna"
                     ),
                     Alimento(
                         nombre = "Empanadas de Carne",
@@ -192,6 +200,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 68.9,
                         fibra = 3.0,
+                        imagenNombre = "empanada_carne"
                     ),
                     Alimento(
                         nombre = "Banana",
@@ -204,6 +213,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                         alcohol = 0.0,
                         colesterol = 0.0,
                         fibra = 2.6,
+                        imagenNombre = "banana"
                     )
                 )
                 alimentoDao.insertAll(alimentos)
