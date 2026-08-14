@@ -17,5 +17,6 @@ data class Alimento(
     @ColumnInfo(name = "grasas") val grasas: Double = 0.0,
     @ColumnInfo(name = "alcohol") val alcohol: Double = 0.0,
     @ColumnInfo(name = "colesterol") val colesterol: Double = 0.0,
-    @ColumnInfo(name = "fibra") val fibra: Double = 0.0
+    @ColumnInfo(name = "fibra") val fibra: Double = 0.0,
+    @ColumnInfo(name = "imagen_nombre") val imagenNombre: String? = null
 )

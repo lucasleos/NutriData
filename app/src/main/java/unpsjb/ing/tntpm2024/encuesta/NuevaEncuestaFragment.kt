@@ -111,7 +111,23 @@ class NuevaEncuestaFragment : Fragment() {
     private fun actualizarNombreAlimentoActual() {
         val indice = aeViewModel.indiceAlimentoActual.value ?: 0
         if (listaAlimentos.isNotEmpty() && indice < listaAlimentos.size) {
-            binding.tvListadoEncuestas.text = listaAlimentos[indice].nombre
+            val alimento = listaAlimentos[indice]
+            binding.tvListadoEncuestas.text = alimento.nombre
+            cargarImagenAlimento(alimento.imagenNombre)
+        }
+    }
+
+    private fun cargarImagenAlimento(nombreImagen: String?) {
+        if (nombreImagen.isNullOrEmpty()) {
+            binding.ivAlimento.setImageResource(R.drawable.ic_food_logo)
+            return
+        }
+
+        val resId = resources.getIdentifier(nombreImagen, "drawable", requireContext().packageName)
+        if (resId != 0) {
+            binding.ivAlimento.setImageResource(resId)
+        } else {
+            binding.ivAlimento.setImageResource(R.drawable.ic_food_logo)
         }
     }
 
