@@ -37,9 +37,22 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         // Enlaza el DrawerLayout y la Toolbar con el grafo de navegación automáticamente
-        appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.inicioFragment, R.id.encuestalist),
+            binding.drawerLayout
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
+
+        // Control de visibilidad del Drawer y bloqueo en pantallas específicas
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.loginFragment) {
+                binding.drawerLayout.setDrawerLockMode(androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            } else {
+                binding.drawerLayout.setDrawerLockMode(androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
+            actualizarVisibilidadMenu(destination.id)
+        }
 
         // 3. Manejo de eventos del menú lateral
         binding.navView.setNavigationItemSelectedListener { menuItem ->
@@ -62,12 +75,18 @@ class MainActivity : AppCompatActivity() {
         actualizarVisibilidadMenu()
     }
 
-    private fun actualizarVisibilidadMenu() {
+    private fun actualizarVisibilidadMenu(currentDestinationId: Int? = null) {
         val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         val menu = binding.navView.menu
 
-        menu.findItem(R.id.nav_logout)?.isVisible = user != null
-        menu.findItem(R.id.nav_lista_encuestas)?.isVisible = user != null
+        // Consideramos "autenticado" si hay un usuario de Firebase 
+        // O si ya navegamos fuera del Login (indicativo de que se usó el bypass "admin")
+        val destinationId = currentDestinationId ?: navController.currentDestination?.id
+        val isNotAtLogin = destinationId != R.id.loginFragment && destinationId != null
+        val showMenu = user != null || isNotAtLogin
+
+        menu.findItem(R.id.nav_logout)?.isVisible = showMenu
+        menu.findItem(R.id.nav_lista_encuestas)?.isVisible = showMenu
     }
 
     private fun logout() {
