@@ -8,6 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
@@ -36,7 +38,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                 return INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     EncuestasDatabase::class.java,
-                        "encuestas_db"
+                    "encuestas_db"
                 )
                     .fallbackToDestructiveMigration()
                     .addCallback(EncuestasDatabaseCallback(CoroutineScope(Dispatchers.IO)))
@@ -51,14 +53,19 @@ abstract class EncuestasDatabase : RoomDatabase() {
         private val scope: CoroutineScope
     ) : Callback() {
 
+        // Mutex para sincronizar el acceso y evitar condiciones de carrera
+        private val prepopulateMutex = Mutex()
+
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    val alimentoDao = database.alimentoDao()
-                    // Si la tabla de alimentos está vacía, la poblamos (esto ayuda si no se desinstaló la app)
-                    if (alimentoDao.getCantidadAlimentos() == 0) {
-                        populateDatabase(alimentoDao)
+                    prepopulateMutex.withLock {
+                        val alimentoDao = database.alimentoDao()
+                        // Si la tabla de alimentos está vacía, la poblamos (esto ayuda si no se desinstaló la app)
+                        if (alimentoDao.getCantidadAlimentos() == 0) {
+                            populateDatabase(alimentoDao)
+                        }
                     }
                 }
             }
@@ -69,15 +76,19 @@ abstract class EncuestasDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    val alimentoDao = database.alimentoDao()
-                    val encuestaDao = database.encuestaDAO
-                    val alimentoEncuestaDao = database.alimentoEncuestaDao()
+                    prepopulateMutex.withLock {
+                        val alimentoDao = database.alimentoDao()
+                        val encuestaDao = database.encuestaDAO
+                        val alimentoEncuestaDao = database.alimentoEncuestaDao()
 
-                    // 1. Primero cargamos los alimentos
-                    populateDatabase(alimentoDao)
+                        // 1. Primero cargamos los alimentos
+                        if (alimentoDao.getCantidadAlimentos() == 0) {
+                            populateDatabase(alimentoDao)
+                        }
 
-                    // 2. Luego cargamos las encuestas y consumos simulados
-                    cargarEncuestasDePrueba(encuestaDao, alimentoEncuestaDao)
+                        // 2. Luego cargamos las encuestas y consumos simulados
+                        cargarEncuestasDePrueba(encuestaDao, alimentoEncuestaDao)
+                    }
                 }
             }
         }
@@ -306,4 +317,3 @@ abstract class EncuestasDatabase : RoomDatabase() {
             }
     */
 }
-
