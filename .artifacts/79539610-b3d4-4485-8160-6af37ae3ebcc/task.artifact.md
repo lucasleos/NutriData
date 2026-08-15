@@ -1,0 +1,2 @@
+- [x] Modificar `MainActivity.kt` para configurar destinos de nivel superior y control de DrawerLayout.
+- [x] Verificar cambios en el emulador/dispositivo.
