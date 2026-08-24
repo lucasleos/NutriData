@@ -13,22 +13,24 @@
         android:id="@+id/detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/fondo_encuesta_alimento_1_redim"
+        android:background="@color/bg_app"
         tools:context=".detalle.DetailFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/encuestaTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/radio_canada_big"
+                android:textStyle="bold"
                 android:text='@{"Encuesta " + viewModel.encuestaId}'
                 android:textSize="25sp"
                 tools:text="Encuesta 1" />

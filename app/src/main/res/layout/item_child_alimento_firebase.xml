@@ -8,7 +8,9 @@ android:padding="16dp">
         android:id="@+id/childNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/text_primary"
+        android:fontFamily="@font/radio_canada_big"
+        android:textStyle="bold"
         android:text="Nombre"
         android:textSize="16sp" />
 
@@ -16,22 +18,29 @@ android:padding="16dp">
         android:id="@+id/childMedida"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/radio_canada_big"
+        android:textColor="@color/text_secondary"
         android:text="Medida"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/childCategoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/radio_canada_big"
+        android:textColor="@color/text_secondary"
         android:text="Categoria"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/childPorcentajeGraso"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/radio_canada_big"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
         android:text="Porcentaje Graso"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <View
         android:layout_marginTop="10dp"

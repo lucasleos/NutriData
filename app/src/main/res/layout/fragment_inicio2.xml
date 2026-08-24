@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_light"
+        android:background="@color/bg_app"
         tools:context=".inicio.InicioFragment">
 
         <!-- Cabecera con gradiente sutil -->
@@ -40,21 +40,23 @@
                 android:id="@+id/tvSaludo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_regular"
+                android:fontFamily="@font/radio_canada_big"
                 android:text="¡Hola!"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:alpha="0.9" />
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:alpha="1.0" />
 
             <TextView
                 android:id="@+id/tvTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/radio_canada_big"
                 android:text="@{inicioViewModel.mensajeBienvenida}"
                 android:textColor="#FFFFFF"
-                android:textSize="26sp"
+                android:textSize="28sp"
+                android:textStyle="bold"
                 tools:text="María García" />
         </LinearLayout>
 
@@ -80,11 +82,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/macro_green"
                     app:strokeWidth="0dp"
                     app:contentPadding="0dp"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="16dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -105,10 +108,11 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
-                            android:fontFamily="@font/lato_bold"
+                            android:fontFamily="@font/radio_canada_big"
                             android:text="Mis Encuestas"
-                            android:textColor="@color/grey_900"
-                            android:textSize="18sp" />
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <ImageButton
                             android:id="@+id/btnEncuestas"
@@ -116,6 +120,7 @@
                             android:layout_height="48dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/text_primary"
                             android:contentDescription="Ir a encuestas" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -124,10 +129,11 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/macro_yellow"
                     app:contentPadding="0dp"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="16dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -147,16 +153,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
-                            android:fontFamily="@font/lato_bold"
+                            android:fontFamily="@font/radio_canada_big"
                             android:text="Nueva Encuesta"
-                            android:textColor="@color/grey_900"
-                            android:textSize="18sp" />
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <ImageButton
                             android:id="@+id/btnEncuesta"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
+                            app:tint="@color/text_primary"
                             android:src="@drawable/ic_arrow_forward" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -165,10 +173,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/macro_red"
+                    app:strokeWidth="0dp"
                     app:contentPadding="0dp"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="16dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -179,8 +189,8 @@
                         android:paddingEnd="4dp">
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:src="@drawable/statistic" />
 
                         <TextView
@@ -188,16 +198,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
-                            android:fontFamily="@font/lato_bold"
+                            android:fontFamily="@font/radio_canada_big"
                             android:text="Estadísticas"
-                            android:textColor="@color/grey_900"
-                            android:textSize="18sp" />
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <ImageButton
                             android:id="@+id/btnEstadistica"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
+                            app:tint="@color/text_primary"
                             android:src="@drawable/ic_arrow_forward" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

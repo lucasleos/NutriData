@@ -6,10 +6,11 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="6dp"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="20dp"
     app:cardElevation="2dp"
     app:strokeWidth="1dp"
-    app:strokeColor="?attr/colorSurfaceVariant">
+    app:strokeColor="@color/primary"
+    app:cardBackgroundColor="@color/md_theme_light_surface">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,9 +21,9 @@
             android:id="@+id/tvEncuestaId"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/radio_canada_big"
             android:text="Encuesta N° X"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/imageUpload"
@@ -55,9 +56,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:fontFamily="@font/roboto_regular"
+                    android:fontFamily="@font/radio_canada_big"
                     android:text="Fecha"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -78,9 +79,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:fontFamily="@font/roboto_regular"
+                    android:fontFamily="@font/radio_canada_big"
                     android:text="Estado"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -99,9 +100,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:fontFamily="@font/roboto_regular"
+                    android:fontFamily="@font/radio_canada_big"
                     android:text="Zona"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
