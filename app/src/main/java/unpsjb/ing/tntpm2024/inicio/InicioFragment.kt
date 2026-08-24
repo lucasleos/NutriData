@@ -30,15 +30,15 @@ class InicioFragment : Fragment() {
     }
 
     private fun configurarBotones() {
-        binding.btnEncuesta.setOnClickListener {
+        binding.cardNuevaEncuesta.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_mapsFragment)
         }
 
-        binding.btnEncuestas.setOnClickListener {
+        binding.cardEncuestas.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_encuestalist)
         }
 
-        binding.btnEstadistica.setOnClickListener {
+        binding.cardEstadisticas.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_estadisticaFragment)
         }
     }
