@@ -49,8 +49,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    app:srcCompat="@drawable/date"
-                    app:tint="?attr/colorSecondary" />
+                    app:srcCompat="@drawable/date" />
                 <TextView
                     android:id="@+id/tvFecha"
                     android:layout_width="wrap_content"
@@ -72,8 +71,7 @@
                     android:id="@+id/ivCheck"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    app:srcCompat="@drawable/check"
-                    app:tint="?attr/colorSecondary" />
+                    app:srcCompat="@drawable/check" />
                 <TextView
                     android:id="@+id/tvEncuestaCompletada"
                     android:layout_width="wrap_content"
@@ -93,8 +91,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    app:srcCompat="@drawable/location80"
-                    app:tint="?attr/colorSecondary" />
+                    app:srcCompat="@drawable/location80" />
                 <TextView
                     android:id="@+id/tvzona"
                     android:layout_width="wrap_content"
@@ -109,17 +106,21 @@
 
         <ImageView
             android:id="@+id/imageUpload"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="32dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:scaleType="centerInside"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
