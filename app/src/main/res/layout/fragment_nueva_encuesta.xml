@@ -14,7 +14,7 @@
         android:id="@+id/encuesta_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/md_theme_light_background"
+        android:background="@color/bg_app"
         tools:context=".encuesta.NuevaEncuestaFragment">
 
         <com.google.android.material.button.MaterialButton
@@ -26,6 +26,8 @@
             android:layout_marginBottom="16dp"
             android:text="Guardar"
             android:textSize="18sp"
+            android:fontFamily="@font/radio_canada_big"
+            android:textStyle="bold"
             app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,14 +35,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tfPorcion"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="128dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:hint="Porción"
-            app:boxBackgroundColor="@color/bone_white"
+            app:boxBackgroundColor="@color/surface"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,47 +52,53 @@
                 android:id="@+id/autoCompleteTextViewPorcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/radio_canada_big"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tfFrecuencia"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="210dp"
-            android:layout_height="60dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:hint="Frecuencia"
-            app:boxBackgroundColor="@color/bone_white"
+            app:boxBackgroundColor="@color/surface"
             app:errorEnabled="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tfVeces"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintEnd_toStartOf="@+id/tfVeces"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tfPorcion">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextViewFrecuencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/radio_canada_big"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tfVeces"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="90dp"
-            app:boxBackgroundColor="@color/bone_white"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:hint="Veces"
+            app:boxBackgroundColor="@color/surface"
             app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/btnGuardar"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tfFrecuencia"
-            app:layout_constraintTop_toBottomOf="@+id/tfPorcion">
+            app:layout_constraintTop_toTopOf="@+id/tfFrecuencia">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputVeces"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/radio_canada_big"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,50 +106,66 @@
             android:id="@+id/tvListadoEncuestas"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/dark_green"
+            android:background="@drawable/gradient_green_header"
             android:gravity="center"
-            android:padding="8dp"
+            android:padding="12dp"
             android:text="Yogur Bebible"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
+            android:fontFamily="@font/radio_canada_big"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/ivAlimento"
-            android:layout_width="300dp"
-            android:layout_height="250dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:scaleType="centerInside"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_food_logo" />
+            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas">
+
+            <ImageView
+                android:id="@+id/ivAlimento"
+                android:layout_width="300dp"
+                android:layout_height="250dp"
+                android:scaleType="centerInside"
+                android:background="@color/surface"
+                app:srcCompat="@drawable/ic_food_logo" />
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvZona"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
             android:text="TextView"
+            android:fontFamily="@font/radio_canada_big"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btnEditZona"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivAlimento" />
+            app:layout_constraintTop_toBottomOf="@+id/cardImage" />
 
         <ImageButton
             android:id="@+id/btnEditZona"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@+id/tvZona"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivAlimento"
-            app:srcCompat="@drawable/edit_ico" />
+            app:layout_constraintTop_toTopOf="@+id/tvZona"
+            app:srcCompat="@drawable/edit_ico"
+            app:tint="@color/primary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

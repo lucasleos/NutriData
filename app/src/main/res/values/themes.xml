@@ -18,8 +18,8 @@
         <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
 
         <!-- Typography -->
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="fontFamily">@font/radio_canada_big</item>
+        <item name="android:fontFamily">@font/radio_canada_big</item>
 
         <!-- Components -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Small</item>

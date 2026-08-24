@@ -36,8 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:strokeWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -46,24 +47,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tvSelectedZone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/lato_bold"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/radio_canada_big"
                     android:text="Selecciona una zona en el mapa"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSeleccionZona"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:enabled="false"
+                    android:fontFamily="@font/radio_canada_big"
+                    android:textStyle="bold"
                     android:text="Confirmar Selección"
                     app:cornerRadius="12dp" />
 

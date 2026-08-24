@@ -19,7 +19,7 @@
             android:id="@+id/headerCard"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="@color/green_700"
+            app:cardBackgroundColor="@color/md_theme_light_primary"
             app:cardCornerRadius="0dp"
             app:contentPadding="32dp"
             app:layout_constraintBottom_toTopOf="@id/guideline"
@@ -37,27 +37,31 @@
                 <ImageView
                     android:layout_width="250dp"
                     android:layout_height="125dp"
+                    android:background="@drawable/bg_rounded_image"
                     android:contentDescription="Logo de la app"
+                    android:padding="12dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/logo_nutridata" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:text="Encuesta Alimentaria"
+                    android:fontFamily="@font/radio_canada_big"
+                    android:text="Encuestas Alimentarias"
                     android:textColor="@color/white"
+                    android:textStyle="bold"
                     android:textSize="28sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:alpha="0.9"
-                    android:fontFamily="@font/lato_bold"
+                    android:alpha="1.0"
+                    android:fontFamily="@font/radio_canada_big"
                     android:text="Iniciá sesión para continuar"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -101,7 +105,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:text="@={loginViewModel.usuario}"
-                        android:fontFamily="@font/roboto_regular" />
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="@font/radio_canada_big" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -122,7 +127,8 @@
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular"
+                        android:fontFamily="@font/radio_canada_big"
+                        android:textColor="@color/text_primary"
                         android:text="@={loginViewModel.password}"
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -134,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="¿Olvidaste tu contraseña?"
-                    android:textColor="@color/green_700"
+                    android:textColor="@color/md_theme_light_primary"
                     android:textStyle="bold"
                     android:fontFamily="@font/roboto_regular"
                     android:textSize="14sp"
@@ -145,11 +151,11 @@
                     android:id="@+id/btnIngresar"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="64dp"
                     android:layout_marginTop="24dp"
                     android:text="Iniciar Sesión"
                     android:textStyle="bold"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/radio_canada_big"
                     app:cornerRadius="12dp"
                     app:layout_constraintTop_toBottomOf="@id/tvForgotPassword"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -159,14 +165,15 @@
                     android:id="@+id/btnGoogleSignIn"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="64dp"
                     android:layout_marginTop="12dp"
                     android:text="Continuar con Google"
                     android:textStyle="bold"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/radio_canada_big"
                     app:icon="@drawable/ic_google"
                     app:cornerRadius="12dp"
-                    app:strokeColor="@color/grey_600"
+                    app:strokeColor="@color/md_theme_light_primary"
+                    app:strokeWidth="3dp"
                     app:layout_constraintTop_toBottomOf="@id/btnIngresar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

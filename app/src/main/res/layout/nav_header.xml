@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:background="@color/green_700"
-    android:gravity="center_vertical"
+    android:layout_height="160dp"
+    android:background="@drawable/gradient_green_header"
+    android:gravity="bottom"
     android:orientation="horizontal"
     android:paddingStart="24dp"
-    android:paddingEnd="24dp">
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
@@ -26,8 +27,9 @@
             android:id="@+id/navUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato_bold"
+            android:fontFamily="@font/radio_canada_big"
             android:text="Usuario"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -36,10 +38,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:fontFamily="@font/roboto_regular"
+            android:fontFamily="@font/radio_canada_big"
             android:text="correo@ejemplo.com"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:alpha="0.8" />
+            android:alpha="0.9" />
     </LinearLayout>
 </LinearLayout>
