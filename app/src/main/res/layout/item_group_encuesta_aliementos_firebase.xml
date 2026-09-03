@@ -1,106 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardParent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="@color/surface"
     app:cardCornerRadius="20dp"
-    android:minHeight="70dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="1dp"
-    app:strokeColor="@color/primary_container">
+    app:cardElevation="3dp"
+    app:strokeColor="@color/primary_container"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/linear_layout">
+        android:orientation="vertical">
 
+        <!-- Header Layout (Clickable for expand/collapse) -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/parentHeaderLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="16dp">
 
+            <!-- Title: Encuesta ID -->
             <TextView
                 android:id="@+id/groupTitleEncuesta"
-                android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="CodingSTUFF"
-                android:textColor="@color/primary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/radio_canada_big"
-                android:layout_marginHorizontal="5dp"
-                android:textSize="15sp"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/expandButton"
+                app:layout_constraintEnd_toStartOf="@id/tvAlimentosCount"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Encuesta #1" />
 
+            <!-- Food Items Count Badge -->
+            <TextView
+                android:id="@+id/tvAlimentosCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_badge_kcal"
+                android:fontFamily="@font/radio_canada_big"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/md_theme_light_onPrimaryContainer"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/groupTitleEncuesta"
+                app:layout_constraintEnd_toStartOf="@id/expandButton"
+                app:layout_constraintTop_toTopOf="@id/groupTitleEncuesta"
+                tools:text="3 alimentos" />
+
+            <!-- Expand Arrow Button -->
             <ImageButton
                 android:id="@+id/expandButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:background="?attr/selectableItemBackground"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Expandir encuesta"
+                android:scaleType="centerInside"
                 android:src="@drawable/drop_down_ico"
+                app:tint="@color/primary"
+                app:layout_constraintBottom_toBottomOf="@id/groupTitleEncuesta"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/groupTitleEncuesta" />
+
+            <!-- Details Section -->
+            <LinearLayout
+                android:id="@+id/infoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/groupTitleEncuesta">
+
+                <!-- User / Encuestador -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Encuestador"
+                        android:src="@drawable/ic_email"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:id="@+id/tvEncuestador"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/radio_canada_big"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        tools:text="Encuestador: usuario" />
+                </LinearLayout>
+
+                <!-- Date -->
+                <LinearLayout
+                    android:id="@+id/layoutFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Fecha"
+                        android:src="@drawable/date" />
+
+                    <TextView
+                        android:id="@+id/tvFecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/radio_canada_big"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        tools:text="Fecha: 03/09/2026" />
+                </LinearLayout>
+
+                <!-- Zone -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Zona"
+                        android:src="@drawable/location80" />
+
+                    <TextView
+                        android:id="@+id/tvZona"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/radio_canada_big"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        tools:text="Zona: Trelew Norte" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <RelativeLayout
+        <!-- Divider and Expandable Child Content -->
+        <LinearLayout
+            android:id="@+id/expandable_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/expandable_layout">
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@color/primary_container" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/childRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
-        </RelativeLayout>
+                android:clipToPadding="false"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
-
-
-<!--
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
-    >
-
-    <TextView
-        android:id="@+id/groupTitleEncuesta"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Titulo Encuesta"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/expandButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/drop_down_ico" />
-</LinearLayout>
-
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/childRecyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:visibility="gone" />
-</LinearLayout>-->
