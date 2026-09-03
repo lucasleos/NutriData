@@ -1,51 +1,111 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="16dp">
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginVertical="4dp"
+    app:cardBackgroundColor="@color/bg_app"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp"
+    app:strokeColor="@color/primary_container"
+    app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/childNombre"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_primary"
-        android:fontFamily="@font/radio_canada_big"
-        android:textStyle="bold"
-        android:text="Nombre"
-        android:textSize="16sp" />
+        android:padding="12dp">
 
-    <TextView
-        android:id="@+id/childMedida"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/radio_canada_big"
-        android:textColor="@color/text_secondary"
-        android:text="Medida"
-        android:textSize="14sp" />
+        <!-- Food Thumbnail -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardImageHolder"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/primary_container"
+            app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/childCategoria"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/radio_canada_big"
-        android:textColor="@color/text_secondary"
-        android:text="Categoria"
-        android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/ivAlimentoChild"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="Imagen del alimento"
+                android:padding="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_food_logo" />
 
-    <TextView
-        android:id="@+id/childPorcentajeGraso"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/radio_canada_big"
-        android:textColor="@color/primary"
-        android:textStyle="bold"
-        android:text="Porcentaje Graso"
-        android:textSize="14sp" />
+        </com.google.android.material.card.MaterialCardView>
 
-    <View
-        android:layout_marginTop="10dp"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#DC696969" />
+        <!-- Food Name -->
+        <TextView
+            android:id="@+id/childNombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/radio_canada_big"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/childKcal"
+            app:layout_constraintStart_toEndOf="@id/cardImageHolder"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Manzana" />
 
-</LinearLayout>
+        <!-- Category & Measurement -->
+        <TextView
+            android:id="@+id/childCategoriaMedida"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/radio_canada_big"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@id/childKcal"
+            app:layout_constraintStart_toEndOf="@id/cardImageHolder"
+            app:layout_constraintTop_toBottomOf="@id/childNombre"
+            tools:text="Frutas • Unidad" />
+
+        <!-- Macros details (carbs, proteins, fats) -->
+        <TextView
+            android:id="@+id/childMacros"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/radio_canada_big"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@id/childKcal"
+            app:layout_constraintStart_toEndOf="@id/cardImageHolder"
+            app:layout_constraintTop_toBottomOf="@id/childCategoriaMedida"
+            tools:text="Carb: 14g | Prot: 0.3g | Grasas: 0.2g" />
+
+        <!-- Calories Badge -->
+        <TextView
+            android:id="@+id/childKcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_badge_kcal"
+            android:fontFamily="@font/radio_canada_big"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:textColor="@color/md_theme_light_onPrimaryContainer"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="52 kcal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
