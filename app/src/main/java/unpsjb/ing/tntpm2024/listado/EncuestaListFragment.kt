@@ -56,6 +56,10 @@ class EncuestaListFragment : Fragment() {
             setHasFixedSize(true)
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(requireContext(), adapterList))
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 

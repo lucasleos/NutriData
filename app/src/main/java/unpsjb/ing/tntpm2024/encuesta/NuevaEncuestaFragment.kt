@@ -48,6 +48,9 @@ class NuevaEncuestaFragment : Fragment() {
         configurarUI()
         gestionarCreacionOEdicion()
         observarAlimentos()
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun inicializarViewModels() {

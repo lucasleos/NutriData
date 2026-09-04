@@ -22,6 +22,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    private val destinosSinToolbar = setOf(
+        R.id.loginFragment,
+        R.id.detailFragment,
+        R.id.editarEncuestaFragment,
+        R.id.nuevaEncuestaFragment,
+        R.id.mapsFragment,
+        R.id.estadisticaFragment,
+        R.id.encuestalist
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,11 +57,23 @@ class MainActivity : AppCompatActivity() {
 
         // Control de visibilidad del Drawer y bloqueo en pantallas específicas
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.loginFragment) {
-                binding.drawerLayout.setDrawerLockMode(androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
+            val ocultarToolbar = destination.id in destinosSinToolbar
+
+            if (ocultarToolbar) {
+                supportActionBar?.hide()
+
+                binding.drawerLayout.setDrawerLockMode(
+                    androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+                )
             } else {
-                binding.drawerLayout.setDrawerLockMode(androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED)
+                supportActionBar?.show()
+
+                binding.drawerLayout.setDrawerLockMode(
+                    androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
+                )
             }
+
             actualizarVisibilidadMenu(destination.id)
         }
 

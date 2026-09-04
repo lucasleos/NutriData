@@ -46,6 +46,10 @@ class EditarEncuestaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         encuestaId = args.encuestaId
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         inicializarViewModels()
         configurarUI()
         setupObservers()

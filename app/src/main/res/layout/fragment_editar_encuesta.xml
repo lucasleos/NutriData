@@ -8,6 +8,7 @@
         <variable
             name="EncuestaViewModel"
             type="unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +18,27 @@
         android:background="@color/bg_app"
         tools:context=".encuesta.NuevaEncuestaFragment">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:navigationIconTint="@color/white"
+                app:title="Nueva encuesta"
+                app:titleCentered="true"
+                app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+                app:titleTextColor="@color/white" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGuardar"
@@ -25,9 +47,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:fontFamily="@font/radio_canada_big"
             android:text="Guardar"
             android:textSize="18sp"
-            android:fontFamily="@font/radio_canada_big"
             android:textStyle="bold"
             app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +69,7 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvZona">
+            app:layout_constraintTop_toBottomOf="@id/tvZona">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextViewPorcion"
@@ -55,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/radio_canada_big"
                 android:inputType="none" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -68,10 +91,10 @@
             android:hint="Frecuencia"
             app:boxBackgroundColor="@color/surface"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toStartOf="@+id/tfVeces"
+            app:layout_constraintEnd_toStartOf="@id/tfVeces"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tfPorcion">
+            app:layout_constraintTop_toBottomOf="@id/tfPorcion">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextViewFrecuencia"
@@ -79,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/radio_canada_big"
                 android:inputType="none" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -92,8 +116,8 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tfFrecuencia"
-            app:layout_constraintTop_toTopOf="@+id/tfFrecuencia">
+            app:layout_constraintStart_toEndOf="@id/tfFrecuencia"
+            app:layout_constraintTop_toTopOf="@id/tfFrecuencia">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputVeces"
@@ -101,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/radio_canada_big"
                 android:inputType="numberDecimal" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -108,16 +133,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_green_header"
+            android:fontFamily="@font/radio_canada_big"
             android:gravity="center"
             android:padding="12dp"
             android:text="Yogur Bebible"
             android:textColor="@color/white"
-            android:fontFamily="@font/radio_canada_big"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardImage"
@@ -129,15 +154,16 @@
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvListadoEncuestas">
+            app:layout_constraintTop_toBottomOf="@id/tvListadoEncuestas">
 
             <ImageView
                 android:id="@+id/ivAlimento"
                 android:layout_width="250dp"
                 android:layout_height="200dp"
-                android:scaleType="centerInside"
                 android:background="@color/surface"
+                android:scaleType="centerInside"
                 app:srcCompat="@drawable/ic_food_logo" />
+
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -147,14 +173,14 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
             android:fontFamily="@font/radio_canada_big"
+            android:text="TextView"
             android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/btnEditZona"
+            app:layout_constraintEnd_toStartOf="@id/btnEditZona"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardImage" />
+            app:layout_constraintTop_toBottomOf="@id/cardImage" />
 
         <ImageButton
             android:id="@+id/btnEditZona"
@@ -162,12 +188,11 @@
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintBottom_toBottomOf="@+id/tvZona"
+            app:layout_constraintBottom_toBottomOf="@id/tvZona"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvZona"
+            app:layout_constraintTop_toTopOf="@id/tvZona"
             app:srcCompat="@drawable/edit_ico"
             app:tint="@color/primary" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

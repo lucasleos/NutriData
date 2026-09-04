@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.*
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
@@ -36,8 +37,12 @@ class EstadisticaFragment : Fragment() {
         binding.estadisticaViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        barChart = binding.barChart
         pieChart = binding.pieChart
+        barChart = binding.barChart
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
 
         setupSpinner()
         setupCharts()
