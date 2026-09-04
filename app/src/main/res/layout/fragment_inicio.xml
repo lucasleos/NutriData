@@ -9,18 +9,21 @@
         android:background="@color/bg_app">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:elevation="0dp">
+            android:background="@color/primary">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar_inicio"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:navigationIconTint="@color/white"
                 app:title="Encuestas"
                 app:titleCentered="true"
-                app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
+                app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+                app:titleTextColor="@color/white" />
 
             <LinearLayout
                 android:id="@+id/filterLayout"
