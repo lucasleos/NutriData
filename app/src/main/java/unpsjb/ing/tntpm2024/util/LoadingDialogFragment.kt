@@ -16,35 +16,66 @@ class LoadingDialogFragment : DialogFragment() {
     companion object {
         private const val TAG = "LoadingDialogFragment"
 
-        fun show(fragmentManager: FragmentManager, message: String = "Cargando...") {
-            // Evita agregar el diálogo dos veces si ya está visible
-            val existing = fragmentManager.findFragmentByTag(TAG)
-            if (existing != null) return
+        fun show(
+            fragmentManager: FragmentManager,
+            message: String = "Cargando..."
+        ) {
+            // No se realizan transacciones después de guardar el estado.
+            if (fragmentManager.isStateSaved) return
 
-            val dialog = LoadingDialogFragment()
-            dialog.message = message
-            dialog.show(fragmentManager, TAG)
+            val existing =
+                fragmentManager.findFragmentByTag(TAG) as? LoadingDialogFragment
+
+            if (existing != null && existing.isAdded) {
+                existing.updateMessage(message)
+                return
+            }
+
+            val dialog = LoadingDialogFragment().apply {
+                this.message = message
+            }
+
+            // showNow evita que dos llamadas consecutivas creen dos diálogos.
+            dialog.showNow(fragmentManager, TAG)
         }
 
         fun hide(fragmentManager: FragmentManager) {
-            val existing = fragmentManager.findFragmentByTag(TAG) as? LoadingDialogFragment
+            if (fragmentManager.isStateSaved) return
+
+            val existing =
+                fragmentManager.findFragmentByTag(TAG) as? LoadingDialogFragment
+
             existing?.dismissAllowingStateLoss()
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogLoadingBinding.inflate(layoutInflater)
+
         binding.tvLoadingMessage.text = message
 
-        val dialog = Dialog(requireContext())
-        dialog.setContentView(binding.root)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setCancelable(false) // que no se cierre tocando afuera o con "back"
-        return dialog
+        return Dialog(requireContext()).apply {
+            setContentView(binding.root)
+
+            window?.setBackgroundDrawableResource(
+                android.R.color.transparent
+            )
+
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+        }
+    }
+
+    fun updateMessage(newMessage: String) {
+        message = newMessage
+
+        if (_binding != null) {
+            binding.tvLoadingMessage.text = newMessage
+        }
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 }

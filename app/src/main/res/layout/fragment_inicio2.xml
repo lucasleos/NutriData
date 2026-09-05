@@ -36,21 +36,11 @@
             android:layout_marginEnd="24dp"
             android:elevation="9dp"
             android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@id/headerBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/headerBackground">
-
-            <TextView
-                android:id="@+id/tvSaludo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="1.0"
-                android:fontFamily="@font/radio_canada_big"
-                android:text="¡Hola!"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvTitulo"
@@ -60,8 +50,10 @@
                 android:fontFamily="@font/radio_canada_big"
                 android:text="@{inicioViewModel.mensajeBienvenida}"
                 android:textColor="#FFFFFF"
-                android:textSize="28sp"
+                android:textSize="36sp"
                 android:textStyle="bold"
+                android:textAlignment="center"
+                android:gravity="center"
                 tools:text="María García" />
         </LinearLayout>
 
@@ -97,7 +89,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/macro_green"
+                    app:cardBackgroundColor="@color/primary"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="4dp"
                     app:contentPadding="0dp"
@@ -145,7 +137,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/macro_yellow"
+                    app:cardBackgroundColor="@color/macro_blue"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="4dp"
                     app:contentPadding="0dp">
@@ -191,7 +183,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/macro_red"
+                    app:cardBackgroundColor="@color/macro_green"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="4dp"
                     app:contentPadding="0dp"
@@ -217,6 +209,101 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/radio_canada_big"
                             android:text="Estadísticas"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/white" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Tarjeta 4: Encuestas Firebase -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardFirebaseEncuestas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/macro_yellow"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:contentPadding="0dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/cloudy_ico" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/radio_canada_big"
+                            android:text="Encuestas Firebase"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/white" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Tarjeta 5: Cerrar Sesión -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/macro_red"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:contentPadding="0dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_logout"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/radio_canada_big"
+                            android:text="Cerrar sesión"
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:textStyle="bold" />
