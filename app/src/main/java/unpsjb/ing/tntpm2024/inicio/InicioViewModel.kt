@@ -17,6 +17,6 @@ class InicioViewModel : ViewModel() {
     private fun cargarDatosUsuario() {
         val user = FirebaseAuth.getInstance().currentUser
         val nombre = user?.email?.substringBefore("@") ?: "Usuario"
-        _mensajeBienvenida.value = "Bienvenido: $nombre"
+        _mensajeBienvenida.value = "Bienvenido $nombre!"
     }
 }

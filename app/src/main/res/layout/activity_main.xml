@@ -2,52 +2,34 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="?attr/colorOnPrimary"
+            app:navigationIconTint="?attr/colorOnPrimary" />
+
+        <FrameLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/md_theme_light_background">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tool_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:titleTextColor="?attr/colorOnPrimary"
-                app:navigationIconTint="?attr/colorOnPrimary" />
-
-            <FrameLayout
-                android:id="@+id/content_frame"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/theNavHostFragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/md_theme_light_background">
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/app_navigation" />
+        </FrameLayout>
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/theNavHostFragment"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/app_navigation" />
-            </FrameLayout>
-
-        </LinearLayout>
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/nav_header"
-            app:menu="@menu/drawer_menu"
-            app:itemTextAppearance="@style/NavDrawerTextStyle"
-            app:itemIconTint="@color/nav_item_tint"
-            android:background="?attr/colorSurface" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </LinearLayout>
 
 </layout>
