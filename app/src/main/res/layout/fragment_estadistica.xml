@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".estadistica.EstadisticaFragment">
-
-    <data>
-        <variable
-            name="estadisticaViewModel"
-            type="unpsjb.ing.tntpm2024.estadistica.EstadisticaViewModel" />
-    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -24,18 +19,20 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:title="Estadísticas Nutricionales"
+                android:titleTextColor="@color/white"
+                android:contentDescription="Volver"
                 app:navigationIcon="?attr/homeAsUpIndicator"
-                app:title="Estadísticas Nutricionales"
                 app:navigationIconTint="@color/white"
                 app:titleCentered="true"
-                app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-                app:titleTextColor="@color/white" />
+                app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -44,7 +41,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Time Frame Selector -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,102 +52,113 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:gravity="center_vertical">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Período de tiempo:"
                             android:fontFamily="@font/radio_canada_big"
-                            android:textStyle="bold"
+                            android:text="Período de tiempo:"
                             android:textColor="@color/text_primary"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <Spinner
                             android:id="@+id/spinner_time_frame"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
+
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Quick Stats -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
                         app:cardCornerRadius="20dp"
                         app:cardElevation="2dp"
                         app:strokeWidth="0dp">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="12dp"
-                            android:gravity="center">
+                            android:padding="12dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Items"
                                 android:fontFamily="@font/radio_canada_big"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary"/>
+                                android:text="Total Items"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+
                             <TextView
                                 android:id="@+id/tvTotalItems"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{String.valueOf(estadisticaViewModel.totalItems)}"
                                 android:fontFamily="@font/radio_canada_big"
+                                android:text="0"
+                                android:textColor="@color/primary"
                                 android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary"/>
+                                android:textStyle="bold" />
+
                         </LinearLayout>
+
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="8dp"
+                        android:layout_weight="1"
                         app:cardCornerRadius="20dp"
                         app:cardElevation="2dp"
                         app:strokeWidth="0dp">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="12dp"
-                            android:gravity="center">
+                            android:padding="12dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Kcal Promedio"
                                 android:fontFamily="@font/radio_canada_big"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary"/>
+                                android:text="Kcal Promedio"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+
                             <TextView
                                 android:id="@+id/tvAvgKcal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{String.format("%.0f", estadisticaViewModel.avgKcalDaily)}'
                                 android:fontFamily="@font/radio_canada_big"
+                                android:text="0"
+                                android:textColor="@color/primary"
                                 android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary"/>
+                                android:textStyle="bold" />
+
                         </LinearLayout>
+
                     </com.google.android.material.card.MaterialCardView>
+
                 </LinearLayout>
 
-                <!-- Bar Chart: Nutrient Intake -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,21 +176,22 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Consumo de Nutrientes"
+                            android:layout_marginBottom="8dp"
                             android:fontFamily="@font/radio_canada_big"
-                            android:textStyle="bold"
+                            android:text="Consumo de Nutrientes"
                             android:textColor="@color/text_primary"
                             android:textSize="18sp"
-                            android:layout_marginBottom="8dp"/>
+                            android:textStyle="bold" />
 
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/bar_chart"
                             android:layout_width="match_parent"
                             android:layout_height="300dp" />
+
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Pie Chart: Macronutrients -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -201,21 +209,22 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Distribución de Macronutrientes"
+                            android:layout_marginBottom="8dp"
                             android:fontFamily="@font/radio_canada_big"
-                            android:textStyle="bold"
+                            android:text="Distribución de Macronutrientes"
                             android:textColor="@color/text_primary"
                             android:textSize="18sp"
-                            android:layout_marginBottom="8dp"/>
+                            android:textStyle="bold" />
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/pie_chart"
                             android:layout_width="match_parent"
                             android:layout_height="300dp" />
+
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Most Consumed Food -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -227,46 +236,157 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:gravity="center_vertical">
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="Alimento icono"
-                            android:src="@drawable/ic_food_logo"
-                            app:tint="@color/primary"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="16dp">
+                            android:layout_marginBottom="12dp"
+                            android:fontFamily="@font/radio_canada_big"
+                            android:text="Top 3 Alimentos Más Consumidos"
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Alimento más frecuente"
-                                android:fontFamily="@font/radio_canada_big"
-                                android:textSize="14sp"
-                                android:textColor="@color/text_secondary"/>
+                        <!-- Item 1 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
 
-                            <TextView
-                                android:id="@+id/tvTopFood"
-                                android:layout_width="wrap_content"
+                            <ImageView
+                                android:id="@+id/ivTop1Food"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="1º Alimento"
+                                android:src="@drawable/ic_food_logo" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@{estadisticaViewModel.topFood}"
-                                android:fontFamily="@font/radio_canada_big"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary"/>
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/radio_canada_big"
+                                    android:text="1º Lugar"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTop1Food"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/radio_canada_big"
+                                    android:text="N/A"
+                                    android:textColor="@color/primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
                         </LinearLayout>
+
+                        <!-- Item 2 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+
+                            <ImageView
+                                android:id="@+id/ivTop2Food"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="2º Alimento"
+                                android:src="@drawable/ic_food_logo" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/radio_canada_big"
+                                    android:text="2º Lugar"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTop2Food"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/radio_canada_big"
+                                    android:text="N/A"
+                                    android:textColor="@color/primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Item 3 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+
+                            <ImageView
+                                android:id="@+id/ivTop3Food"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="3º Alimento"
+                                android:src="@drawable/ic_food_logo" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/radio_canada_big"
+                                    android:text="3º Lugar"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTop3Food"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/radio_canada_big"
+                                    android:text="N/A"
+                                    android:textColor="@color/primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+
         </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
