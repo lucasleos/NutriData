@@ -161,6 +161,20 @@ class EstadisticaFragment : Fragment() {
         viewModel.macroData.observe(viewLifecycleOwner) { data ->
             updatePieChart(data)
         }
+
+        viewModel.timeFrame.observe(viewLifecycleOwner) { _ ->
+            runTransitionEffect()
+        }
+    }
+
+    private fun runTransitionEffect() {
+        binding.barChart.alpha = 0.2f
+        binding.barChart.animate().alpha(1.0f).setDuration(400).start()
+        barChart.animateY(600)
+
+        binding.pieChart.alpha = 0.2f
+        binding.pieChart.animate().alpha(1.0f).setDuration(400).start()
+        pieChart.animateY(600)
     }
 
     private fun updateBarChart(data: Map<String, Double>) {
@@ -179,9 +193,10 @@ class EstadisticaFragment : Fragment() {
             )
         }
 
+        val currentTimeFrame = viewModel.timeFrame.value ?: "Diaria"
         val dataSet = BarDataSet(
             entries,
-            "Consumo promedio"
+            "Consumo promedio ($currentTimeFrame)"
         ).apply {
             colors = ColorTemplate.MATERIAL_COLORS.toList()
             valueTextColor = Color.BLACK
