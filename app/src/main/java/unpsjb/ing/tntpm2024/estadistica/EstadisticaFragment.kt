@@ -25,6 +25,14 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.R
 import unpsjb.ing.tntpm2024.databinding.FragmentEstadisticaBinding
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolygonOptions
 
 class EstadisticaFragment : Fragment() {
 
@@ -35,6 +43,14 @@ class EstadisticaFragment : Fragment() {
 
     private lateinit var barChart: BarChart
     private lateinit var pieChart: PieChart
+
+    private var mMap: GoogleMap? = null
+    private var pendingZoneCounts: Map<String, Int>? = null
+
+    private val mapCallback = OnMapReadyCallback { googleMap ->
+        mMap = googleMap
+        setupMap()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +74,9 @@ class EstadisticaFragment : Fragment() {
 
         barChart = binding.barChart
         pieChart = binding.pieChart
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_estadistica) as SupportMapFragment?
+        mapFragment?.getMapAsync(mapCallback)
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -164,6 +183,89 @@ class EstadisticaFragment : Fragment() {
 
         viewModel.timeFrame.observe(viewLifecycleOwner) { _ ->
             runTransitionEffect()
+        }
+
+        viewModel.zoneCounts.observe(viewLifecycleOwner) { counts ->
+            pendingZoneCounts = counts
+            if (mMap != null) {
+                updateMapMarkers(counts)
+            }
+        }
+    }
+
+    private fun setupMap() {
+        val madryn = LatLng(-42.7692, -65.03851)
+        mMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(madryn, 12f))
+
+        loadBarriosGeoJson().forEach { (name, points) ->
+            val polygonOptions = PolygonOptions()
+                .addAll(points)
+                .strokeWidth(3f)
+                .strokeColor(Color.DKGRAY)
+                .fillColor(Color.argb(50, 46, 125, 50))
+            mMap?.addPolygon(polygonOptions)
+        }
+
+        pendingZoneCounts?.let { counts ->
+            updateMapMarkers(counts)
+        }
+    }
+
+    private fun loadBarriosGeoJson(): List<Pair<String, List<LatLng>>> {
+        val barrios = mutableListOf<Pair<String, List<LatLng>>>()
+        try {
+            val json = requireContext().assets.open("barrios_madryn.geojson")
+                .bufferedReader()
+                .use { it.readText() }
+
+            val root = org.json.JSONObject(json)
+            val features = root.getJSONArray("features")
+
+            for (i in 0 until features.length()) {
+                val feature = features.getJSONObject(i)
+                val geometry = feature.getJSONObject("geometry")
+
+                if (geometry.getString("type") != "Polygon") continue
+
+                val properties = feature.getJSONObject("properties")
+                if (!properties.has("name")) continue
+                val name = properties.getString("name")
+
+                val coordsArray = geometry.getJSONArray("coordinates").getJSONArray(0)
+                val points = mutableListOf<LatLng>()
+                for (j in 0 until coordsArray.length()) {
+                    val coord = coordsArray.getJSONArray(j)
+                    val lng = coord.getDouble(0)
+                    val lat = coord.getDouble(1)
+                    points.add(LatLng(lat, lng))
+                }
+                barrios.add(name to points)
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("EstadisticaFragment", "Error cargando barrios_madryn.geojson", e)
+        }
+        return barrios
+    }
+
+    private fun updateMapMarkers(counts: Map<String, Int>) {
+        val map = mMap ?: return
+        loadBarriosGeoJson().forEach { (name, points) ->
+            val count = counts[name] ?: 0
+            if (count > 0) {
+                val bounds = LatLngBounds.Builder()
+                for (point in points) {
+                    bounds.include(point)
+                }
+                val center = bounds.build().center
+                val marker = map.addMarker(
+                    MarkerOptions()
+                        .position(center)
+                        .title("$count")
+                        .snippet("Barrio: $name ($count encuestas)")
+                )
+                marker?.showInfoWindow()
+            }
         }
     }
 

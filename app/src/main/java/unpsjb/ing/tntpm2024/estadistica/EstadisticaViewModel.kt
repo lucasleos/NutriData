@@ -30,6 +30,21 @@ class EstadisticaViewModel(
             database.alimentoEncuestaDao()
         )
 
+    private val encuestaRepository =
+        unpsjb.ing.tntpm2024.basededatos.Repository(
+            database.encuestaDAO
+        )
+
+    val zoneCounts: LiveData<Map<String, Int>> =
+        encuestaRepository.allEncuestas.map { encuestas ->
+            encuestas
+                .asSequence()
+                .map { it.zona.trim() }
+                .filter { it.isNotEmpty() }
+                .groupingBy { it }
+                .eachCount()
+        }
+
     val alimentoEncuestaDetalles:
             LiveData<List<AlimentoEncuestaDetalles>> =
         repository.alimentoEncuestaDetallesLiveData
