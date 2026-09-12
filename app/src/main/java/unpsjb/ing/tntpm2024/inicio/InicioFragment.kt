@@ -52,6 +52,10 @@ class InicioFragment : Fragment() {
             startActivity(Intent(requireContext(), ListaEncuestasFireBaseActivity::class.java))
         }
 
+        binding.cardTurnos.setOnClickListener {
+            findNavController().navigate(R.id.action_inicioFragment_to_listaTurnosFragment)
+        }
+
         binding.cardLogout.setOnClickListener {
             logout()
         }

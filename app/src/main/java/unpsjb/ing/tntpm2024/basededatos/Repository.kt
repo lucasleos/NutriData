@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentosEnEncuestas
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Turno
 import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
 class Repository(private val encuestaDAO: EncuestaDAO) {
@@ -177,6 +178,56 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
             .removeValue()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
+    }
+
+    fun obtenerTurnosSolicitados(): LiveData<List<Turno>> {
+        val liveData = MutableLiveData<List<Turno>>()
+        val turnosRef = FirebaseDatabase.getInstance().getReference("turnos")
+
+        // Filtramos solo los turnos que están pendientes de asignación
+        turnosRef.orderByChild("estado").equalTo("SOLICITADO")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val listaTurnos = mutableListOf<Turno>()
+                    for (turnoSnapshot in snapshot.children) {
+                        val turno = turnoSnapshot.getValue(Turno::class.java)
+                        if (turno != null) {
+                            listaTurnos.add(turno)
+                        }
+                    }
+                    // Los mostramos ordenados por fecha de solicitud (más antiguos primero o viceversa)
+                    liveData.value = listaTurnos
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Repository", "Error al obtener turnos: ${error.message}")
+                }
+            })
+
+        return liveData
+    }
+
+    fun asignarTurno(
+        turnoId: String,
+        asignacion: unpsjb.ing.tntpm2024.basededatos.entidades.AsignacionTurno,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val turnoRef = FirebaseDatabase.getInstance().getReference("turnos").child(turnoId)
+
+        val updates = mapOf(
+            "estado" to "ASIGNADO",
+            "asignacion" to mapOf(
+                "fecha" to asignacion.fecha,
+                "hora" to asignacion.hora,
+                "lugar" to asignacion.lugar,
+                "indicaciones" to asignacion.indicaciones
+            )
+        )
+
+        turnoRef.updateChildren(updates)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { error -> onFailure(error) }
     }
 
 }

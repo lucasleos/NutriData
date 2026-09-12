@@ -13,6 +13,7 @@ import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.Repository
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentosEnEncuestas
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Turno
 import unpsjb.ing.tntpm2024.detalle.AlimentoEncuestaDetalles
 
 class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
@@ -93,6 +94,18 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
         return repository.getEncuestasByUserId(userId)
     }
 
+    fun obtenerTurnosSolicitados(): LiveData<List<Turno>> {
+        return repository.obtenerTurnosSolicitados()
+    }
+
+    fun asignarTurno(
+        turnoId: String,
+        asignacion: unpsjb.ing.tntpm2024.basededatos.entidades.AsignacionTurno,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        repository.asignarTurno(turnoId, asignacion, onSuccess, onFailure)
+    }
 
     private var _fecha = MutableLiveData<Long>()
     val fecha: LiveData<Long>
