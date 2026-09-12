@@ -115,6 +115,9 @@
         <action
             android:id="@+id/action_inicioFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_inicioFragment_to_listaTurnosFragment"
+            app:destination="@id/listaTurnosFragment" />
     </fragment>
     <fragment
         android:id="@+id/estadisticaFragment"
@@ -145,4 +148,8 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/listaTurnosFragment"
+        android:name="unpsjb.ing.tntpm2024.turnos.ListaTurnosFragment"
+        android:label="ListaTurnosFragment" />
 </navigation>

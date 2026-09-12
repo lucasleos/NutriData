@@ -22,7 +22,9 @@ class MainActivity : AppCompatActivity() {
         R.id.nuevaEncuestaFragment,
         R.id.mapsFragment,
         R.id.estadisticaFragment,
-        R.id.encuestalist
+        R.id.encuestalist,
+        R.id.listaTurnosFragment,
+        R.id.inicioFragment,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
