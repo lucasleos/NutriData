@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "455e09a5ebd18f61dfda5acd6e95528b",
+    "identityHash": "82201d5ea772afdcb0da0733ebd27898",
     "entities": [
       {
         "tableName": "tabla_encuesta",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`encuestaId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fecha` INTEGER NOT NULL, `encuestaCompletada` INTEGER NOT NULL, `zona` TEXT NOT NULL, `userId` TEXT, `userEmail` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`encuestaId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fecha` INTEGER NOT NULL, `encuestaCompletada` INTEGER NOT NULL, `zona` TEXT NOT NULL, `userId` TEXT, `userEmail` TEXT, `turnoId` TEXT)",
         "fields": [
           {
             "fieldPath": "encuestaId",
@@ -40,6 +40,11 @@
           {
             "fieldPath": "userEmail",
             "columnName": "userEmail",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "turnoId",
+            "columnName": "turnoId",
             "affinity": "TEXT"
           }
         ],
@@ -179,7 +184,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '455e09a5ebd18f61dfda5acd6e95528b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82201d5ea772afdcb0da0733ebd27898')"
     ]
   }
 }

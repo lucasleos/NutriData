@@ -1,7 +1,6 @@
 package unpsjb.ing.tntpm2024.encuesta
 
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +19,7 @@ import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Turno
 import unpsjb.ing.tntpm2024.databinding.FragmentNuevaEncuestaBinding
 import java.util.Date
 
@@ -34,6 +34,8 @@ class NuevaEncuestaFragment : Fragment() {
     private lateinit var aeViewModel: AlimentoEncuestaViewModel
 
     private var listaAlimentos = emptyList<Alimento>()
+    private var listaTurnosAsignados = listOf<Turno>()
+    private var turnoIdSeleccionado: String? = null
     private var encuestaId = 0
     private var isSaved = false
 
@@ -46,6 +48,7 @@ class NuevaEncuestaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         inicializarViewModels()
         configurarUI()
+        configurarObservadorTurnos()
         gestionarCreacionOEdicion()
         observarAlimentos()
         binding.toolbar.setNavigationOnClickListener {
@@ -84,11 +87,37 @@ class NuevaEncuestaFragment : Fragment() {
         binding.autoCompleteTextViewFrecuencia.setAdapter(adapterFrecuencia)
     }
 
+    private fun configurarObservadorTurnos() {
+        viewModel.obtenerTurnosAsignados().observe(viewLifecycleOwner) { turnos ->
+            listaTurnosAsignados = turnos
+            val nombresOpciones = turnos.map { turno ->
+                val voluntarioCorto = turno.voluntarioId.take(6)
+                val fecha = turno.asignacion?.fecha ?: "Sin fecha"
+                val hora = turno.asignacion?.hora ?: ""
+                "Voluntario: $voluntarioCorto ($fecha $hora)"
+            }
+
+            val adapterTurnos = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, nombresOpciones)
+            binding.autoCompleteTextViewTurno.setAdapter(adapterTurnos)
+
+            binding.autoCompleteTextViewTurno.setOnItemClickListener { _, _, position, _ ->
+                turnoIdSeleccionado = listaTurnosAsignados[position].turnoId
+                Toast.makeText(requireContext(), "Turno vinculado a la encuesta", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun gestionarCreacionOEdicion() {
         encuestaId = args.encuestaId
         if (encuestaId == 0) {
             val user = FirebaseAuth.getInstance().currentUser
-            val nuevaEncuesta = Encuesta(fecha = Date().time, encuestaCompletada = false, zona = args.zona, userId = user?.uid ?: "admin")
+            val nuevaEncuesta = Encuesta(
+                fecha = Date().time,
+                encuestaCompletada = false,
+                zona = args.zona,
+                userId = user?.uid ?: "admin",
+                turnoId = turnoIdSeleccionado
+            )
             viewModel.cargarEncuesta(nuevaEncuesta) { idGenerado -> encuestaId = idGenerado.toInt() }
         }
     }
@@ -96,16 +125,13 @@ class NuevaEncuestaFragment : Fragment() {
     private fun observarAlimentos() {
         alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
             listaAlimentos = alimentos
-            Log.d("NuevaEncuesta", "Alimentos cargados: ${alimentos.size}")
             binding.btnGuardar.isEnabled = alimentos.isNotEmpty()
-            
             if (alimentos.isEmpty()) {
-                Toast.makeText(requireContext(), "No hay alimentos cargados. Por favor reinicia la app.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "No hay alimentos cargados.", Toast.LENGTH_LONG).show()
             }
             actualizarNombreAlimentoActual()
         }
 
-        // Observamos el índice actual en el ViewModel por separado
         aeViewModel.indiceAlimentoActual.observe(viewLifecycleOwner) {
             actualizarNombreAlimentoActual()
         }
@@ -127,22 +153,12 @@ class NuevaEncuestaFragment : Fragment() {
         }
 
         val resId = resources.getIdentifier(nombreImagen, "drawable", requireContext().packageName)
-        if (resId != 0) {
-            binding.ivAlimento.setImageResource(resId)
-        } else {
-            binding.ivAlimento.setImageResource(R.drawable.ic_food_logo)
-        }
+        binding.ivAlimento.setImageResource(if (resId != 0) resId else R.drawable.ic_food_logo)
     }
 
     private fun procesarGuardadoParcial() {
-        if (listaAlimentos.isEmpty()) {
-            Toast.makeText(requireContext(), "Cargando alimentos...", Toast.LENGTH_SHORT).show()
-            return
-        }
-
+        if (listaAlimentos.isEmpty()) return
         val indiceActual = aeViewModel.indiceAlimentoActual.value ?: 0
-        Log.d("NuevaEncuesta", "Procesando alimento $indiceActual de ${listaAlimentos.size}")
-
         if (!validarInputs()) return
 
         val alimentoEncuesta = AlimentoEncuesta(
@@ -153,12 +169,10 @@ class NuevaEncuestaFragment : Fragment() {
             veces = binding.inputVeces.text.toString()
         )
         aeViewModel.insert(alimentoEncuesta)
-        Toast.makeText(requireContext(), "Consumo registrado: ${listaAlimentos[indiceActual].nombre}", Toast.LENGTH_SHORT).show()
 
         if (indiceActual == listaAlimentos.size - 1) {
             finalizarEncuesta()
         } else {
-            // Limpiar inputs y avanzar de estado
             limpiarCampos()
             aeViewModel.avanzarAlSiguienteAlimento()
         }
@@ -168,24 +182,27 @@ class NuevaEncuestaFragment : Fragment() {
         binding.autoCompleteTextViewPorcion.setText("", false)
         binding.autoCompleteTextViewFrecuencia.setText("", false)
         binding.inputVeces.text = null
-        
+
         binding.tfPorcion.error = null
         binding.tfFrecuencia.error = null
         binding.tfVeces.error = null
-        
-        binding.tfPorcion.isErrorEnabled = false
-        binding.tfFrecuencia.isErrorEnabled = false
-        binding.tfVeces.isErrorEnabled = false
-        
-        // Reactivamos por si acaso
-        binding.tfPorcion.isErrorEnabled = true
-        binding.tfFrecuencia.isErrorEnabled = true
-        binding.tfVeces.isErrorEnabled = true
     }
 
     private fun finalizarEncuesta() {
         isSaved = true
-        viewModel.editEncuesta(Encuesta(encuestaId = encuestaId, fecha = Date().time, encuestaCompletada = true, zona = args.zona))
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val encuestaFinalizada = Encuesta(
+            encuestaId = encuestaId,
+            fecha = Date().time,
+            encuestaCompletada = true,
+            zona = args.zona,
+            userId = user?.uid,
+            userEmail = user?.email,
+            turnoId = turnoIdSeleccionado
+        )
+
+        viewModel.editEncuesta(encuestaFinalizada)
         Toast.makeText(requireContext(), "Encuesta Finalizada", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_nuevaEncuestaFragment_to_encuestalist)
     }

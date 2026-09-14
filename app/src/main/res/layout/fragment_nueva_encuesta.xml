@@ -56,6 +56,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <!-- NUEVO: Selector de Turno Asignado -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tfTurno"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Asociar Turno (Opcional)"
+            app:boxBackgroundColor="@color/surface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvZona">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewTurno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/radio_canada_big"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tfPorcion"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -69,7 +93,7 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvZona">
+            app:layout_constraintTop_toBottomOf="@id/tfTurno">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextViewPorcion"
