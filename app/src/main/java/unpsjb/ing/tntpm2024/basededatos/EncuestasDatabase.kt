@@ -40,7 +40,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                     EncuestasDatabase::class.java,
                     "encuestas_db"
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(false)
                     .addCallback(EncuestasDatabaseCallback(CoroutineScope(Dispatchers.IO)))
                     .build().also {
                         INSTANCE = it

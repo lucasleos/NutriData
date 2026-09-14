@@ -19,6 +19,7 @@ import unpsjb.ing.tntpm2024.basededatos.EncuestasDatabase
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
+import unpsjb.ing.tntpm2024.basededatos.entidades.Turno
 import unpsjb.ing.tntpm2024.databinding.FragmentEditarEncuestaBinding
 import java.util.Date
 
@@ -33,6 +34,9 @@ class EditarEncuestaFragment : Fragment() {
     private lateinit var aeViewModel: AlimentoEncuestaViewModel
 
     private var listaAlimentos = emptyList<Alimento>()
+    private var listaTurnosAsignados = listOf<Turno>()
+    private var turnoIdSeleccionado: String? = null
+    private var encuestaActual: Encuesta? = null
     private var encuestaId = 0
     private var isSaved = false
     private var isFirstload = true
@@ -52,13 +56,12 @@ class EditarEncuestaFragment : Fragment() {
 
         inicializarViewModels()
         configurarUI()
+        configurarObservadorTurnos()
         setupObservers()
     }
 
     private fun inicializarViewModels() {
         val database = EncuestasDatabase.getInstance(requireContext())
-
-        // Utilizamos la única fábrica unificada
         val factory = AppViewModelFactory(database)
 
         viewModel = ViewModelProvider(this, factory)[EncuestaViewModel::class.java]
@@ -86,11 +89,35 @@ class EditarEncuestaFragment : Fragment() {
         }
     }
 
+    private fun configurarObservadorTurnos() {
+        viewModel.obtenerTurnosAsignados().observe(viewLifecycleOwner) { turnos ->
+            listaTurnosAsignados = turnos
+            val nombresOpciones = turnos.map { turno ->
+                val voluntarioCorto = turno.voluntarioId.take(6)
+                val fecha = turno.asignacion?.fecha ?: "Sin fecha"
+                val hora = turno.asignacion?.hora ?: ""
+                "Voluntario: $voluntarioCorto ($fecha $hora)"
+            }
+
+            val adapterTurnos = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, nombresOpciones)
+            binding.autoCompleteTextViewTurno.setAdapter(adapterTurnos)
+
+            binding.autoCompleteTextViewTurno.setOnItemClickListener { _, _, position, _ ->
+                turnoIdSeleccionado = listaTurnosAsignados[position].turnoId
+                // Actualizamos inmediatamente el objeto encuesta en memoria y en base de datos local
+                encuestaActual?.let {
+                    it.turnoId = turnoIdSeleccionado
+                    viewModel.editEncuesta(it)
+                }
+                Toast.makeText(requireContext(), "Turno vinculado a la encuesta", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setupObservers() {
         alimentoViewModel.allAlimentos.observe(viewLifecycleOwner) { alimentos ->
             listaAlimentos = alimentos
 
-            // Observamos el estado del progreso desde el ViewModel
             aeViewModel.indiceAlimentoActual.observe(viewLifecycleOwner) { indice ->
                 if (listaAlimentos.isNotEmpty() && indice < listaAlimentos.size) {
                     val alimento = listaAlimentos[indice]
@@ -102,11 +129,17 @@ class EditarEncuestaFragment : Fragment() {
 
         viewModel.getEncuestaById(encuestaId).observe(viewLifecycleOwner) { response ->
             if (response != null) {
+                encuestaActual = response
+                // Recuperar el turno previo si existía
+                if (turnoIdSeleccionado == null && !response.turnoId.isNullOrEmpty()) {
+                    turnoIdSeleccionado = response.turnoId
+                    binding.autoCompleteTextViewTurno.setText("Turno ID: ${response.turnoId?.take(8)}...", false)
+                }
+
                 viewModel.getAlimentosByEncuestaId(encuestaId).observe(viewLifecycleOwner) { alimentosRegistrados ->
                     if (isFirstload) {
                         val ultimoIndiceRegistrado = if (alimentosRegistrados.isNotEmpty()) alimentosRegistrados.size - 1 else 0
 
-                        // Seteamos el índice recuperado en el ViewModel central
                         aeViewModel.setIndiceInicial(ultimoIndiceRegistrado)
 
                         if (alimentosRegistrados.isNotEmpty()) {
@@ -144,8 +177,8 @@ class EditarEncuestaFragment : Fragment() {
         if (indiceActual == listaAlimentos.size - 1) {
             finalizarEncuesta()
         } else {
-            binding.autoCompleteTextViewPorcion.text = null
-            binding.autoCompleteTextViewFrecuencia.text = null
+            binding.autoCompleteTextViewPorcion.setText("", false)
+            binding.autoCompleteTextViewFrecuencia.setText("", false)
             binding.inputVeces.text = null
             aeViewModel.avanzarAlSiguienteAlimento()
         }
@@ -153,7 +186,16 @@ class EditarEncuestaFragment : Fragment() {
 
     private fun finalizarEncuesta() {
         isSaved = true
-        viewModel.editEncuesta(Encuesta(encuestaId, Date().time, true, args.zona))
+        val encuestaFinal = Encuesta(
+            encuestaId = encuestaId,
+            fecha = Date().time,
+            encuestaCompletada = true,
+            zona = args.zona,
+            userId = encuestaActual?.userId,
+            userEmail = encuestaActual?.userEmail,
+            turnoId = turnoIdSeleccionado ?: encuestaActual?.turnoId
+        )
+        viewModel.editEncuesta(encuestaFinal)
         Toast.makeText(requireContext(), "Encuesta Finalizada", Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.popBackStack()
     }
@@ -204,11 +246,7 @@ class EditarEncuestaFragment : Fragment() {
         }
 
         val resId = resources.getIdentifier(nombreImagen, "drawable", requireContext().packageName)
-        if (resId != 0) {
-            binding.ivAlimento.setImageResource(resId)
-        } else {
-            binding.ivAlimento.setImageResource(R.drawable.ic_food_logo)
-        }
+        binding.ivAlimento.setImageResource(if (resId != 0) resId else R.drawable.ic_food_logo)
     }
 
     private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)

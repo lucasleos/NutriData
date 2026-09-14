@@ -107,6 +107,10 @@ class EncuestaViewModel(database: EncuestasDatabase) : ViewModel() {
         repository.asignarTurno(turnoId, asignacion, onSuccess, onFailure)
     }
 
+    fun obtenerTurnosAsignados(): LiveData<List<Turno>> {
+        return repository.obtenerTurnosAsignados()
+    }
+
     private var _fecha = MutableLiveData<Long>()
     val fecha: LiveData<Long>
         get() = _fecha

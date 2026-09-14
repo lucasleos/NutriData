@@ -125,23 +125,25 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         onFailure: (DatabaseError) -> Unit
     ) {
         val currentUser = FirebaseAuth.getInstance().currentUser
-
         val userId = currentUser?.uid ?: return onFailure(DatabaseError.fromException(Exception("Usuario no autenticado")))
         val userEmail = currentUser?.email ?: return onFailure(DatabaseError.fromException(Exception("Usuario no autenticado")))
 
-        // Crear un mapa para los detalles de la encuesta
+        val encuestaIdFirebase = "${encuesta.encuestaId}_${encuesta.fecha}"
+
+        // 1. Datos de la encuesta
         val encuestaMap = mutableMapOf<String, Any>(
             "encuesta" to mapOf(
                 "encuestaId" to encuesta.encuestaId,
                 "fecha" to encuesta.fecha,
                 "zona" to encuesta.zona,
                 "encuestaCompletada" to encuesta.encuestaCompletada,
-                "userId" to userId,  // Agregar el UID del usuario
-                "userEmail" to userEmail
+                "userId" to userId,
+                "userEmail" to userEmail,
+                "turnoId" to (encuesta.turnoId ?: "")
             )
         )
 
-        // Crear una lista de mapas para los detalles de los alimentos
+        // 2. Alimentos detallados
         val alimentosList = alimentoEncuestaDetalles.map { alimento ->
             mapOf(
                 "alimentoId" to alimento.alimentoId,
@@ -155,17 +157,24 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                 "grasas" to alimento.grasas.toDouble(),
                 "alcohol" to alimento.alcohol.toDouble(),
                 "colesterol" to alimento.colesterol.toDouble(),
+                "fibra" to alimento.fibra.toDouble(),
                 "porcion" to alimento.porcion,
                 "veces" to alimento.veces
             )
         }
-
-        // Añadir la lista de alimentos al mapa de la encuesta
         encuestaMap["alimentos"] = alimentosList
 
-        // Subir los datos a Firebase
-        dbRef.child("encuestas").child("${encuesta.encuestaId}_${encuesta.fecha}")
-            .setValue(encuestaMap)
+        // 3. Multi-path update en Firebase
+        val childUpdates = mutableMapOf<String, Any>()
+        childUpdates["/encuestas/$encuestaIdFirebase"] = encuestaMap
+
+        // Si la encuesta tiene un turno vinculado, lo marcamos como COMPLETADO
+        encuesta.turnoId?.takeIf { it.isNotEmpty() }?.let { tId ->
+            childUpdates["/turnos/$tId/estado"] = "COMPLETADO"
+            childUpdates["/turnos/$tId/encuestaAsociadaId"] = encuestaIdFirebase
+        }
+
+        dbRef.updateChildren(childUpdates)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
     }
@@ -228,6 +237,31 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         turnoRef.updateChildren(updates)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { error -> onFailure(error) }
+    }
+
+    fun obtenerTurnosAsignados(): LiveData<List<Turno>> {
+        val liveData = MutableLiveData<List<Turno>>()
+        val turnosRef = FirebaseDatabase.getInstance().getReference("turnos")
+
+        turnosRef.orderByChild("estado").equalTo("ASIGNADO")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val lista = mutableListOf<Turno>()
+                    for (child in snapshot.children) {
+                        val turno = child.getValue(Turno::class.java)
+                        if (turno != null) {
+                            lista.add(turno)
+                        }
+                    }
+                    liveData.value = lista
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Repository", "Error al leer turnos asignados: ${error.message}")
+                }
+            })
+
+        return liveData
     }
 
 }
