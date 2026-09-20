@@ -50,9 +50,25 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/license.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/notice.txt",
+                "META-INF/ASL2.0"
+            )
+        }
+    }
 }
 
 dependencies {
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.google.firebase:firebase-auth:21.0.6")
