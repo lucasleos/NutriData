@@ -17,7 +17,9 @@ import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModel
 import unpsjb.ing.tntpm2024.encuesta.EncuestaViewModelFactory
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 import unpsjb.ing.tntpm2024.databinding.DialogAsignarTurnoBinding
@@ -146,8 +148,15 @@ class ListaTurnosFragment : Fragment() {
                     onSuccess = {
                         Toast.makeText(requireContext(), "Turno asignado exitosamente", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
-                        // Al cambiar el estado a "ASIGNADO", Firebase quitará automáticamente
-                        // este ítem del RecyclerView gracias al listener de "SOLICITADO"
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            FcmSender.enviarNotificacion(
+                                context = requireContext().applicationContext,
+                                targetToken = turno.fcmToken,
+                                titulo = "¡Tu turno fue asignado!",
+                                cuerpo = "Te esperamos el ${asignacion.fecha} a las ${asignacion.hora} en ${asignacion.lugar}."
+                            )
+                        }
+
                     },
                     onFailure = { error ->
                         Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
