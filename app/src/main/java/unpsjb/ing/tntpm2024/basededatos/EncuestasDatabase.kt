@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,7 @@ import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentoEncuesta
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [
         Encuesta::class,
         Alimento::class,
@@ -33,6 +34,12 @@ abstract class EncuestasDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: EncuestasDatabase? = null
 
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE tabla_encuesta ADD COLUMN subida INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
         fun getInstance(context: Context): EncuestasDatabase {
             synchronized(this) {
                 return INSTANCE ?: Room.databaseBuilder(
@@ -40,6 +47,7 @@ abstract class EncuestasDatabase : RoomDatabase() {
                     EncuestasDatabase::class.java,
                     "encuestas_db"
                 )
+                    .addMigrations(MIGRATION_4_5)
                     .fallbackToDestructiveMigration(false)
                     .addCallback(EncuestasDatabaseCallback(CoroutineScope(Dispatchers.IO)))
                     .build().also {

@@ -45,6 +45,8 @@ class EncuestaListAdapter internal constructor(
         val encuestaCompletadaTextView: TextView = itemView.findViewById(R.id.tvEncuestaCompletada)
         val zonaTextView: TextView = itemView.findViewById(R.id.tvzona)
         val imageCheck: ImageView = itemView.findViewById(R.id.ivCheck)
+        val subidaTextView: TextView = itemView.findViewById(R.id.tvSubida)
+        val cloudStateImageView: ImageView = itemView.findViewById(R.id.ivCloudState)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EncuestaViewHolder {
@@ -61,14 +63,27 @@ class EncuestaListAdapter internal constructor(
         holder.fechaTextView.text = fechaLocalDateTime.format(formatter)
         holder.encuestaCompletadaTextView.text = if (encuesta.encuestaCompletada) "Completa" else "Incompleta"
         holder.zonaTextView.text = encuesta.zona
+        holder.subidaTextView.text = if (encuesta.subida) "Subida a Firebase" else "No subida a Firebase"
+
+        if (encuesta.subida) {
+            holder.cloudStateImageView.setImageResource(R.drawable.subida)
+        } else {
+            holder.cloudStateImageView.setImageResource(R.drawable.nosubida)
+        }
 
         if (encuesta.encuestaCompletada) {
             holder.imageView.setImageResource(R.drawable.view_ico)
-            holder.imageUpload.setImageResource(R.drawable.cloud_upload_icon)
             holder.imageCheck.setImageResource(R.drawable.check)
+            if (encuesta.subida) {
+                holder.imageUpload.visibility = View.GONE
+            } else {
+                holder.imageUpload.setImageResource(R.drawable.cloud_upload_icon)
+                holder.imageUpload.visibility = View.VISIBLE
+            }
         } else {
             holder.imageView.setImageResource(R.drawable.edit_ico)
             holder.imageCheck.setImageResource(R.drawable.wrong)
+            holder.imageUpload.visibility = View.GONE
         }
 
         holder.imageView.setOnClickListener {

@@ -243,7 +243,8 @@ class NuevaEncuestaFragment : Fragment() {
             zona = args.zona,
             userId = user?.uid,
             userEmail = user?.email,
-            turnoId = turnoIdSeleccionado
+            turnoId = turnoIdSeleccionado,
+            subida = encuestaActual?.subida ?: false
         )
 
         viewModel.editEncuesta(encuestaFinalizada)

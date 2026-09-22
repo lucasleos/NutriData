@@ -20,7 +20,9 @@ data class Encuesta(
     @ColumnInfo(name = "userEmail")
     var userEmail: String? = null,
     @ColumnInfo(name = "turnoId")
-    var turnoId: String? = null
+    var turnoId: String? = null,
+    @ColumnInfo(name = "subida")
+    var subida: Boolean = false,
 ) {
-    constructor() : this(0, 0, true, "", null, null, null)
+    constructor() : this(0, 0, true, "", null, null, null, false)
 }

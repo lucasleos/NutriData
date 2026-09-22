@@ -41,10 +41,10 @@ interface EncuestaDAO {
     suspend fun insert(encuesta: Encuesta): Long
 
     @Delete
-    fun deleteEncuesta(encuesta: Encuesta)
+    suspend fun deleteEncuesta(encuesta: Encuesta)
 
     @Update
-    fun editEncuesta(encuesta: Encuesta)
+    suspend fun editEncuesta(encuesta: Encuesta)
 
 //    @Query("SELECT * FROM tabla_alimento_encuesta WHERE encuestaId = :encuestaId")
 //    fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuesta>>
@@ -64,6 +64,4 @@ interface EncuestaDAO {
     """
     )
     fun getAlimentosByEncuestaId(encuestaId: Int): LiveData<List<AlimentoEncuestaDetalles>>
-
-
 }

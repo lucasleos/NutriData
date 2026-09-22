@@ -213,7 +213,8 @@ class EditarEncuestaFragment : Fragment() {
             zona = args.zona,
             userId = encuestaActual?.userId,
             userEmail = encuestaActual?.userEmail,
-            turnoId = turnoIdSeleccionado ?: encuestaActual?.turnoId
+            turnoId = turnoIdSeleccionado ?: encuestaActual?.turnoId,
+            subida = encuestaActual?.subida ?: false
         )
         viewModel.editEncuesta(encuestaFinal)
         Toast.makeText(requireContext(), "Encuesta Finalizada", Toast.LENGTH_SHORT).show()
