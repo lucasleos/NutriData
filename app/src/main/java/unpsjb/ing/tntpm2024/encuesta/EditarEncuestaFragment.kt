@@ -111,6 +111,22 @@ class EditarEncuestaFragment : Fragment() {
                 }
                 Toast.makeText(requireContext(), "Turno vinculado a la encuesta", Toast.LENGTH_SHORT).show()
             }
+
+            actualizarTextoTurno()
+        }
+    }
+
+    private fun actualizarTextoTurno() {
+        val currentTurnoId = turnoIdSeleccionado ?: encuestaActual?.turnoId ?: return
+        val turnoEncontrado = listaTurnosAsignados.find { it.turnoId == currentTurnoId }
+        if (turnoEncontrado != null) {
+            val voluntarioCorto = turnoEncontrado.voluntarioId.take(6)
+            val fecha = turnoEncontrado.asignacion?.fecha ?: "Sin fecha"
+            val hora = turnoEncontrado.asignacion?.hora ?: ""
+            val textoTurno = "Voluntario: $voluntarioCorto ($fecha $hora)"
+            binding.autoCompleteTextViewTurno.setText(textoTurno, false)
+        } else {
+            binding.autoCompleteTextViewTurno.setText("Turno ID: ${currentTurnoId.take(8)}...", false)
         }
     }
 
@@ -133,8 +149,12 @@ class EditarEncuestaFragment : Fragment() {
                 // Recuperar el turno previo si existía
                 if (turnoIdSeleccionado == null && !response.turnoId.isNullOrEmpty()) {
                     turnoIdSeleccionado = response.turnoId
-                    binding.autoCompleteTextViewTurno.setText("Turno ID: ${response.turnoId?.take(8)}...", false)
                 }
+                if (turnoIdSeleccionado != null && response.turnoId != turnoIdSeleccionado) {
+                    response.turnoId = turnoIdSeleccionado
+                    viewModel.editEncuesta(response)
+                }
+                actualizarTextoTurno()
 
                 viewModel.getAlimentosByEncuestaId(encuestaId).observe(viewLifecycleOwner) { alimentosRegistrados ->
                     if (isFirstload) {
@@ -144,8 +164,8 @@ class EditarEncuestaFragment : Fragment() {
 
                         if (alimentosRegistrados.isNotEmpty()) {
                             val ultimoAlimento = alimentosRegistrados[ultimoIndiceRegistrado]
-                            binding.autoCompleteTextViewPorcion.text = ultimoAlimento.porcion.toEditable()
-                            binding.autoCompleteTextViewFrecuencia.text = ultimoAlimento.frecuencia.toEditable()
+                            binding.autoCompleteTextViewPorcion.setText(ultimoAlimento.porcion, false)
+                            binding.autoCompleteTextViewFrecuencia.setText(ultimoAlimento.frecuencia, false)
                             binding.inputVeces.text = ultimoAlimento.veces.toEditable()
                         }
                         isFirstload = false
@@ -220,6 +240,13 @@ class EditarEncuestaFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         if (!isSaved) {
+            encuestaActual?.let { encuesta ->
+                if (turnoIdSeleccionado != null && encuesta.turnoId != turnoIdSeleccionado) {
+                    encuesta.turnoId = turnoIdSeleccionado
+                    viewModel.editEncuesta(encuesta)
+                }
+            }
+
             val porcion = binding.autoCompleteTextViewPorcion.text.toString()
             val frecuencia = binding.autoCompleteTextViewFrecuencia.text.toString()
             val veces = binding.inputVeces.text.toString()

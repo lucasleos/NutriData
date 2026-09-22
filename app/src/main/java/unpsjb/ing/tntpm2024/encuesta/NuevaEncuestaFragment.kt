@@ -36,6 +36,7 @@ class NuevaEncuestaFragment : Fragment() {
     private var listaAlimentos = emptyList<Alimento>()
     private var listaTurnosAsignados = listOf<Turno>()
     private var turnoIdSeleccionado: String? = null
+    private var encuestaActual: Encuesta? = null
     private var encuestaId = 0
     private var isSaved = false
 
@@ -102,8 +103,28 @@ class NuevaEncuestaFragment : Fragment() {
 
             binding.autoCompleteTextViewTurno.setOnItemClickListener { _, _, position, _ ->
                 turnoIdSeleccionado = listaTurnosAsignados[position].turnoId
+                encuestaActual?.let { encuesta ->
+                    encuesta.turnoId = turnoIdSeleccionado
+                    viewModel.editEncuesta(encuesta)
+                }
                 Toast.makeText(requireContext(), "Turno vinculado a la encuesta", Toast.LENGTH_SHORT).show()
             }
+
+            actualizarTextoTurno()
+        }
+    }
+
+    private fun actualizarTextoTurno() {
+        val currentTurnoId = turnoIdSeleccionado ?: encuestaActual?.turnoId ?: return
+        val turnoEncontrado = listaTurnosAsignados.find { it.turnoId == currentTurnoId }
+        if (turnoEncontrado != null) {
+            val voluntarioCorto = turnoEncontrado.voluntarioId.take(6)
+            val fecha = turnoEncontrado.asignacion?.fecha ?: "Sin fecha"
+            val hora = turnoEncontrado.asignacion?.hora ?: ""
+            val textoTurno = "Voluntario: $voluntarioCorto ($fecha $hora)"
+            binding.autoCompleteTextViewTurno.setText(textoTurno, false)
+        } else {
+            binding.autoCompleteTextViewTurno.setText("Turno ID: ${currentTurnoId.take(8)}...", false)
         }
     }
 
@@ -118,7 +139,30 @@ class NuevaEncuestaFragment : Fragment() {
                 userId = user?.uid ?: "admin",
                 turnoId = turnoIdSeleccionado
             )
-            viewModel.cargarEncuesta(nuevaEncuesta) { idGenerado -> encuestaId = idGenerado.toInt() }
+            viewModel.cargarEncuesta(nuevaEncuesta) { idGenerado ->
+                encuestaId = idGenerado.toInt()
+                observarEncuestaActual()
+            }
+        } else {
+            observarEncuestaActual()
+        }
+    }
+
+    private fun observarEncuestaActual() {
+        if (encuestaId != 0) {
+            viewModel.getEncuestaById(encuestaId).observe(viewLifecycleOwner) { response ->
+                if (response != null) {
+                    encuestaActual = response
+                    if (turnoIdSeleccionado == null && !response.turnoId.isNullOrEmpty()) {
+                        turnoIdSeleccionado = response.turnoId
+                    }
+                    if (turnoIdSeleccionado != null && response.turnoId != turnoIdSeleccionado) {
+                        response.turnoId = turnoIdSeleccionado
+                        viewModel.editEncuesta(response)
+                    }
+                    actualizarTextoTurno()
+                }
+            }
         }
     }
 
@@ -221,6 +265,18 @@ class NuevaEncuestaFragment : Fragment() {
         } else {
             textField.error = null
             true
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!isSaved) {
+            encuestaActual?.let { encuesta ->
+                if (turnoIdSeleccionado != null && encuesta.turnoId != turnoIdSeleccionado) {
+                    encuesta.turnoId = turnoIdSeleccionado
+                    viewModel.editEncuesta(encuesta)
+                }
+            }
         }
     }
 
