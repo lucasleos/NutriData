@@ -8,6 +8,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import unpsjb.ing.tntpm2024.basededatos.entidades.Alimento
 import unpsjb.ing.tntpm2024.basededatos.entidades.AlimentosEnEncuestas
 import unpsjb.ing.tntpm2024.basededatos.entidades.Encuesta
@@ -33,7 +36,7 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         return encuestaDAO.getEncuestasByUserId(userId)
     }
 
-    fun eliminarEncuesta(encuesta: Encuesta) {
+    suspend fun eliminarEncuesta(encuesta: Encuesta) {
         encuestaDAO.deleteEncuesta(encuesta)
     }
 
@@ -59,7 +62,7 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         return encuestaDAO.insert(encuesta)
     }
 
-    fun editarEncuesta(encuesta: Encuesta) {
+    suspend fun editarEncuesta(encuesta: Encuesta) {
         val user = FirebaseAuth.getInstance().currentUser
         val idUser = user?.uid
         val emailUser = user?.email
@@ -139,7 +142,8 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
                 "encuestaCompletada" to encuesta.encuestaCompletada,
                 "userId" to userId,
                 "userEmail" to userEmail,
-                "turnoId" to (encuesta.turnoId ?: "")
+                "turnoId" to (encuesta.turnoId ?: ""),
+                "subida" to true
             )
         )
 
@@ -175,7 +179,13 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
         }
 
         dbRef.updateChildren(childUpdates)
-            .addOnSuccessListener { onSuccess() }
+            .addOnSuccessListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    encuesta.subida = true
+                    encuestaDAO.editEncuesta(encuesta)
+                }
+                onSuccess()
+            }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
     }
 
@@ -185,7 +195,13 @@ class Repository(private val encuestaDAO: EncuestaDAO) {
 
         dbRef.child("encuestas").child("${encuesta.encuestaId}_${encuesta.fecha}")
             .removeValue()
-            .addOnSuccessListener { onSuccess() }
+            .addOnSuccessListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    encuesta.subida = false
+                    encuestaDAO.editEncuesta(encuesta)
+                }
+                onSuccess()
+            }
             .addOnFailureListener { exception -> onFailure(DatabaseError.fromException(exception)) }
     }
 

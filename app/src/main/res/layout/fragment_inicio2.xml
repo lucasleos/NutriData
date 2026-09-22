@@ -255,7 +255,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/radio_canada_big"
-                            android:text="Encuestas Firebase"
+                            android:text="Encuestas en Firebase"
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -276,7 +276,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/macro_yellow"
+                    app:cardBackgroundColor="@color/violeta"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="4dp"
                     app:contentPadding="0dp">
@@ -292,7 +292,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/hacer_encuesta_icon" />
+                            android:src="@drawable/turno" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -300,7 +300,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/radio_canada_big"
-                            android:text="Turnos"
+                            android:text="Turnos Solicitados"
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:textStyle="bold" />
