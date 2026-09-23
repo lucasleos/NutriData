@@ -47,6 +47,9 @@ class EncuestaListAdapter internal constructor(
         val imageCheck: ImageView = itemView.findViewById(R.id.ivCheck)
         val subidaTextView: TextView = itemView.findViewById(R.id.tvSubida)
         val cloudStateImageView: ImageView = itemView.findViewById(R.id.ivCloudState)
+        val turnoTextView: TextView = itemView.findViewById(R.id.tvTurno)
+
+        val turnoImageView: ImageView = itemView.findViewById(R.id.ivTurno)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EncuestaViewHolder {
@@ -64,6 +67,15 @@ class EncuestaListAdapter internal constructor(
         holder.encuestaCompletadaTextView.text = if (encuesta.encuestaCompletada) "Completa" else "Incompleta"
         holder.zonaTextView.text = encuesta.zona
         holder.subidaTextView.text = if (encuesta.subida) "Subida a Firebase" else "No subida a Firebase"
+        holder.turnoTextView.text = if (!encuesta.turnoId.isNullOrEmpty()) "Con turno asociado" else "Sin turno asociado"
+
+
+        if (encuesta.turnoId != null) {
+            holder.turnoImageView.setImageResource(R.drawable.turno_asignado)
+        } else {
+            holder.turnoImageView.setImageResource(R.drawable.sin_turno)
+        }
+
 
         if (encuesta.subida) {
             holder.cloudStateImageView.setImageResource(R.drawable.subida)
@@ -96,6 +108,7 @@ class EncuestaListAdapter internal constructor(
 
         holder.imageUpload.setOnClickListener {
             onItemClickUploadInCloud?.invoke(encuesta)
+            holder.imageUpload.visibility = View.GONE
         }
     }
 

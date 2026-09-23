@@ -62,6 +62,10 @@ class ExpandableRecyclerViewAdapter(
         val zonaText = parentItem.encuesta.zona.ifEmpty { "Sin especificar" }
         binding.tvZona.text = "Zona: $zonaText"
 
+        // Turno
+        val tieneTurno = !parentItem.encuesta.turnoId.isNullOrEmpty()
+        binding.tvTurno.text = if (tieneTurno) "Turno: Con turno asociado" else "Turno: Sin turno asociado"
+
         // Child adapter setup
         val childAdapter = ChildAdapter(parentItem.alimentos)
         binding.childRecyclerView.adapter = childAdapter
