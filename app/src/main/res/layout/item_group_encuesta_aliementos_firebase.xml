@@ -139,6 +139,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -157,6 +158,31 @@
                         android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         tools:text="Zona: Trelew Norte" />
+                </LinearLayout>
+
+                <!-- Turno -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="Turno"
+                        android:src="@drawable/turno"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:id="@+id/tvTurno"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/radio_canada_big"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        tools:text="Turno: Con turno asociado" />
                 </LinearLayout>
 
             </LinearLayout>
